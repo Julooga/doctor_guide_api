@@ -23,4 +23,4 @@ export const client = ({ local }: { local: boolean }) => {
   return remoteClient
 }
 
-export const docClient = DynamoDBDocumentClient.from(client({ local: false }))
+export const docClient = DynamoDBDocumentClient.from(remoteClient)

@@ -3,13 +3,13 @@ import { getScanResultSchema } from '../api'
 
 export const hospitalPoiReqSchema = z
   .object({
-    numOfRows: z.number().openapi({
+    numOfRows: z.string().openapi({
       description: '페이지당개수',
-      example: 1
+      example: '1'
     }),
-    pageNo: z.number().openapi({
+    pageNo: z.string().openapi({
       description: '페이지번호',
-      example: 1
+      example: '1'
     }),
     ADDR: z.string().optional().openapi({
       description: '주소',
