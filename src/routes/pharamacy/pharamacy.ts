@@ -1,6 +1,6 @@
 import { createRoute, z } from '@hono/zod-openapi'
 import { createSuccessSchema } from '../utils'
-import { pharmacyPoiModel } from './schema'
+import { pharmacyPoiModel, pharmacyPoiReqSchema } from './schema'
 
 const route = createRoute({
   method: 'get',
@@ -9,7 +9,7 @@ const route = createRoute({
   description:
     '재난안전데이터 공유플랫폼이 제공하는 행정안전부 약국 POI 목록을 반환하는 get 메소드',
   request: {
-    query: pharmacyPoiModel
+    query: pharmacyPoiReqSchema
   },
   responses: {
     200: {
