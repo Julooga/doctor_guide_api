@@ -189,7 +189,7 @@ const defaultCodeStyle = {
 }
 
 export default tseslint.config(
-  { ignores: ['build', '.react-router', 'pb_data', 'pb_migrations'] },
+  { ignores: ['build', '.react-router', '.wrangler'] },
   defaultCodeStyle,
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],

@@ -1,0 +1,6 @@
+{
+  "$schema": "node_modules//config-schema.json",
+  "name": "hello-aws",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-05-03"
+}

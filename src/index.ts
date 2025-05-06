@@ -8,3 +8,4 @@ app.get('/', (c) => {
 })
 
 export const handler = handle(app)
+export default app

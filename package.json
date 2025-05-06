@@ -6,6 +6,9 @@
     "pnpm": ">=9.0.0"
   },
   "scripts": {
+    "dev": "wrangler dev",
+    "deploy:cf": "wrangler deploy --minify",
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings",
     "build": "esbuild --bundle --outfile=./dist/index.js --platform=node --target=node20 ./src/index.ts",
     "zip": "zip -j lambda.zip dist/index.js",
     "update:local": "aws lambda update-function-code --zip-file fileb://lambda.zip --function-name doctor_guide_api --region ap-northeast-2 --profile 166287530750_jurloogar-jaewon",
@@ -41,6 +44,7 @@
     "tsx": "^4.19.4",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.31.1",
+    "wrangler": "^4.14.1",
     "zx": "^8.5.3"
   },
   "dependencies": {
