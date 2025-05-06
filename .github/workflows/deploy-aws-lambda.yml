@@ -8,13 +8,13 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest # 이 부분이 누락되었습니다
-    steps: # steps: 키워드가 필요합니다
+    runs-on: ubuntu-latest
+    steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v4 # 오타 수정: action-s이etup -> action-setup
+        uses: pnpm/action-setup@v4
         with:
           version: 'latest'
           run_install: false
@@ -33,6 +33,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: ap-northeast-2
 
       - name: Deploy to Lambda
