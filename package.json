@@ -6,7 +6,7 @@
     "pnpm": ">=9.0.0"
   },
   "scripts": {
-    "dev": "wrangler dev",
+    "dev": "wrangler dev --port 8080",
     "deploy:cf": "wrangler deploy --minify",
     "cf-typegen": "wrangler types --env-interface CloudflareBindings",
     "build": "esbuild --bundle --outfile=./dist/index.js --platform=node --target=node20 ./src/index.ts",
