@@ -1,4 +1,4 @@
-import { createRoute } from '@hono/zod-openapi'
+import { createRoute, z } from '@hono/zod-openapi'
 import { createSuccessSchema } from '../utils'
 import { pharmacyPoiModel } from './schema'
 
@@ -16,7 +16,7 @@ const route = createRoute({
       content: {
         'application/json': {
           schema: createSuccessSchema({
-            dataSchema: pharmacyPoiModel,
+            dataSchema: z.array(pharmacyPoiModel),
             schemaName: 'PharamacySuccessResponse'
           })
         }

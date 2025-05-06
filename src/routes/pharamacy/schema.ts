@@ -46,9 +46,9 @@ export const pharmacyPoiModel = z
       description: '진료종료시간수요일',
       example: '2000'
     }),
-    SN: z.string().nullable().openapi({
+    SN: z.number().nullable().openapi({
       description: '일련번호',
-      example: '234'
+      example: 234
     }),
     MDEXM_END_HR_SNDY: z.string().nullable().openapi({
       description: '진료종료시간일요일',
@@ -98,13 +98,13 @@ export const pharmacyPoiModel = z
       description: '진료시작시간금요일',
       example: '1000'
     }),
-    LOT: z.string().nullable().openapi({
+    LOT: z.number().nullable().openapi({
       description: '경도',
-      example: '129.1723296629'
+      example: 129.1723296629
     }),
-    YMAP_CRTS: z.string().nullable().openapi({
+    YMAP_CRTS: z.number().nullable().openapi({
       description: 'Y지도좌표',
-      example: '4220567.7607631'
+      example: 4220567.7607631
     }),
     RPRS_TELNO: z.string().nullable().openapi({
       description: '대표전화번호',
@@ -122,13 +122,13 @@ export const pharmacyPoiModel = z
       description: '진료시작시간수요일',
       example: '1000'
     }),
-    XMAP_CRTS: z.string().nullable().openapi({
+    XMAP_CRTS: z.number().nullable().openapi({
       description: 'X지도좌표',
-      example: '14379397.962653672'
+      example: 14379397.962653672
     }),
-    LAT: z.string().nullable().openapi({
+    LAT: z.number().nullable().openapi({
       description: '위도',
-      example: '35.4160672505'
+      example: 35.4160672505
     })
   })
   .openapi('PharmacyPoiModel')

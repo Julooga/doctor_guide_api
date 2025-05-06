@@ -46,9 +46,9 @@ export const hospitalPoiModel = z
       description: '진료종료시간토요일',
       example: '1230'
     }),
-    YCRD: z.string().nullable().openapi({
+    YCRD: z.number().nullable().openapi({
       description: 'Y지도좌표',
-      example: '4477337.182'
+      example: 4477337.182
     }),
     MDEXM_HR_MNDY_S: z.string().nullable().openapi({
       description: '진료시작시간월요일',
@@ -94,9 +94,9 @@ export const hospitalPoiModel = z
       description: '진료종료시간월요일',
       example: '1730'
     }),
-    HSPTL_LOT: z.string().nullable().openapi({
+    HSPTL_LOT: z.number().nullable().openapi({
       description: '병원경도',
-      example: '127.1114072'
+      example: 127.1114072
     }),
     MDEXM_HR_TSDY_S: z.string().nullable().openapi({
       description: '진료시작시간화요일',
@@ -122,9 +122,9 @@ export const hospitalPoiModel = z
       description: '진료종료시간목요일',
       example: '1730'
     }),
-    XCRD: z.string().nullable().openapi({
+    XCRD: z.number().nullable().openapi({
       description: 'X지도좌표',
-      example: '14149977.12'
+      example: 14149977.12
     }),
     MDEXM_HR_FRDY_S: z.string().nullable().openapi({
       description: '진료시작시간금요일',
@@ -138,9 +138,9 @@ export const hospitalPoiModel = z
       description: '진료시작시간수요일',
       example: '830'
     }),
-    HSPTL_LAT: z.string().nullable().openapi({
+    HSPTL_LAT: z.number().nullable().openapi({
       description: '병원위도',
-      example: '37.27377984'
+      example: 37.27377984
     }),
     EMRO_OPER_YN_: z.string().nullable().openapi({
       description: '응급실운영여부',
