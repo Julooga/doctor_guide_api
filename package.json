@@ -14,7 +14,7 @@
     "update:local": "aws lambda update-function-code --zip-file fileb://lambda.zip --function-name doctor_guide_api --region ap-northeast-2 --profile 166287530750_jurloogar-jaewon",
     "update:ci": "aws lambda update-function-code --zip-file fileb://lambda.zip --function-name doctor_guide_api --region ap-northeast-2",
     "cleanup:lambda": "rimraf lambda.zip",
-    "deploy:lambda": "run-s build zip update:local cleanup:lambda",
+    "deploy:lambda:local": "run-s build zip update:local cleanup:lambda",
     "deploy:lambda:ci": "run-s build zip update:ci cleanup:lambda",
     "prepare": "husky",
     "type:check": "tsc --skipLibCheck --noEmit --incremental --tsBuildInfoFile ./node_modules/.cache/tsc/tsbuildinfo",
