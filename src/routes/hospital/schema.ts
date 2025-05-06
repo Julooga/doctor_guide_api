@@ -5,7 +5,7 @@ export const hospitalPoiReqSchema = z
   .object({
     numOfRows: z.number().openapi({
       description: '페이지당개수',
-      example: 10
+      example: 1
     }),
     pageNo: z.number().openapi({
       description: '페이지번호',
