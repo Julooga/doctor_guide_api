@@ -3,6 +3,7 @@ import { OpenAPIHono } from '@hono/zod-openapi'
 import { HTTPException } from 'hono/http-exception'
 import { handle } from 'hono/aws-lambda'
 import hospital from './routes/hospital'
+import pharamacy from './routes/pharamacy'
 
 const app = new OpenAPIHono({
   defaultHook: (result, c) => {
@@ -60,6 +61,17 @@ app.onError((err, c) => {
 })
 
 app.openapi(hospital, (c) => {
+  const { userName } = c.req.valid('query')
+
+  return c.json({
+    success: true,
+    data: {
+      greetings: `안녕하세요, ${userName}님`
+    }
+  })
+})
+
+app.openapi(pharamacy, (c) => {
   const { userName } = c.req.valid('query')
 
   return c.json({
