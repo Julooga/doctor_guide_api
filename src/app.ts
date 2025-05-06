@@ -1,5 +1,6 @@
 import { OpenAPIHono } from '@hono/zod-openapi'
 import { HTTPException } from 'hono/http-exception'
+import { logger } from 'hono/logger'
 
 const app = new OpenAPIHono({
   defaultHook: (result, c) => {
@@ -14,6 +15,8 @@ const app = new OpenAPIHono({
     }
   }
 })
+
+app.use('*', logger())
 
 app.onError((err, c) => {
   if (err instanceof HTTPException) {

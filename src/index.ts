@@ -45,6 +45,7 @@ app.doc31('/docs', {
     title: 'Doctor Guide Api'
   }
 })
+
 app.get('/', swaggerUI({ url: '/docs' }))
 
 export const handler = handle(app)
