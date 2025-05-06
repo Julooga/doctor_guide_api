@@ -26,30 +26,30 @@ app.openapi(pharamacy, (c) => {
   })
 })
 
-const getServers = () => {
-  const localServer = {
-    url: 'http://localhost:8080'
-  }
-  const prodServer = {
-    url: 'https://1acgaqfa8f.execute-api.ap-northeast-2.amazonaws.com'
-  }
-  const isProduction =
-    process.env.LAMBDA_TASK_ROOT || process.env.NODE_ENV === 'production'
+// const getServers = () => {
+//   const localServer = {
+//     url: 'http://localhost:8080'
+//   }
+//   const prodServer = {
+//     url: 'https://1acgaqfa8f.execute-api.ap-northeast-2.amazonaws.com'
+//   }
+//   const isProduction =
+//     process.env.LAMBDA_TASK_ROOT || process.env.NODE_ENV === 'production'
 
-  if (isProduction) {
-    return [prodServer]
-  }
+//   if (isProduction) {
+//     return [prodServer]
+//   }
 
-  return [localServer]
-}
+//   return [localServer]
+// }
 
 app.doc31('/docs', {
   openapi: '3.1.0',
   info: {
     version: '1.0.0',
     title: 'Doctor Guide Api'
-  },
-  servers: getServers()
+  }
+  // servers: getServers()
 })
 app.get('/', swaggerUI({ url: '/docs' }))
 
