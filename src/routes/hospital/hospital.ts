@@ -1,23 +1,6 @@
-import { createRoute, z } from '@hono/zod-openapi'
-import { createSuccessSchema } from './utils'
-
-const reqSchema = z
-  .object({
-    userName: z.string().optional().openapi({
-      example: '홍길동',
-      description: '사용자의 이름'
-    })
-  })
-  .openapi('HospitalRequest')
-
-const resSchema = z
-  .object({
-    greetings: z.string().openapi({
-      example: '안녕하세요. *** 님',
-      description: '인삿말'
-    })
-  })
-  .openapi('HospitalResponse')
+import { createRoute } from '@hono/zod-openapi'
+import { createSuccessSchema } from '../utils'
+import { reqSchema, resSchema } from './schema'
 
 const route = createRoute({
   method: 'get',
