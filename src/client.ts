@@ -1,8 +1,10 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb'
+import { fromEnv } from '@aws-sdk/credential-providers'
 
 const remoteClient = new DynamoDBClient({
-  region: 'ap-northeast-2'
+  region: 'ap-northeast-2',
+  credentials: fromEnv()
 })
 
 // docker run -d -p 8000:8000 amazon/dynamodb-local -jar DynamoDBLocal.jar -sharedDb -cors '*' 명령으로 로컬 다이나모 실행가능
@@ -23,4 +25,4 @@ export const client = ({ local }: { local: boolean }) => {
   return remoteClient
 }
 
-export const docClient = DynamoDBDocumentClient.from(remoteClient)
+export const docClient = DynamoDBDocumentClient.from(client({ local: false }))
