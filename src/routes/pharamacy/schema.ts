@@ -12,8 +12,7 @@ export const pharmacyPoiReqSchema = z
       example: '1'
     }),
     ADDR: z.string().optional().openapi({
-      description: '주소',
-      example: '경상남도'
+      description: '주소'
     })
   })
   .openapi('PharmacyPoiReqSchema')
