@@ -60,7 +60,7 @@ app.onError((err, c) => {
 })
 
 app.openapi(hospital, (c) => {
-  const { userName } = c.req.valid('json')
+  const { userName } = c.req.valid('query')
 
   return c.json({
     success: true,

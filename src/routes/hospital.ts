@@ -3,8 +3,7 @@ import { createSuccessSchema } from './utils'
 
 const reqSchema = z
   .object({
-    userName: z.string().openapi({
-      param: { name: '이름' },
+    userName: z.string().optional().openapi({
       example: '홍길동',
       description: '사용자의 이름'
     })
@@ -27,13 +26,7 @@ const route = createRoute({
   description:
     '재난안전데이터 공유플랫폼이 제공하는 행정안전부 병의원 POI 목록을 반환하는 get 메소드',
   request: {
-    body: {
-      content: {
-        'application/json': {
-          schema: reqSchema
-        }
-      }
-    }
+    query: reqSchema
   },
   responses: {
     200: {
