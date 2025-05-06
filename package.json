@@ -50,6 +50,8 @@
     "zx": "^8.5.3"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.803.0",
+    "@aws-sdk/lib-dynamodb": "^3.803.0",
     "@hono/swagger-ui": "^0.5.1",
     "@hono/zod-openapi": "^0.19.6",
     "hono": "^4.7.8",
