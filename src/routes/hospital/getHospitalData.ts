@@ -8,6 +8,7 @@ import {
   processScanResult
 } from '../api'
 import { toNumber } from 'lodash-es'
+import 'dotenv/config'
 
 type Params = {
   TableName: string
