@@ -37,10 +37,10 @@ const getServers = () => {
     process.env.LAMBDA_TASK_ROOT || process.env.NODE_ENV === 'production'
 
   if (isProduction) {
-    return [prodServer, localServer]
+    return [prodServer]
   }
 
-  return [localServer, prodServer]
+  return [localServer]
 }
 
 app.doc31('/docs', {
