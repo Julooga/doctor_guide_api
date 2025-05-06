@@ -8,30 +8,32 @@ on:
 
 jobs:
   deploy:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+    runs-on: ubuntu-latest # 이 부분이 누락되었습니다
+    steps: # steps: 키워드가 필요합니다
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Install pnpm
-      uses: pnpm/action-setup@v4
-      with:
-        version: 'latest'
-        run_install: false
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4 # 오타 수정: action-s이etup -> action-setup
+        with:
+          version: 'latest'
+          run_install: false
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-        cache: 'pnpm'
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
 
-    - name: Install dependencies
-      run: pnpm i --frozen-lockfile
+      - name: Install dependencies
+        run: pnpm i --frozen-lockfile
 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ap-northeast-2
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
 
-    - name: Deploy to Lambda
-      run: pnpm run deploy:lambda:ci
+      - name: Deploy to Lambda
+        run: pnpm run deploy:lambda:ci
