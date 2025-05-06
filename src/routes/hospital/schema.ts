@@ -1,6 +1,24 @@
 import { z } from '@hono/zod-openapi'
+import { getScanResultSchema } from '../api'
 
-export const hospitalPoiReqSchema = z.object({}).openapi('HospitalPoiReqSchema')
+export const hospitalPoiReqSchema = z
+  .object({
+    numOfRows: z.number().openapi({
+      description: '페이지당개수',
+      example: 10
+    }),
+    pageNo: z.number().openapi({
+      description: '페이지번호',
+      example: 1
+    }),
+    ADDR: z.string().optional().openapi({
+      description: '주소',
+      example: '경기도'
+    })
+  })
+  .openapi('HospitalPoiReqSchema')
+
+export type HospitalPoiReqSchema = z.infer<typeof hospitalPoiReqSchema>
 
 export const hospitalPoiSchema = z
   .object({
@@ -150,3 +168,7 @@ export const hospitalPoiSchema = z
   .openapi('HospitalPoiSchema')
 
 export type HospitalPoiSchema = z.infer<typeof hospitalPoiSchema>
+
+export const hospitalPoiResSchema = getScanResultSchema<HospitalPoiSchema>()
+
+export type HospitalPoiResSchema = z.infer<typeof hospitalPoiResSchema>

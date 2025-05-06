@@ -1,8 +1,26 @@
 import { z } from '@hono/zod-openapi'
+import { getScanResultSchema } from '../api'
 
-export const pharmacyPoiReqSchema = z.object({}).openapi('PharmacyPoiReqSchema')
+export const pharmacyPoiReqSchema = z
+  .object({
+    numOfRows: z.string().openapi({
+      description: '페이지당개수',
+      example: '1'
+    }),
+    pageNo: z.string().openapi({
+      description: '페이지번호',
+      example: '1'
+    }),
+    ADDR: z.string().optional().openapi({
+      description: '주소',
+      example: '경상남도'
+    })
+  })
+  .openapi('PharmacyPoiReqSchema')
 
-export const pharmacyPoiModel = z
+export type PharmacyPoiReqSchema = z.infer<typeof pharmacyPoiReqSchema>
+
+export const pharmacyPoiSchema = z
   .object({
     MDEXM_END_HR_THDY: z.string().nullable().openapi({
       description: '진료종료시간목요일',
@@ -131,4 +149,8 @@ export const pharmacyPoiModel = z
   })
   .openapi('PharmacyPoiSchema')
 
-export type PharmacyPoiModel = z.infer<typeof pharmacyPoiModel>
+export type pharmacyPoiSchema = z.infer<typeof pharmacyPoiSchema>
+
+export const pharmacyPoiResSchema = getScanResultSchema<pharmacyPoiSchema>()
+
+export type PharmacyPoiResSchema = z.infer<typeof pharmacyPoiResSchema>

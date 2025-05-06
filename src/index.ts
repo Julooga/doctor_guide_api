@@ -5,15 +5,17 @@ import pharamacy from './routes/pharamacy/pharamacy'
 import app from './app'
 import getHospitalData from './routes/hospital/getHospitalData'
 import getPharmacyData from './routes/pharamacy/getPharmacyData'
+import { pharmacyPoiSchema } from './routes/pharamacy/schema'
 import { HospitalPoiSchema } from './routes/hospital/schema'
-import { PharmacyPoiModel } from './routes/pharamacy/schema'
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
 app.openapi(hospital, async (c) => {
-  const query = await c.req.valid('query')
-  const data = (await getHospitalData({
+  const query = c.req.valid('query')
+  const data = await getHospitalData<HospitalPoiSchema>({
     TableName: 'Hospital-safetydata',
     query
-  })) as HospitalPoiSchema[]
+  })
 
   return c.json({
     success: true,
@@ -21,12 +23,14 @@ app.openapi(hospital, async (c) => {
   })
 })
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
 app.openapi(pharamacy, async (c) => {
-  const query = await c.req.valid('query')
-  const data = (await getPharmacyData({
+  const query = c.req.valid('query')
+  const data = await getPharmacyData<pharmacyPoiSchema>({
     TableName: 'Pharamacy-safetydata',
     query
-  })) as PharmacyPoiModel[]
+  })
 
   return c.json({
     success: true,

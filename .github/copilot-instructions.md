@@ -11,6 +11,7 @@
   - Enhance type safety by adding appropriate type definitions and interfaces.
   - Use `type` instead of `interface` for defining types.
   - Avoid using `any` type; apply generic types wherever possible.
+  - Replace `any` with generics, use pure functions instead of ternary operators, prefer array methods over loops, and use `const` with early returns instead of `let`.
   - When designing functions with two or more parameters, prefer using an object to group them.
 
     ```ts
