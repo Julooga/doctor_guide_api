@@ -148,3 +148,5 @@ export const hospitalPoiSchema = z
     })
   })
   .openapi('HospitalPoiSchema')
+
+export type HospitalPoiSchema = z.infer<typeof hospitalPoiSchema>

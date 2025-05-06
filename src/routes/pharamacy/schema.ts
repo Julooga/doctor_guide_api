@@ -130,3 +130,5 @@ export const pharmacyPoiModel = z
     })
   })
   .openapi('PharmacyPoiSchema')
+
+export type PharmacyPoiModel = z.infer<typeof pharmacyPoiModel>

@@ -1,4 +1,5 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
+import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb'
 
 const remoteClient = new DynamoDBClient({
   region: 'ap-northeast-2'
@@ -14,7 +15,7 @@ const localClient = new DynamoDBClient({
   }
 })
 
-const client = ({ local }: { local: boolean }) => {
+export const client = ({ local }: { local: boolean }) => {
   if (local) {
     return localClient
   }
@@ -22,4 +23,4 @@ const client = ({ local }: { local: boolean }) => {
   return remoteClient
 }
 
-export default client
+export const docClient = DynamoDBDocumentClient.from(client({ local: false }))
