@@ -1,0 +1,41 @@
+{
+    "Table": {
+        "AttributeDefinitions": [
+            {
+                "AttributeName": "INST_ID",
+                "AttributeType": "S"
+            }
+        ],
+        "TableName": "Hospital-safetydata",
+        "KeySchema": [
+            {
+                "AttributeName": "INST_ID",
+                "KeyType": "HASH"
+            }
+        ],
+        "TableStatus": "ACTIVE",
+        "CreationDateTime": "2025-05-06T19:11:00.251000+09:00",
+        "ProvisionedThroughput": {
+            "NumberOfDecreasesToday": 0,
+            "ReadCapacityUnits": 0,
+            "WriteCapacityUnits": 0
+        },
+        "TableSizeBytes": 50726991,
+        "ItemCount": 71735,
+        "TableArn": "arn:aws:dynamodb:ap-northeast-2:166287530750:table/Hospital-safetydata",
+        "TableId": "f7e57294-38fb-4f48-8e98-38f147e8f3e3",
+        "BillingModeSummary": {
+            "BillingMode": "PAY_PER_REQUEST",
+            "LastUpdateToPayPerRequestDateTime": "2025-05-06T19:11:00.251000+09:00"
+        },
+        "TableClassSummary": {
+            "TableClass": "STANDARD"
+        },
+        "DeletionProtectionEnabled": false,
+        "WarmThroughput": {
+            "ReadUnitsPerSecond": 12000,
+            "WriteUnitsPerSecond": 4000,
+            "Status": "ACTIVE"
+        }
+    }
+}

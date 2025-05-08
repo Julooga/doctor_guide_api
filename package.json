@@ -9,6 +9,8 @@
     "dev": "tsx watch src/dev.ts",
     "build": "esbuild --bundle --outfile=./dist/index.js --platform=node --target=node20 ./src/index.ts",
     "zip": "zip -j lambda.zip dist/index.js",
+    "show:hospital": "aws dynamodb describe-table --table-name Hospital-safetydata --region ap-northeast-2 --profile 166287530750_jurloogar-jaewon > schema.txt",
+    "show:pharamacy": "aws dynamodb describe-table --table-name Pharamacy-safetydata --region ap-northeast-2 --profile 166287530750_jurloogar-jaewon > schema.txt",
     "update:local": "aws lambda update-function-code --zip-file fileb://lambda.zip --function-name doctor_guide_api --region ap-northeast-2 --profile 166287530750_jurloogar-jaewon",
     "update:ci": "aws lambda update-function-code --zip-file fileb://lambda.zip --function-name doctor_guide_api --region ap-northeast-2",
     "cleanup:lambda": "rimraf lambda.zip",
@@ -54,6 +56,7 @@
     "@aws-sdk/lib-dynamodb": "^3.803.0",
     "@hono/swagger-ui": "^0.5.1",
     "@hono/zod-openapi": "^0.19.6",
+    "electrodb": "^3.4.1",
     "hono": "^4.7.8",
     "lodash-es": "^4.17.21",
     "zod": "^3.24.4"

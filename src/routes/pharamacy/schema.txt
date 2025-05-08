@@ -1,0 +1,41 @@
+{
+    "Table": {
+        "AttributeDefinitions": [
+            {
+                "AttributeName": "INST_ID",
+                "AttributeType": "S"
+            }
+        ],
+        "TableName": "Pharamacy-safetydata",
+        "KeySchema": [
+            {
+                "AttributeName": "INST_ID",
+                "KeyType": "HASH"
+            }
+        ],
+        "TableStatus": "ACTIVE",
+        "CreationDateTime": "2025-05-06T18:58:18.057000+09:00",
+        "ProvisionedThroughput": {
+            "NumberOfDecreasesToday": 0,
+            "ReadCapacityUnits": 0,
+            "WriteCapacityUnits": 0
+        },
+        "TableSizeBytes": 940029,
+        "ItemCount": 1450,
+        "TableArn": "arn:aws:dynamodb:ap-northeast-2:166287530750:table/Pharamacy-safetydata",
+        "TableId": "ef8f7802-9681-4047-a500-4c0c8d40b3b6",
+        "BillingModeSummary": {
+            "BillingMode": "PAY_PER_REQUEST",
+            "LastUpdateToPayPerRequestDateTime": "2025-05-06T18:58:18.057000+09:00"
+        },
+        "TableClassSummary": {
+            "TableClass": "STANDARD"
+        },
+        "DeletionProtectionEnabled": false,
+        "WarmThroughput": {
+            "ReadUnitsPerSecond": 12000,
+            "WriteUnitsPerSecond": 4000,
+            "Status": "ACTIVE"
+        }
+    }
+}

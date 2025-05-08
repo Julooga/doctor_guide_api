@@ -23,6 +23,9 @@ importers:
       '@hono/zod-openapi':
         specifier: ^0.19.6
         version: 0.19.6(hono@4.7.8)(zod@3.24.4)
+      electrodb:
+        specifier: ^3.4.1
+        version: 3.4.1(@aws-sdk/client-dynamodb@3.803.0)
       hono:
         specifier: ^4.7.8
         version: 4.7.8
@@ -1101,6 +1104,9 @@ packages:
   ee-first@1.1.1:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
 
+  electrodb@3.4.1:
+    resolution: {integrity: sha512-jKSLe8EoT7C6Mhv4Z+PqPon438GUBZcdf4Bt43yagwG1OSE5/QNQvQsAOb1V+hEaL5itlsfdQf65RDn4N8A33w==}
+
   emoji-regex@8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}
 
@@ -1428,6 +1434,9 @@ packages:
 
   json-stable-stringify-without-jsonify@1.0.1:
     resolution: {integrity: sha512-Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw==}
+
+  jsonschema@1.2.7:
+    resolution: {integrity: sha512-3dFMg9hmI9LdHag/BRIhMefCfbq1hicvYMy8YhZQorAdzOzWz7NjniSpn39yjpzUAMIWtGyyZuH2KNBloH7ZLw==}
 
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
@@ -3191,6 +3200,14 @@ snapshots:
 
   ee-first@1.1.1: {}
 
+  electrodb@3.4.1(@aws-sdk/client-dynamodb@3.803.0):
+    dependencies:
+      '@aws-sdk/lib-dynamodb': 3.803.0(@aws-sdk/client-dynamodb@3.803.0)
+      '@aws-sdk/util-dynamodb': 3.803.0(@aws-sdk/client-dynamodb@3.803.0)
+      jsonschema: 1.2.7
+    transitivePeerDependencies:
+      - '@aws-sdk/client-dynamodb'
+
   emoji-regex@8.0.0: {}
 
   emoji-regex@9.2.2: {}
@@ -3576,6 +3593,8 @@ snapshots:
   json-schema-traverse@0.4.1: {}
 
   json-stable-stringify-without-jsonify@1.0.1: {}
+
+  jsonschema@1.2.7: {}
 
   keyv@4.5.4:
     dependencies:
