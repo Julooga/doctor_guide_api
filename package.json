@@ -20,7 +20,8 @@
     "type:check": "tsc --skipLibCheck --noEmit --incremental --tsBuildInfoFile ./node_modules/.cache/tsc/tsbuildinfo",
     "prettier": "prettier --write \"**/*.{ts,tsx,cjs,mjs,json,html,css,js,jsx}\" --cache --config prettier.config.mjs",
     "eslint": "eslint --fix --cache --cache-location ./node_modules/.cache/eslint .",
-    "format": "run-s type:check prettier eslint"
+    "format": "run-s type:check prettier eslint",
+    "api:build": "swagger-typescript-api generate --path http://localhost:8080/docs -o ./src/sdk -n api.ts --axios"
   },
   "devDependencies": {
     "@eslint/js": "^9.26.0",
@@ -60,6 +61,7 @@
     "hono": "^4.7.8",
     "hono-openapi": "^0.4.8",
     "lodash-es": "^4.17.21",
+    "swagger-typescript-api": "^13.1.3",
     "zod": "^3.24.4",
     "zod-openapi": "^4.2.4"
   }
