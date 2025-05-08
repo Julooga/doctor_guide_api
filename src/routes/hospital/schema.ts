@@ -1,6 +1,7 @@
-import { z } from '@hono/zod-openapi'
+import { z } from 'zod'
+import 'zod-openapi/extend'
 
-export const hospitalPoiReqSchema = z
+export const HospitalRequest = z
   .object({
     limit: z.string().optional().openapi({
       description: '페이지 당 레코드 개수',
@@ -18,9 +19,9 @@ export const hospitalPoiReqSchema = z
       example: '응급'
     })
   })
-  .openapi('HospitalPoiReqSchema')
+  .openapi({ ref: 'HospitalRequest' })
 
-export type HospitalPoiReqSchema = z.infer<typeof hospitalPoiReqSchema>
+export type HospitalRequest = z.infer<typeof HospitalRequest>
 
 export const hospitalPoiSchema = z
   .object({
@@ -167,7 +168,7 @@ export const hospitalPoiSchema = z
       description: '진료종료시간일요일'
     })
   })
-  .openapi('HospitalPoiSchema')
+  .openapi({ ref: 'HospitalPoiSchema' })
 
 export type HospitalPoiSchema = z.infer<typeof hospitalPoiSchema>
 
@@ -179,6 +180,6 @@ export const hospitalPoiResSchema = z
       cursor: z.string().nullable()
     })
   })
-  .openapi('HospitalSuccessResponse')
+  .openapi({ ref: 'HospitalSuccessResponse' })
 
 export type HospitalPoiResSchema = z.infer<typeof hospitalPoiResSchema>

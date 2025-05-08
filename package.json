@@ -55,10 +55,12 @@
     "@aws-sdk/credential-providers": "^3.803.0",
     "@aws-sdk/lib-dynamodb": "^3.803.0",
     "@hono/swagger-ui": "^0.5.1",
-    "@hono/zod-openapi": "^0.19.6",
+    "@hono/zod-validator": "^0.5.0",
     "electrodb": "^3.4.1",
     "hono": "^4.7.8",
+    "hono-openapi": "^0.4.8",
     "lodash-es": "^4.17.21",
-    "zod": "^3.24.4"
+    "zod": "^3.24.4",
+    "zod-openapi": "^4.2.4"
   }
 }

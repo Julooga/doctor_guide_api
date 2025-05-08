@@ -1,6 +1,7 @@
-import { z } from '@hono/zod-openapi'
+import { z } from 'zod'
+import 'zod-openapi/extend'
 
-export const pharmacyPoiReqSchema = z
+export const PharmacyRequest = z
   .object({
     limit: z.string().optional().openapi({
       description: '페이지 당 레코드 개수',
@@ -18,9 +19,9 @@ export const pharmacyPoiReqSchema = z
       example: '역곡'
     })
   })
-  .openapi('PharmacyPoiReqSchema')
+  .openapi({ ref: 'PharmacyRequest' })
 
-export type PharmacyPoiReqSchema = z.infer<typeof pharmacyPoiReqSchema>
+export type PharmacyRequest = z.infer<typeof PharmacyRequest>
 
 export const pharmacyPoiSchema = z
   .object({
@@ -149,7 +150,7 @@ export const pharmacyPoiSchema = z
       example: 35.4160672505
     })
   })
-  .openapi('PharmacyPoiSchema')
+  .openapi({ ref: 'PharmacyPoiSchema' })
 
 export type PharmacyPoiSchema = z.infer<typeof pharmacyPoiSchema>
 
@@ -161,6 +162,6 @@ export const pharmacyPoiResSchema = z
       cursor: z.string().nullable()
     })
   })
-  .openapi('PharamacySuccessResponse')
+  .openapi({ ref: 'PharamacyResponse' })
 
 export type PharmacyPoiResSchema = z.infer<typeof pharmacyPoiResSchema>
