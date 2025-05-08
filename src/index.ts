@@ -19,12 +19,34 @@ import {
 app.openapi(hospital, async (c) => {
   const query = c.req.valid('query')
   const limit = toNumber(query.limit) || 10
-  const data = await HospitalEntity.scan.go({
-    // 일렉트로 DB 의 오너쉽을 확인하지 않음(https://chatgpt.com/share/681c23f2-c538-8012-a6e2-e97940522a13)
-    ignoreOwnership: true,
-    limit,
-    cursor: query.cursor
-  })
+  const data = await HospitalEntity.scan
+    .where(({ ADDR, FIAI_MDLCR_INST_CD_NM }, { contains }) => {
+      const conditions = []
+
+      if (query.ADDR) {
+        // eslint-disable-next-line no-restricted-syntax
+        conditions.push(contains(ADDR, query.ADDR))
+      }
+
+      if (query.FIAI_MDLCR_INST_CD_NM) {
+        // eslint-disable-next-line no-restricted-syntax
+        conditions.push(
+          contains(FIAI_MDLCR_INST_CD_NM, query.FIAI_MDLCR_INST_CD_NM)
+        )
+      }
+
+      if (conditions.length > 0) {
+        return conditions.join(' AND ')
+      }
+
+      return ''
+    })
+    .go({
+      ignoreOwnership: true,
+      limit,
+      cursor: query.cursor
+    })
+
   const res: HospitalPoiResSchema = {
     success: true,
     data: {
@@ -39,11 +61,31 @@ app.openapi(hospital, async (c) => {
 app.openapi(pharamacy, async (c) => {
   const query = c.req.valid('query')
   const limit = toNumber(query.limit) || 10
-  const data = await PharmacyEntity.scan.go({
-    ignoreOwnership: true,
-    limit,
-    cursor: query.cursor
-  })
+  const data = await PharmacyEntity.scan
+    .where(({ ADDR, INST_NM }, { contains }) => {
+      const conditions = []
+
+      if (query.ADDR) {
+        // eslint-disable-next-line no-restricted-syntax
+        conditions.push(contains(ADDR, query.ADDR))
+      }
+
+      if (query.INST_NM) {
+        // eslint-disable-next-line no-restricted-syntax
+        conditions.push(contains(INST_NM, query.INST_NM))
+      }
+
+      if (conditions.length > 0) {
+        return conditions.join(' AND ')
+      }
+
+      return ''
+    })
+    .go({
+      ignoreOwnership: true,
+      limit,
+      cursor: query.cursor
+    })
   const res: PharmacyPoiResSchema = {
     success: true,
     data: {

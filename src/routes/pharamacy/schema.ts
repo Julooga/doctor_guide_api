@@ -8,6 +8,14 @@ export const pharmacyPoiReqSchema = z
     }),
     cursor: z.string().optional().openapi({
       description: '다음 페이지를 조회하는 커서'
+    }),
+    ADDR: z.string().optional().openapi({
+      description: '주소',
+      example: '경기'
+    }),
+    INST_NM: z.string().nullable().openapi({
+      description: '약국이름',
+      example: '역곡'
     })
   })
   .openapi('PharmacyPoiReqSchema')
@@ -73,7 +81,7 @@ export const pharmacyPoiSchema = z
       example: '1000'
     }),
     INST_NM: z.string().nullable().openapi({
-      description: '기관명',
+      description: '약국이름',
       example: '명동약국'
     }),
     ZIP_2: z.string().nullable().openapi({
