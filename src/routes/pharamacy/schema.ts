@@ -1,18 +1,13 @@
 import { z } from '@hono/zod-openapi'
-import { getScanResultSchema } from '../api'
 
 export const pharmacyPoiReqSchema = z
   .object({
-    numOfRows: z.string().openapi({
-      description: '페이지당개수',
-      example: '1'
+    limit: z.string().optional().openapi({
+      description: '페이지 당 레코드 개수',
+      example: '10'
     }),
-    pageNo: z.string().openapi({
-      description: '페이지번호',
-      example: '1'
-    }),
-    ADDR: z.string().optional().openapi({
-      description: '주소'
+    cursor: z.string().optional().openapi({
+      description: '다음 페이지를 조회하는 커서'
     })
   })
   .openapi('PharmacyPoiReqSchema')
@@ -148,8 +143,16 @@ export const pharmacyPoiSchema = z
   })
   .openapi('PharmacyPoiSchema')
 
-export type pharmacyPoiSchema = z.infer<typeof pharmacyPoiSchema>
+export type PharmacyPoiSchema = z.infer<typeof pharmacyPoiSchema>
 
-export const pharmacyPoiResSchema = getScanResultSchema<pharmacyPoiSchema>()
+export const pharmacyPoiResSchema = z
+  .object({
+    success: z.boolean(),
+    data: z.object({
+      items: pharmacyPoiSchema.array(),
+      cursor: z.string().nullable()
+    })
+  })
+  .openapi('PharamacySuccessResponse')
 
 export type PharmacyPoiResSchema = z.infer<typeof pharmacyPoiResSchema>

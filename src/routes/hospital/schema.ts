@@ -1,18 +1,13 @@
 import { z } from '@hono/zod-openapi'
-import { getScanResultSchema } from '../api'
 
 export const hospitalPoiReqSchema = z
   .object({
-    numOfRows: z.string().openapi({
-      description: '페이지당개수',
-      example: '1'
+    limit: z.string().optional().openapi({
+      description: '페이지 당 레코드 개수',
+      example: '10'
     }),
-    pageNo: z.string().openapi({
-      description: '페이지번호',
-      example: '1'
-    }),
-    ADDR: z.string().optional().openapi({
-      description: '주소'
+    cursor: z.string().optional().openapi({
+      description: '다음 페이지를 조회하는 커서'
     })
   })
   .openapi('HospitalPoiReqSchema')
@@ -168,6 +163,14 @@ export const hospitalPoiSchema = z
 
 export type HospitalPoiSchema = z.infer<typeof hospitalPoiSchema>
 
-export const hospitalPoiResSchema = getScanResultSchema<HospitalPoiSchema>()
+export const hospitalPoiResSchema = z
+  .object({
+    success: z.boolean(),
+    data: z.object({
+      items: hospitalPoiSchema.array(),
+      cursor: z.string().nullable()
+    })
+  })
+  .openapi('HospitalSuccessResponse')
 
 export type HospitalPoiResSchema = z.infer<typeof hospitalPoiResSchema>
