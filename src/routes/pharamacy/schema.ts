@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import 'zod-openapi/extend'
 
-export const PharmacyRequest = z
+export const pharmacyRequest = z
   .object({
     limit: z.string().optional().openapi({
       description: '페이지 당 레코드 개수',
@@ -21,7 +21,7 @@ export const PharmacyRequest = z
   })
   .openapi({ ref: 'PharmacyRequest' })
 
-export type PharmacyRequest = z.infer<typeof PharmacyRequest>
+export type PharmacyRequest = z.infer<typeof pharmacyRequest>
 
 export const pharmacyPoiSchema = z
   .object({

@@ -5,7 +5,7 @@ import 'dotenv/config'
 import toNumber from 'lodash-es/toNumber'
 
 import {
-  HospitalRequest,
+  hospitalRequest,
   hospitalPoiResSchema,
   HospitalPoiResSchema,
   HospitalPoiSchema
@@ -15,7 +15,7 @@ import { resolver, validator as zValidator } from 'hono-openapi/zod'
 import 'zod-openapi/extend'
 import { swaggerUI } from '@hono/swagger-ui'
 import {
-  PharmacyRequest,
+  pharmacyRequest,
   pharmacyPoiResSchema,
   PharmacyPoiResSchema,
   PharmacyPoiSchema
@@ -38,7 +38,7 @@ app.get(
       }
     }
   }),
-  zValidator('query', HospitalRequest),
+  zValidator('query', hospitalRequest),
   async (c) => {
     const query = c.req.valid('query')
     const limit = toNumber(query.limit) || 10
@@ -98,7 +98,7 @@ app.get(
       }
     }
   }),
-  zValidator('query', PharmacyRequest),
+  zValidator('query', pharmacyRequest),
   async (c) => {
     const query = c.req.valid('query')
     const limit = toNumber(query.limit) || 10
