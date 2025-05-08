@@ -158,7 +158,7 @@ export const pharmacyPoiResSchema = z
   .object({
     success: z.boolean(),
     data: z.object({
-      items: pharmacyPoiSchema.array(),
+      list: pharmacyPoiSchema.array(),
       cursor: z.string().nullable()
     })
   })

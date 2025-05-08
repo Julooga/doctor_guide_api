@@ -176,7 +176,7 @@ export const hospitalPoiResSchema = z
   .object({
     success: z.boolean(),
     data: z.object({
-      items: hospitalPoiSchema.array(),
+      list: hospitalPoiSchema.array(),
       cursor: z.string().nullable()
     })
   })

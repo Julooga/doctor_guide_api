@@ -73,7 +73,7 @@ app.get(
     const res: HospitalPoiResSchema = {
       success: true,
       data: {
-        items: data.data as unknown as HospitalPoiSchema[],
+        list: data.data as unknown as HospitalPoiSchema[],
         cursor: data.cursor
       }
     }
@@ -130,7 +130,7 @@ app.get(
     const res: PharmacyPoiResSchema = {
       success: true,
       data: {
-        items: data.data as unknown as PharmacyPoiSchema[],
+        list: data.data as unknown as PharmacyPoiSchema[],
         cursor: data.cursor
       }
     }
