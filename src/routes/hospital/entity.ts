@@ -29,76 +29,14 @@ export const HospitalEntity = new Entity(
       INST_ID: {
         type: 'string',
         required: true
-      },
-      // 병원명
-      name: {
-        type: 'string'
-      },
-      // 주소
-      address: {
-        type: 'string'
-      },
-      // 전화번호
-      tel: {
-        type: 'string'
-      },
-      // 병원 유형
-      type: {
-        type: 'string'
-      },
-      // 설립일
-      establishedDate: {
-        type: 'string'
-      },
-      // 병상 수
-      bedCount: {
-        type: 'number'
-      },
-      // 의사 수
-      doctorCount: {
-        type: 'number'
-      },
-      // 진료과목 (문자열 배열)
-      departments: {
-        type: 'list',
-        items: {
-          type: 'string'
-        }
-      },
-      // 위치 정보 (위도, 경도)
-      location: {
-        type: 'map',
-        properties: {
-          latitude: {
-            type: 'number'
-          },
-          longitude: {
-            type: 'number'
-          }
-        }
-      },
-      // 생성 일시
-      createdAt: {
-        type: 'string'
-      },
-      // 수정 일시
-      updatedAt: {
-        type: 'string',
-        watch: '*', // 다른 필드가 변경될 때마다 자동 업데이트
-        set: () => new Date().toISOString()
       }
     },
-    // 인덱스 정의
     indexes: {
-      // 기본 인덱스: INST_ID를 파티션 키로 사용
       primary: {
         pk: {
-          field: 'pk',
-          composite: ['INST_ID']
-        },
-        sk: {
-          field: 'sk',
-          composite: []
+          field: 'INST_ID',
+          composite: ['INST_ID'],
+          template: '${INST_ID}'
         }
       }
     }
