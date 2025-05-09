@@ -1,0 +1,16 @@
+{
+  "name": "@julooga/doctor_guide_api_sdk",
+  "version": "1.0.0",
+  "description": "의료정보를 제공하는 api 의 스웨거 sdk",
+  "main": "api.ts",
+  "types": "api.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Julooga/doctor_guide_api.git"
+  },
+  "author": "Julooga",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.9.0"
+  }
+}
