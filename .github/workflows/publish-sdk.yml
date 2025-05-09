@@ -36,10 +36,16 @@ jobs:
       - name: Generate SDK
         run: pnpm build:api
 
-      - name: Set package name for GitHub Packages
+      - name: Bump patch version
         run: |
-          jq '.name = "@${{ github.repository_owner }}/doctor_guide_api-sdk"' package.json > package.tmp.json
-          mv package.tmp.json package.json
+          VERSION=$(jq -r '.version' src/dist/package.json)
+          MAJOR=$(echo $VERSION | cut -d. -f1)
+          MINOR=$(echo $VERSION | cut -d. -f2)
+          PATCH=$(echo $VERSION | cut -d. -f3)
+          NEW_PATCH=$((PATCH + 1))
+          NEW_VERSION="$MAJOR.$MINOR.$NEW_PATCH"
+          jq --arg v "$NEW_VERSION" '.version = $v' src/dist/package.json > src/dist/package.tmp.json
+          mv src/dist/package.tmp.json src/dist/package.json
 
       - name: Publish to GitHub Packages
         run: pnpm publish --no-git-checks --access public
