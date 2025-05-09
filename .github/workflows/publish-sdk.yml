@@ -1,0 +1,41 @@
+name: Publish SDK to GitHub Packages
+
+on:
+  workflow_dispatch:
+#   push:
+#     branches:
+#       - main
+#     paths:
+#       - 'src/sdk/**'
+#       - '.github/workflows/publish-sdk.yml'
+#       - 'package.json'
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://npm.pkg.github.com/'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Generate SDK
+        run: pnpm build:api
+
+      - name: Set package name for GitHub Packages
+        run: |
+          jq '.name = "@${{ github.repository_owner }}/doctor_guide_api-sdk"' package.json > package.tmp.json
+          mv package.tmp.json package.json
+
+      - name: Publish to GitHub Packages
+        run: pnpm publish --no-git-checks --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
