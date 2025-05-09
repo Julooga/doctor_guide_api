@@ -13,6 +13,9 @@ on:
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read # 소스 코드를 체크아웃하기 위해 필요
+      packages: write # GitHub Packages에 패키지를 게시하기 위해 필요
 
     steps:
       - name: Checkout repository
