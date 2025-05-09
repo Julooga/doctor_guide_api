@@ -22,6 +22,9 @@ import {
 } from './routes/pharamacy/schema'
 import PharmacyEntity from './routes/pharamacy/entity'
 
+// const api = new Api()
+// api.hospital.getHospital().then(res => res.)
+
 app.get(
   '/hospital',
   describeRoute({

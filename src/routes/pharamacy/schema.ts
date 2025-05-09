@@ -19,7 +19,7 @@ export const pharmacyRequest = z
       example: '역곡'
     })
   })
-  .openapi({ ref: 'PharmacyRequest' })
+  .openapi({ ref: 'PharmacyRequest', refType: 'input' })
 
 export type PharmacyRequest = z.infer<typeof pharmacyRequest>
 
@@ -162,6 +162,6 @@ export const pharmacyPoiResSchema = z
       cursor: z.string().nullable()
     })
   })
-  .openapi({ ref: 'PharamacyResponse' })
+  .openapi({ ref: 'PharamacyResponse', refType: 'output' })
 
 export type PharmacyPoiResSchema = z.infer<typeof pharmacyPoiResSchema>

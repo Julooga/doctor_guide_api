@@ -7,21 +7,19 @@
   },
   "scripts": {
     "dev": "tsx watch src/dev.ts",
-    "build": "esbuild --bundle --outfile=./dist/index.js --platform=node --target=node20 ./src/index.ts",
+    "build:lambda": "esbuild --bundle --outfile=./dist/index.js --platform=node --target=node20 ./src/index.ts",
     "zip": "zip -j lambda.zip dist/index.js",
-    "show:hospital": "aws dynamodb describe-table --table-name Hospital-safetydata --region ap-northeast-2 --profile 166287530750_jurloogar-jaewon > schema.txt",
-    "show:pharamacy": "aws dynamodb describe-table --table-name Pharamacy-safetydata --region ap-northeast-2 --profile 166287530750_jurloogar-jaewon > schema.txt",
     "update:local": "aws lambda update-function-code --zip-file fileb://lambda.zip --function-name doctor_guide_api --region ap-northeast-2 --profile 166287530750_jurloogar-jaewon",
     "update:ci": "aws lambda update-function-code --zip-file fileb://lambda.zip --function-name doctor_guide_api --region ap-northeast-2",
     "cleanup:lambda": "rimraf lambda.zip",
-    "deploy:lambda:local": "run-s build zip update:local cleanup:lambda",
-    "deploy:lambda:ci": "run-s build zip update:ci cleanup:lambda",
+    "deploy:lambda:local": "run-s build:lambda zip update:local cleanup:lambda",
+    "deploy:lambda:ci": "run-s build:lambda zip update:ci cleanup:lambda",
     "prepare": "husky",
     "type:check": "tsc --skipLibCheck --noEmit --incremental --tsBuildInfoFile ./node_modules/.cache/tsc/tsbuildinfo",
     "prettier": "prettier --write \"**/*.{ts,tsx,cjs,mjs,json,html,css,js,jsx}\" --cache --config prettier.config.mjs",
     "eslint": "eslint --fix --cache --cache-location ./node_modules/.cache/eslint .",
     "format": "run-s type:check prettier eslint",
-    "api:build": "swagger-typescript-api generate --path http://localhost:8080/docs -o ./src/sdk -n api.ts --axios"
+    "build:api": "swagger-typescript-api generate --path https://1acgaqfa8f.execute-api.ap-northeast-2.amazonaws.com/docs -o ./src/sdk -n api.ts --axios"
   },
   "devDependencies": {
     "@eslint/js": "^9.26.0",

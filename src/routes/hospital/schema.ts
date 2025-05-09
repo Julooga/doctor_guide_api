@@ -19,7 +19,7 @@ export const hospitalRequest = z
       example: '응급'
     })
   })
-  .openapi({ ref: 'HospitalRequest' })
+  .openapi({ ref: 'HospitalRequest', refType: 'input' })
 
 export type HospitalRequest = z.infer<typeof hospitalRequest>
 
@@ -180,6 +180,6 @@ export const hospitalPoiResSchema = z
       cursor: z.string().nullable()
     })
   })
-  .openapi({ ref: 'HospitalSuccessResponse' })
+  .openapi({ ref: 'HospitalResponse', refType: 'output' })
 
 export type HospitalPoiResSchema = z.infer<typeof hospitalPoiResSchema>
