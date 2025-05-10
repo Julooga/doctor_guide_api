@@ -11,7 +11,7 @@
 
 ```
 pnpm i
-pnpm deploy:lambda
+pnpm lambda:deploy
 ```
 
 ## 사용한 AWS 리소스
