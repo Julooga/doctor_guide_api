@@ -1,0 +1,12 @@
+{
+  "servers": {
+    "perplexity-mcp": {
+      "env": {
+        "PERPLEXITY_API_KEY": "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",
+        "PERPLEXITY_MODEL": "sonar"
+      },
+      "command": "uvx",
+      "args": ["perplexity-mcp"]
+    }
+  }
+}
