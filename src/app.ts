@@ -1,10 +1,12 @@
 import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import { logger } from 'hono/logger'
+import { secureHeaders } from 'hono/secure-headers'
 
 const app = new Hono()
 
 app.use('*', logger())
+app.use(secureHeaders())
 
 app.onError((err, c) => {
   if (err instanceof HTTPException) {
