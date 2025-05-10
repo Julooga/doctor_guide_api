@@ -3,19 +3,6 @@ import { HTTPException } from 'hono/http-exception'
 import { logger } from 'hono/logger'
 
 const app = new Hono()
-// const app = new OpenAPIHono({
-//   defaultHook: (result, c) => {
-//     if (!result.success) {
-//       return c.json(
-//         {
-//           success: false,
-//           error: result.error
-//         },
-//         400
-//       )
-//     }
-//   }
-// })
 
 app.use('*', logger())
 

@@ -1,6 +1,6 @@
 import { handle } from 'hono/aws-lambda'
-import app from './app'
-import HospitalEntity from './routes/hospital/entity'
+import app from '@/app'
+import HospitalEntity from '@/routes/hospital/entity'
 import 'dotenv/config'
 import toNumber from 'lodash-es/toNumber'
 
@@ -9,7 +9,7 @@ import {
   hospitalPoiResSchema,
   HospitalPoiResSchema,
   HospitalPoiSchema
-} from './routes/hospital/schema'
+} from '@/routes/hospital/schema'
 import { describeRoute, openAPISpecs } from 'hono-openapi'
 import { resolver, validator as zValidator } from 'hono-openapi/zod'
 import 'zod-openapi/extend'

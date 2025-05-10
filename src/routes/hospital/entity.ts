@@ -1,5 +1,5 @@
 import { Entity } from 'electrodb'
-import { docClient } from '../../client'
+import { docClient } from '@/client'
 
 // 테이블 이름 정의
 const TABLE_NAME = 'Hospital-safetydata'
