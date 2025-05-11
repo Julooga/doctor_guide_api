@@ -146,8 +146,8 @@ const hospitalPoiSchema = z
       description: '진료종료시간일요일'
     })
   })
-  .openapi({ ref: 'HospitalPoiSchema' })
+  .openapi({ ref: 'HospitalPoiModel' })
 
 export default hospitalPoiSchema
 
-export type HospitalPoiSchemaType = z.infer<typeof hospitalPoiSchema>
+export type HospitalPoiModelType = z.infer<typeof hospitalPoiSchema>
