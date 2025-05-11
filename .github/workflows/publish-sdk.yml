@@ -10,6 +10,7 @@ jobs:
   install:
     uses: ./.github/workflows/install-dependency.yml
   build-and-publish:
+    needs: install
     runs-on: ubuntu-latest
     permissions:
       contents: read # 소스 코드를 체크아웃하기 위해 필요

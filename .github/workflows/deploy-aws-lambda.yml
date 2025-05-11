@@ -10,6 +10,7 @@ jobs:
   install:
     uses: ./.github/workflows/install-dependency.yml
   deploy:
+    needs: install
     runs-on: ubuntu-latest
     steps:
       - name: Configure AWS credentials
