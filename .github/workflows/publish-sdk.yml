@@ -7,27 +7,43 @@ on:
       - '*'
 
 jobs:
-  install:
-    uses: ./.github/workflows/install-dependency.yml
   build-and-publish:
-    needs: install
     runs-on: ubuntu-latest
     permissions:
       contents: read # 소스 코드를 체크아웃하기 위해 필요
       packages: write # GitHub Packages에 패키지를 게시하기 위해 필요
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 'latest'
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm i --frozen-lockfile
+
       - name: Generate SDK
         run: pnpm build:api
 
-      - name: Publish to GitHub Packages
+      - name: write .npmrc
         run: |
           # sdk 디렉토리에 .npmrc 파일 생성
           echo "@julooga:registry=https://npm.pkg.github.com/" > sdk/.npmrc
           echo "//npm.pkg.github.com/:_authToken=\${NODE_AUTH_TOKEN}" >> sdk/.npmrc
 
+      - name: Publish to GitHub Packages
+        run: |
           cd sdk
-          # .npmrc 파일에서 레지스트리 정보가 이미 설정되었으므로 --registry 플래그는 생략 가능하나, 유지해도 무방합니다.
           pnpm publish --no-git-checks --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

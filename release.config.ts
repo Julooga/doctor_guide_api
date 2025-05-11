@@ -1,8 +1,19 @@
 import { GlobalConfig } from 'semantic-release'
 
+// GitHub Actions 환경 변수로부터 저장소 URL 생성
+const getRepositoryUrl = (): string => {
+  // GitHub Actions 환경에서 실행 중인 경우
+  if (!process.env.GITHUB_REPOSITORY) {
+    throw new Error('env.GITHUB_REPOSITORY not found')
+  }
+
+  // 로컬 환경 또는 환경 변수가 없는 경우 기본값 사용
+  return `https://github.com'/${process.env.GITHUB_REPOSITORY}`
+}
+
 const config: GlobalConfig = {
   branches: ['main'],
-  repositoryUrl: 'https://github.com/Julooga/doctor_guide_api',
+  repositoryUrl: getRepositoryUrl(),
   tagFormat: '${version}',
   plugins: [
     '@semantic-release/commit-analyzer', // 커밋 메시지를 분석하여 버전 결정
