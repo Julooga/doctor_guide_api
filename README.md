@@ -1,6 +1,6 @@
 # 긴급정보 서비스 API (Emergency Info Service API) 🚑🌐
 
-[![semantic-release: hono](https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
+[![semantic-release: hono](https://img.shields.io/badge/semantic--release-hono-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
 
 ## 개발환경 (Development Environment) 🛠️
 
