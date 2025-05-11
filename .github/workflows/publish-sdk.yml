@@ -93,22 +93,31 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      # dist 브랜치 존재 여부 확인 및 체크아웃
+      # dist 브랜치 존재 여부 확인
       - name: Check if dist branch exists
         id: check-branch
         run: |
-          if git ls-remote --heads origin dist | grep dist; then
+          if git ls-remote --heads https://github.com/${{ github.repository }} dist | grep dist; then
             echo "exists=true" >> $GITHUB_OUTPUT
           else
             echo "exists=false" >> $GITHUB_OUTPUT
           fi
 
-      # 기존 dist 브랜치 체크아웃
+      # 기존 dist 브랜치 체크아웃 (강제 리셋 적용)
       - name: Checkout dist branch if exists
         if: steps.check-branch.outputs.exists == 'true'
         uses: actions/checkout@v4
         with:
           ref: dist
+          fetch-depth: 0 # 전체 히스토리 가져오기
+
+      # 브랜치 강제 리셋 단계 추가
+      - name: Reset branch to prevent conflicts
+        if: steps.check-branch.outputs.exists == 'true'
+        run: |
+          git fetch origin dist
+          git reset --hard origin/dist
+          git clean -fd  # 추적되지 않는 파일 제거
 
       # dist 브랜치가 없으면 기본 브랜치 체크아웃
       - name: Checkout default branch if dist not exists
