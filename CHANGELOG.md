@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/Julooga/doctor_guide_api/compare/v1.0.0...1.0.1) (2025-05-11)
+
+
+### Bug Fixes
+
+* tagFormat에서 'v' 접두사 제거 ([3e000cd](https://github.com/Julooga/doctor_guide_api/commit/3e000cddb3ee9163a5435bddecf1df7daf0ec7e1))
+
 # 1.0.0 (2025-05-11)
 
 
