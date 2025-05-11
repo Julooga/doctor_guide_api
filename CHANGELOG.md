@@ -1,3 +1,10 @@
+## [1.0.13](https://github.com/Julooga/doctor_guide_api/compare/1.0.12...1.0.13) (2025-05-11)
+
+
+### Bug Fixes
+
+* dist 브랜치 체크 및 강제 리셋 단계 추가 ([21f8b61](https://github.com/Julooga/doctor_guide_api/commit/21f8b61e05cebe904f00356023213fb75d177a89))
+
 ## [1.0.12](https://github.com/Julooga/doctor_guide_api/compare/1.0.11...1.0.12) (2025-05-11)
 
 
