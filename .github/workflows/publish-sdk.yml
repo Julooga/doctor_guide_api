@@ -1,7 +1,7 @@
 name: Build and Publish SDK
 
 on:
-  workflow_dispatch: # 수동 실행 옵션 유지 (버전 지정 없음)
+  workflow_dispatch: # 수동 실행 가능
   workflow_run:
     workflows: ['semantic-release']
     types:
@@ -97,7 +97,6 @@ jobs:
           path: ./workspace
 
   # 2. 빌드 결과물을 dist 브랜치로 푸시
-  # 2. 빌드 결과물을 dist 브랜치로 푸시 (개선된 방식)
   deploy-to-dist:
     name: Deploy to dist branch
     needs: build

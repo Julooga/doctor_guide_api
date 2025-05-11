@@ -1,7 +1,6 @@
 # prod
-dist/
+workspace/
 lambda.zip
-sdk/api.ts
 
 # dev
 .yarn/
