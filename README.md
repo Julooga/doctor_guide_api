@@ -38,7 +38,30 @@ pnpm lambda:deploy
 - 아래의 명령어로 디펜던시를 설치하세요.
 
 ```sh
-pnpm i pnpm i @julooga/doctor_guide_api_sdk
+pnpm i @julooga/doctor_guide_api_sdk@latest
+```
+
+- 아래와 같이 사용하세요.
+
+```ts
+import { Api } from '@julooga/doctor_guide_api_sdk'
+
+const api = new Api({
+  baseURL: 'https://1acgaqfa8f.execute-api.ap-northeast-2.amazonaws.com'
+})
+const result = await api.hospital.getHospital({ limit: 1 })
+console.log(result.data)
+/**
+{
+  success: true,
+  data: {
+    list: [
+      [Object ...]
+    ],
+    cursor: "eyJJTlNUX0lEIjoiQTIxMDc3NzgifQ",
+  },
+}
+ */
 ```
 
 ## 사용한 AWS 리소스 (AWS Resources Used) ☁️
