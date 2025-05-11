@@ -4,7 +4,7 @@ on:
   workflow_dispatch: # 수동 실행 옵션 유지 (버전 지정 없음)
   push:
     tags:
-      - 'v*' # v로 시작하는 시맨틱 버전 태그만 처리
+      - '*'
 
 jobs:
   # 1. 전용 작업 공간에서 SDK 빌드
