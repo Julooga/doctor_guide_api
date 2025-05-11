@@ -4,6 +4,7 @@ import { openAPISpecs } from 'hono-openapi'
 import { HTTPException } from 'hono/http-exception'
 import { logger } from 'hono/logger'
 import { secureHeaders } from 'hono/secure-headers'
+import { version } from '../package.json'
 
 const app = new Hono()
 
@@ -57,7 +58,7 @@ app.get(
   openAPISpecs(app, {
     documentation: {
       info: {
-        version: '1.0.0',
+        version,
         title: 'Doctor Guide Api'
       }
     }
