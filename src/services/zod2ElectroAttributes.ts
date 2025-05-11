@@ -95,11 +95,29 @@ const extractRegexFromChecks = (checks: unknown[]): RegExp | undefined => {
   return regexCheck?.regex
 }
 
+const unwrapSchema = (schema: ZodTypeAny): ZodTypeAny => {
+  // ZodOptional 처리
+  if (schema instanceof ZodOptional) {
+    return unwrapSchema(schema._def.innerType)
+  }
+
+  // ZodNullable 처리
+  if (schema._def.typeName === 'ZodNullable') {
+    return unwrapSchema(schema._def.innerType)
+  }
+
+  // 최종적으로 반환
+  return schema
+}
+
 const processString = (
   schema: ZodTypeAny,
   config: Partial<ElectroAttributeConfig>
 ): ElectroAttributeConfig | null => {
-  if (!(schema instanceof ZodString)) {
+  // 스키마를 재귀적으로 풀어서 실제 타입 추출
+  const unwrappedSchema = unwrapSchema(schema)
+
+  if (!(unwrappedSchema instanceof ZodString)) {
     return null
   }
 
@@ -117,7 +135,10 @@ const processNumber = (
   schema: ZodTypeAny,
   config: Partial<ElectroAttributeConfig>
 ): ElectroAttributeConfig | null => {
-  if (!(schema instanceof ZodNumber)) {
+  // 스키마를 재귀적으로 풀어서 실제 타입 추출
+  const unwrappedSchema = unwrapSchema(schema)
+
+  if (!(unwrappedSchema instanceof ZodNumber)) {
     return null
   }
 
@@ -132,7 +153,9 @@ const processBoolean = (
   schema: ZodTypeAny,
   config: Partial<ElectroAttributeConfig>
 ): ElectroAttributeConfig | null => {
-  if (!(schema instanceof ZodBoolean)) {
+  const unwrappedSchema = unwrapSchema(schema)
+
+  if (!(unwrappedSchema instanceof ZodBoolean)) {
     return null
   }
 
