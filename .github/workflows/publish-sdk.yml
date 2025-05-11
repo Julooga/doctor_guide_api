@@ -4,7 +4,7 @@ on:
   workflow_dispatch: # 수동 실행 옵션
     inputs:
       package_name:
-        description: '@julooga/doctor_guide_api_sdk'
+        # description: '@julooga/doctor_guide_api_sdk'
         required: false
   workflow_run:
     workflows: ['semantic-release']
