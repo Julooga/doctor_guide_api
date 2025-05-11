@@ -8,7 +8,12 @@ const config: GlobalConfig = {
     '@semantic-release/commit-analyzer', // 커밋 메시지를 분석하여 버전 결정
     '@semantic-release/release-notes-generator', // CHANGELOG.md에 들어갈 릴리스 노트를 생성
     '@semantic-release/changelog', // CHANGELOG.md 업데이트
-    // '@semantic-release/npm', // npm 배포
+    [
+      '@semantic-release/npm',
+      {
+        npmPublish: false
+      }
+    ], // npm 배포, package.json 업데이트
     '@semantic-release/github', // GitHub Release를 생성
     [
       '@semantic-release/git', //  Git 커밋 및 푸시
