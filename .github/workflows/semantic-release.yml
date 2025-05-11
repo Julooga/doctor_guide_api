@@ -1,4 +1,4 @@
-name: Release
+name: semantic-release
 
 on:
   workflow_dispatch:
@@ -38,4 +38,4 @@ jobs:
       - name: Semantic Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pnpm tsx semantic-release
+        run: pnpm semantic-release
