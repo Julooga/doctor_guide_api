@@ -2,9 +2,12 @@ name: Build and Publish SDK
 
 on:
   workflow_dispatch: # 수동 실행 옵션 유지 (버전 지정 없음)
-  push:
-    tags:
-      - '*'
+  workflow_run:
+    workflows: ['semantic-release']
+    types:
+      - completed
+    branches:
+      - main
 
 permissions:
   contents: write
@@ -36,13 +39,19 @@ jobs:
       - name: Install dependencies
         run: pnpm i --frozen-lockfile
 
-      # 태그에서 버전 추출 (v 접두사 제거)
+      # 태그에서 버전 추출
       - name: Extract version from tag
         id: extract-version
         run: |
-          # 태그가 있는 경우 태그에서 버전 추출 (v 접두사 제거)
-          if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
-            VERSION="${GITHUB_REF#refs/tags/v}"
+          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            # 태그에서 버전 추출 (refs/tags/ 제거)
+            TAG="${GITHUB_REF#refs/tags/}"
+            # 'v' 접두사가 있으면 제거
+            if [[ "$TAG" == v* ]]; then
+              VERSION="${TAG#v}"
+            else
+              VERSION="$TAG"
+            fi
           else
             # 태그가 없는 경우 package.json에서 버전 가져오기
             VERSION=$(node -p "require('./package.json').version")
