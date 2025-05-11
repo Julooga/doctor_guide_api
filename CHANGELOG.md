@@ -1,3 +1,11 @@
+## [1.0.5](https://github.com/Julooga/doctor_guide_api/compare/1.0.4...1.0.5) (2025-05-11)
+
+
+### Bug Fixes
+
+* '@semantic-release/npm' 플러그인 추가 및 주석 수정 ([ce4c68a](https://github.com/Julooga/doctor_guide_api/commit/ce4c68a3f893f740dd9081c3f1a791526f9e6f90))
+* package.json 버전 1.0.0에서 1.0.4로 업데이트 ([2fdbfd8](https://github.com/Julooga/doctor_guide_api/commit/2fdbfd8dc9b75854fea0d8d9fab64c7016143d66))
+
 ## [1.0.4](https://github.com/Julooga/doctor_guide_api/compare/1.0.3...1.0.4) (2025-05-11)
 
 
