@@ -8,7 +8,7 @@ const getRepositoryUrl = (): string => {
   }
 
   // 로컬 환경 또는 환경 변수가 없는 경우 기본값 사용
-  return `https://github.com'/${process.env.GITHUB_REPOSITORY}`
+  return `https://github.com/${process.env.GITHUB_REPOSITORY}`
 }
 
 const config: GlobalConfig = {
