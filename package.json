@@ -2,6 +2,10 @@
   "name": "doctor_guide_api",
   "type": "module",
   "version": "1.0.7",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Julooga/doctor_guide_api.git"
+  },
   "engines": {
     "node": ">=20.0.0",
     "pnpm": ">=9.0.0"
@@ -20,7 +24,7 @@
     "prettier": "prettier --write \"**/*.{ts,tsx,cjs,mjs,json,html,css,js,jsx}\" --cache --config prettier.config.mjs",
     "eslint": "eslint --fix --cache --cache-location ./node_modules/.cache/eslint .",
     "format": "run-s type:check prettier eslint",
-    "build:api": "swagger-typescript-api generate --path https://1acgaqfa8f.execute-api.ap-northeast-2.amazonaws.com/docs -o ./sdk -n api.ts --axios"
+    "build:api": "swagger-typescript-api generate --path https://1acgaqfa8f.execute-api.ap-northeast-2.amazonaws.com/docs -o ./workspace -n api.ts --axios"
   },
   "devDependencies": {
     "@eslint/js": "^9.26.0",
