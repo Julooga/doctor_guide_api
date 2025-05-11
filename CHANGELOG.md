@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/Julooga/doctor_guide_api/compare/1.0.3...1.0.4) (2025-05-11)
+
+
+### Bug Fixes
+
+* pre-commit 스크립트에 lambda:cleanup 추가 및 배포 스크립트 수정 ([9a38d03](https://github.com/Julooga/doctor_guide_api/commit/9a38d038ab7a17431e7010be6a1e551aeabf647d))
+
 ## [1.0.3](https://github.com/Julooga/doctor_guide_api/compare/1.0.2...1.0.3) (2025-05-11)
 
 
