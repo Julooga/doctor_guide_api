@@ -1,4 +1,6 @@
+import { swaggerUI } from '@hono/swagger-ui'
 import { Hono } from 'hono'
+import { openAPISpecs } from 'hono-openapi'
 import { HTTPException } from 'hono/http-exception'
 import { logger } from 'hono/logger'
 import { secureHeaders } from 'hono/secure-headers'
@@ -7,7 +9,6 @@ const app = new Hono()
 
 app.use('*', logger())
 app.use(secureHeaders())
-
 app.onError((err, c) => {
   if (err instanceof HTTPException) {
     // HTTP 예외를 Zod 스타일로 변환
@@ -48,5 +49,19 @@ app.onError((err, c) => {
     500
   )
 })
+
+app.get('/', swaggerUI({ url: '/docs' }))
+
+app.get(
+  '/docs',
+  openAPISpecs(app, {
+    documentation: {
+      info: {
+        version: '1.0.0',
+        title: 'Doctor Guide Api'
+      }
+    }
+  })
+)
 
 export default app

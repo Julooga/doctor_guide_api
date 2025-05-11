@@ -1,25 +1,24 @@
 import { z } from 'zod'
 import 'zod-openapi/extend'
+import { createNumberSchema } from '@/schemas/utility'
 
-export const pharmacyRequest = z
-  .object({
-    limit: z.string().optional().openapi({
-      description: '페이지 당 레코드 개수',
-      example: '10'
-    }),
-    cursor: z.string().optional().openapi({
-      description: '다음 페이지를 조회하는 커서'
-    }),
-    ADDR: z.string().optional().openapi({
-      description: '주소',
-      example: '경기'
-    }),
-    INST_NM: z.string().nullable().openapi({
-      description: '약국이름',
-      example: '역곡'
-    })
+export const pharmacyRequest = z.object({
+  limit: createNumberSchema().optional().openapi({
+    description: '페이지 당 레코드 개수',
+    example: '10'
+  }),
+  cursor: z.string().optional().openapi({
+    description: '다음 페이지를 조회하는 커서'
+  }),
+  ADDR: z.string().optional().openapi({
+    description: '주소',
+    example: '경기'
+  }),
+  INST_NM: z.string().optional().openapi({
+    description: '약국이름',
+    example: '역곡'
   })
-  .openapi({ ref: 'PharmacyRequest', refType: 'input' })
+})
 
 export type PharmacyRequest = z.infer<typeof pharmacyRequest>
 

@@ -2,10 +2,10 @@ name: Publish SDK to GitHub Packages
 
 on:
   workflow_dispatch:
-  workflow_run:
-    workflows: ['Deploy to aws lambda Pages']
-    types:
-      - completed
+#   workflow_run:
+#     workflows: ['Deploy to aws lambda Pages']
+#     types:
+#       - completed
 
 jobs:
   build-and-publish:
