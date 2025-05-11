@@ -2,10 +2,13 @@ name: semantic-release
 
 on:
   workflow_dispatch:
-  workflow_run:
-    workflows: ['Deploy to aws lambda']
-    types:
-      - completed
+  push:
+    branches:
+      - main
+#   workflow_run:
+#     workflows: ['Deploy to aws lambda']
+#     types:
+#       - completed
 
 permissions:
   contents: write
