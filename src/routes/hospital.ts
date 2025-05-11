@@ -1,4 +1,4 @@
-import HospitalPoiModel from '@/services/hospital/hospitalPoiSchema'
+import hospitalPoiSchema from '@/services/hospital/hospitalPoiSchema'
 import {
   createFailRoute,
   createListDataSchema,
@@ -32,7 +32,7 @@ export const hospitalRequest = z.object({
 
 export type HospitalRequest = z.infer<typeof hospitalRequest>
 
-export const hospitalPoiDataSchema = createListDataSchema(HospitalPoiModel)
+export const hospitalPoiDataSchema = createListDataSchema(hospitalPoiSchema)
 export type HospitalPoiDataType = z.infer<typeof hospitalPoiDataSchema>
 
 export const hospitalPoiResSchema = createSuccessSchema(

@@ -1,9 +1,9 @@
 import { Entity } from 'electrodb'
 import { docClient } from '@/services/client'
 import zod2ElectroAttributes from '../zodSchema2ElectroAttributes'
-import HospitalPoiModel from './hospitalPoiSchema'
+import hospitalPoiSchema from './hospitalPoiSchema'
 
-const attributes = zod2ElectroAttributes(HospitalPoiModel)
+const attributes = zod2ElectroAttributes(hospitalPoiSchema)
 
 /**
  * Hospital 엔티티 정의

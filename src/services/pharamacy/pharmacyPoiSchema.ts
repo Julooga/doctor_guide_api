@@ -131,5 +131,3 @@ const pharmacyPoiSchema = z
   .openapi({ ref: 'PharmacyPoiSchema' })
 
 export default pharmacyPoiSchema
-
-export type PharmacyPoiSchemaType = z.infer<typeof pharmacyPoiSchema>

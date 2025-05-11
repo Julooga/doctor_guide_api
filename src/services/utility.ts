@@ -25,7 +25,7 @@ export const createFailRoute = (description = '에러응답') => {
       'application/json': {
         schema: resolver(
           zodErrorSchema.openapi({
-            ref: 'ErrorSchema'
+            ref: 'ErrorResponse'
           })
         )
       }
@@ -34,21 +34,17 @@ export const createFailRoute = (description = '에러응답') => {
 }
 
 export const createSuccessSchema = (dataSchema: ZodType) => {
-  return z
-    .object({
-      success: z.boolean(),
-      data: dataSchema
-    })
-    .openapi({ ref: 'SuccessResponseModel' })
+  return z.object({
+    success: z.boolean(),
+    data: dataSchema
+  })
 }
 
 export const createListDataSchema = (recordSchema: ZodType) => {
-  return z
-    .object({
-      list: recordSchema.array(),
-      cursor: z.string().nullable()
-    })
-    .openapi({ ref: 'ListModel' })
+  return z.object({
+    list: recordSchema.array(),
+    cursor: z.string().nullable()
+  })
 }
 
 export const createSuccessRoute = ({
