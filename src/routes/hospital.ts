@@ -1,4 +1,4 @@
-import { hospitalPoiSchema } from '@/services/hospital/schema'
+import hospitalPoiSchema from '@/services/hospital/hospitalPoiSchema'
 import {
   createFailRoute,
   createListDataSchema,

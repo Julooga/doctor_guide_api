@@ -1,3 +1,4 @@
+import { Attribute } from 'electrodb'
 import {
   ZodTypeAny,
   ZodObject,
@@ -214,7 +215,7 @@ const processSchema = (
 // zod 스키마를 일렉트로DB 애뜨리뷰트로 변환하는 컨버터
 const zod2ElectroAttributes = <T extends ZodRawShape>(
   zodSchema: ZodObject<T>
-): Record<string, ElectroAttributeConfig> => {
+): { readonly [x: string]: Attribute } => {
   const entries = Object.entries(zodSchema.shape).map(([key, schema]) => [
     key,
     processSchema(key, schema as ZodTypeAny)

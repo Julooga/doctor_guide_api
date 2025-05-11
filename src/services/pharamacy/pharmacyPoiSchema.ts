@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import 'zod-openapi/extend'
 
-export const pharmacyPoiSchema = z
+const pharmacyPoiSchema = z
   .object({
     MDEXM_END_HR_THDY: z.string().nullable().openapi({
       description: '진료종료시간목요일',
@@ -129,5 +129,7 @@ export const pharmacyPoiSchema = z
     })
   })
   .openapi({ ref: 'PharmacyPoiSchema' })
+
+export default pharmacyPoiSchema
 
 export type PharmacyPoiSchemaType = z.infer<typeof pharmacyPoiSchema>

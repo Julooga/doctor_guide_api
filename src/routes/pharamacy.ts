@@ -1,4 +1,4 @@
-import { pharmacyPoiSchema } from '@/services/pharamacy/schema'
+import pharmacyPoiSchema from '@/services/pharamacy/pharmacyPoiSchema'
 import {
   createFailRoute,
   createListDataSchema,

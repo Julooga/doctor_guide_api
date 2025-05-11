@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import 'zod-openapi/extend'
 
-export const hospitalPoiSchema = z
+const hospitalPoiSchema = z
   .object({
     INST_EXPLN_DTL: z.string().nullable().openapi({
       description: '기관설명상세'
@@ -147,5 +147,7 @@ export const hospitalPoiSchema = z
     })
   })
   .openapi({ ref: 'HospitalPoiSchema' })
+
+export default hospitalPoiSchema
 
 export type HospitalPoiSchemaType = z.infer<typeof hospitalPoiSchema>
