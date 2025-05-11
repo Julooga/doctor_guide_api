@@ -1,7 +1,7 @@
 {
   "name": "doctor_guide_api",
   "type": "module",
-  "version": "1.0.15",
+  "version": "1.1.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/Julooga/doctor_guide_api.git"
