@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/Julooga/doctor_guide_api/compare/1.0.1...1.0.2) (2025-05-11)
+
+
+### Bug Fixes
+
+* 워크플로우 트리거를 수정하여 일관성 유지 ([9e10702](https://github.com/Julooga/doctor_guide_api/commit/9e1070243d5742e651e4653148f4ac809b67b882))
+
 ## [1.0.1](https://github.com/Julooga/doctor_guide_api/compare/v1.0.0...1.0.1) (2025-05-11)
 
 
