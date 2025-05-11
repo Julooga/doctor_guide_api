@@ -1,3 +1,10 @@
+## [1.0.15](https://github.com/Julooga/doctor_guide_api/compare/1.0.14...1.0.15) (2025-05-11)
+
+
+### Bug Fixes
+
+* 워크플로우 트리거를 수정하고 태그에서 버전 추출 로직 개선 ([320abcd](https://github.com/Julooga/doctor_guide_api/commit/320abcd21136b2a8fa4fde451ba04c6eaa5c13b6))
+
 ## [1.0.14](https://github.com/Julooga/doctor_guide_api/compare/1.0.13...1.0.14) (2025-05-11)
 
 
