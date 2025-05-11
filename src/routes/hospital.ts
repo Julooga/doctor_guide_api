@@ -1,6 +1,7 @@
 import { hospitalPoiSchema } from '@/services/hospital/schema'
 import {
   createFailRoute,
+  createListDataSchema,
   createNumberSchema,
   createSuccessRoute,
   createSuccessSchema
@@ -32,10 +33,7 @@ export const hospitalRequest = z.object({
 export type HospitalRequestType = z.infer<typeof hospitalRequest>
 
 export const hospitalPoiResSchema = createSuccessSchema(
-  z.object({
-    list: hospitalPoiSchema.array(),
-    cursor: z.string().nullable()
-  })
+  createListDataSchema(hospitalPoiSchema)
 ).openapi({ ref: 'HospitalResponse' })
 
 export type HospitalPoiResSchemaType = z.infer<typeof hospitalPoiResSchema>

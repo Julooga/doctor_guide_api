@@ -34,10 +34,21 @@ export const createFailRoute = (description = '에러응답') => {
 }
 
 export const createSuccessSchema = (dataSchema: ZodType) => {
-  return z.object({
-    success: z.boolean(),
-    data: dataSchema
-  })
+  return z
+    .object({
+      success: z.boolean(),
+      data: dataSchema
+    })
+    .openapi({ ref: 'SuccessResponseModel' })
+}
+
+export const createListDataSchema = (recordSchema: ZodType) => {
+  return z
+    .object({
+      list: recordSchema.array(),
+      cursor: z.string().nullable()
+    })
+    .openapi({ ref: 'ListModel' })
 }
 
 export const createSuccessRoute = ({

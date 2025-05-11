@@ -1,6 +1,7 @@
 import { pharmacyPoiSchema } from '@/services/pharamacy/schema'
 import {
   createFailRoute,
+  createListDataSchema,
   createNumberSchema,
   createSuccessRoute,
   createSuccessSchema
@@ -32,10 +33,7 @@ export const pharmacyRequest = z.object({
 export type PharmacyRequestType = z.infer<typeof pharmacyRequest>
 
 export const pharmacyPoiResSchema = createSuccessSchema(
-  z.object({
-    list: pharmacyPoiSchema.array(),
-    cursor: z.string().nullable()
-  })
+  createListDataSchema(pharmacyPoiSchema)
 ).openapi({ ref: 'PharamacyResponse' })
 
 export type PharmacyPoiResSchemaType = z.infer<typeof pharmacyPoiResSchema>
