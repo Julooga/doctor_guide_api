@@ -1,3 +1,10 @@
+## [1.0.10](https://github.com/Julooga/doctor_guide_api/compare/1.0.9...1.0.10) (2025-05-11)
+
+
+### Bug Fixes
+
+* Node.js 및 pnpm 설정 단계 분리 및 최적화 ([f05896e](https://github.com/Julooga/doctor_guide_api/commit/f05896ee7755f48e0921c717d568890c35f49166))
+
 ## [1.0.9](https://github.com/Julooga/doctor_guide_api/compare/1.0.8...1.0.9) (2025-05-11)
 
 
