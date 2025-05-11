@@ -1,3 +1,10 @@
+## [1.0.9](https://github.com/Julooga/doctor_guide_api/compare/1.0.8...1.0.9) (2025-05-11)
+
+
+### Bug Fixes
+
+* 모든 태그에 대해 SDK 빌드 트리거하도록 수정 ([9e9e3bd](https://github.com/Julooga/doctor_guide_api/commit/9e9e3bdea4cd8c37fe50ee2ccf12cb1d98edcd32))
+
 ## [1.0.8](https://github.com/Julooga/doctor_guide_api/compare/1.0.7...1.0.8) (2025-05-11)
 
 
