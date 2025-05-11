@@ -1,3 +1,10 @@
+## [1.0.11](https://github.com/Julooga/doctor_guide_api/compare/1.0.10...1.0.11) (2025-05-11)
+
+
+### Bug Fixes
+
+* GitHub Actions에서 permissions 섹션 추가 ([9e9be51](https://github.com/Julooga/doctor_guide_api/commit/9e9be51b57b5cc43f6244b5c399ca35786f7b69d))
+
 ## [1.0.10](https://github.com/Julooga/doctor_guide_api/compare/1.0.9...1.0.10) (2025-05-11)
 
 
