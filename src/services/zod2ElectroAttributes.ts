@@ -188,7 +188,7 @@ const processSchema = (
   return processType(schemaAfterDefault, configAfterDefault, key)
 }
 
-// zod 스키마를 일렉트로DB 애뜨리뷰트로 변환하는 컨버터 시제품
+// zod 스키마를 일렉트로DB 애뜨리뷰트로 변환하는 컨버터
 const zod2ElectroAttributes = <T extends ZodRawShape>(
   zodSchema: ZodObject<T>
 ): Record<string, ElectroAttributeConfig> => {
