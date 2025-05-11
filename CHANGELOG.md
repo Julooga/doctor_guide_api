@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/Julooga/doctor_guide_api/compare/1.1.0...1.2.0) (2025-05-11)
+
+
+### Features
+
+* SDK 빌드 프로세스에서 패키지 이름 및 스코프 정보를 동적으로 설정하도록 수정 ([b0765fa](https://github.com/Julooga/doctor_guide_api/commit/b0765fa80bec9f2707166b7095846e013186093b))
+
 # [1.1.0](https://github.com/Julooga/doctor_guide_api/compare/1.0.15...1.1.0) (2025-05-11)
 
 
