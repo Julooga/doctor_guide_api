@@ -11,6 +11,7 @@ sdk/api.ts
 .idea/workspace.xml
 .idea/usage.statistics.xml
 .idea/shelf
+.lh/
 
 # deps
 node_modules/

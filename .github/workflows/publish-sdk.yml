@@ -1,49 +1,160 @@
-name: Publish SDK to GitHub Packages
+name: Build and Publish SDK
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: # 수동 실행 옵션 유지 (버전 지정 없음)
   push:
     tags:
-      - '*'
+      - 'v*' # v로 시작하는 시맨틱 버전 태그만 처리
 
 jobs:
-  build-and-publish:
+  # 1. 전용 작업 공간에서 SDK 빌드
+  build:
+    name: Build SDK
     runs-on: ubuntu-latest
-    permissions:
-      contents: read # 소스 코드를 체크아웃하기 위해 필요
-      packages: write # GitHub Packages에 패키지를 게시하기 위해 필요
-
+    outputs:
+      version: ${{ steps.extract-version.outputs.version }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 'latest'
-          run_install: false
-
-      - name: Setup Node.js
+      
+      - name: Setup Node.js and pnpm
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'pnpm'
-
+      
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 'latest'
+      
       - name: Install dependencies
         run: pnpm i --frozen-lockfile
-
-      - name: Generate SDK
-        run: pnpm build:api
-
-      - name: write .npmrc
+      
+      # 태그에서 버전 추출 (v 접두사 제거)
+      - name: Extract version from tag
+        id: extract-version
         run: |
-          # sdk 디렉토리에 .npmrc 파일 생성
-          echo "@julooga:registry=https://npm.pkg.github.com/" > sdk/.npmrc
-          echo "//npm.pkg.github.com/:_authToken=\${NODE_AUTH_TOKEN}" >> sdk/.npmrc
-
-      - name: Publish to GitHub Packages
+          # 태그가 있는 경우 태그에서 버전 추출 (v 접두사 제거)
+          if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
+            VERSION="${GITHUB_REF#refs/tags/v}"
+          else
+            # 태그가 없는 경우 package.json에서 버전 가져오기
+            VERSION=$(node -p "require('./package.json').version")
+          fi
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+      
+      # 전용 작업 공간에서 SDK 빌드
+      - name: Generate SDK in workspace
         run: |
-          cd sdk
+          # 작업 공간 생성
+          mkdir -p ./workspace
+          
+          # SDK 생성
+          pnpm build:api
+          
+          # SDK 파일을 작업 공간으로 복사
+          cp -r ./sdk/* ./workspace/
+          
+          # 작업 공간의 package.json 버전 업데이트
+          cd ./workspace
+          sed -i "s/\"version\": \".*\"/\"version\": \"${{ steps.extract-version.outputs.version }}\"/" package.json
+      
+      # 빌드 결과물을 아티팩트로 저장
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: sdk-build
+          path: ./workspace
+
+  # 2. 빌드 결과물을 dist 브랜치로 푸시
+  deploy-to-dist:
+    name: Deploy to dist branch
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      # dist 브랜치 존재 여부 확인 및 체크아웃
+      - name: Check if dist branch exists
+        id: check-branch
+        run: |
+          if git ls-remote --heads origin dist | grep dist; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+      
+      # 기존 dist 브랜치 체크아웃
+      - name: Checkout dist branch if exists
+        if: steps.check-branch.outputs.exists == 'true'
+        uses: actions/checkout@v4
+        with:
+          ref: dist
+      
+      # dist 브랜치가 없으면 기본 브랜치 체크아웃
+      - name: Checkout default branch if dist not exists
+        if: steps.check-branch.outputs.exists == 'false'
+        uses: actions/checkout@v4
+      
+      # dist 브랜치 생성 및 푸시
+      - name: Create and push dist branch
+        if: steps.check-branch.outputs.exists == 'false'
+        run: |
+          git checkout -b dist
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git commit --allow-empty -m "Initial dist branch commit"
+          git push origin dist
+      
+      # 빌드 아티팩트 다운로드
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: sdk-build
+          path: ./
+      
+      # dist 브랜치에 커밋 및 푸시
+      - name: Commit to dist branch
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          
+          git add .
+          git commit -m "chore: update SDK to version ${{ needs.build.outputs.version }}"
+          git push origin dist
+      
+      # 태그 푸시 시 dist 브랜치에도 태그 생성
+      - name: Create dist tag
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          VERSION="${{ needs.build.outputs.version }}"
+          git tag "dist-v${VERSION}"
+          git push origin "dist-v${VERSION}"
+
+  # 3. dist 브랜치에서 GitHub Packages에 게시
+  publish:
+    name: Publish to GitHub Packages
+    needs: [build, deploy-to-dist]
+    runs-on: ubuntu-latest
+    steps:
+      # dist 브랜치 체크아웃
+      - name: Checkout dist branch
+        uses: actions/checkout@v4
+        with:
+          ref: dist
+      
+      # Node.js 및 npm 레지스트리 설정
+      - name: Setup Node.js with registry
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@julooga'
+      
+      # GitHub Packages에 게시
+      - name: Publish package
+        run: |
+          echo "@julooga:registry=https://npm.pkg.github.com/" > .npmrc
+          echo "//npm.pkg.github.com/:_authToken=\${NODE_AUTH_TOKEN}" >> .npmrc
           pnpm publish --no-git-checks --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
