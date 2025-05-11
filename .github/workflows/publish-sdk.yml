@@ -6,6 +6,10 @@ on:
     tags:
       - '*'
 
+permissions:
+  contents: write
+  packages: write
+
 jobs:
   # 1. 전용 작업 공간에서 SDK 빌드
   build:
