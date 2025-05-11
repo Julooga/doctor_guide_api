@@ -20,7 +20,7 @@ export const pharmacyRequest = z.object({
   })
 })
 
-export type PharmacyRequest = z.infer<typeof pharmacyRequest>
+export type PharmacyRequestType = z.infer<typeof pharmacyRequest>
 
 export const pharmacyPoiSchema = z
   .object({
@@ -151,7 +151,7 @@ export const pharmacyPoiSchema = z
   })
   .openapi({ ref: 'PharmacyPoiSchema' })
 
-export type PharmacyPoiSchema = z.infer<typeof pharmacyPoiSchema>
+export type PharmacyPoiSchemaType = z.infer<typeof pharmacyPoiSchema>
 
 export const pharmacyPoiResSchema = z
   .object({
@@ -163,4 +163,4 @@ export const pharmacyPoiResSchema = z
   })
   .openapi({ ref: 'PharamacyResponse', refType: 'output' })
 
-export type PharmacyPoiResSchema = z.infer<typeof pharmacyPoiResSchema>
+export type PharmacyPoiResSchemaType = z.infer<typeof pharmacyPoiResSchema>

@@ -20,7 +20,7 @@ export const hospitalRequest = z.object({
   })
 })
 
-export type HospitalRequest = z.infer<typeof hospitalRequest>
+export type HospitalRequestType = z.infer<typeof hospitalRequest>
 
 export const hospitalPoiSchema = z
   .object({
@@ -169,7 +169,7 @@ export const hospitalPoiSchema = z
   })
   .openapi({ ref: 'HospitalPoiSchema' })
 
-export type HospitalPoiSchema = z.infer<typeof hospitalPoiSchema>
+export type HospitalPoiSchemaType = z.infer<typeof hospitalPoiSchema>
 
 export const hospitalPoiResSchema = z
   .object({
@@ -181,4 +181,4 @@ export const hospitalPoiResSchema = z
   })
   .openapi({ ref: 'HospitalResponse', refType: 'output' })
 
-export type HospitalPoiResSchema = z.infer<typeof hospitalPoiResSchema>
+export type HospitalPoiResSchemaType = z.infer<typeof hospitalPoiResSchema>

@@ -1,7 +1,7 @@
 import { Entity } from 'electrodb'
 import { docClient } from '@/client'
 
-const PharmacyEntity = new Entity(
+const pharmacyEntity = new Entity(
   {
     model: {
       entity: 'pharmacy',
@@ -58,4 +58,4 @@ const PharmacyEntity = new Entity(
   }
 )
 
-export default PharmacyEntity
+export default pharmacyEntity

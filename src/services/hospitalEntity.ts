@@ -10,7 +10,7 @@ const TABLE_NAME = 'Hospital-safetydata'
  * ElectroDB Entity를 사용하여 병원 데이터 모델 정의
  * schema.txt를 기반으로 INST_ID를 주 키로 사용
  */
-const HospitalEntity = new Entity(
+const hospitalEntity = new Entity(
   {
     // 모델 메타데이터 정의
     model: {
@@ -312,4 +312,4 @@ const HospitalEntity = new Entity(
   }
 )
 
-export default HospitalEntity
+export default hospitalEntity
