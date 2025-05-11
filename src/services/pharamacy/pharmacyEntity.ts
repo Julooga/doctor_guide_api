@@ -1,5 +1,5 @@
 import { Entity } from 'electrodb'
-import { docClient } from '@/client'
+import { docClient } from '@/services/client'
 
 const pharmacyEntity = new Entity(
   {
