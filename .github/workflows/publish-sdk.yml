@@ -88,76 +88,79 @@ jobs:
           path: ./workspace
 
   # 2. 빌드 결과물을 dist 브랜치로 푸시
+  # 2. 빌드 결과물을 dist 브랜치로 푸시 (개선된 방식)
   deploy-to-dist:
     name: Deploy to dist branch
     needs: build
     runs-on: ubuntu-latest
     steps:
-      # dist 브랜치 존재 여부 확인
-      - name: Check if dist branch exists
-        id: check-branch
-        run: |
-          if git ls-remote --heads https://github.com/${{ github.repository }} dist | grep dist; then
-            echo "exists=true" >> $GITHUB_OUTPUT
-          else
-            echo "exists=false" >> $GITHUB_OUTPUT
-          fi
-
-      # 기존 dist 브랜치 체크아웃 (강제 리셋 적용)
-      - name: Checkout dist branch if exists
-        if: steps.check-branch.outputs.exists == 'true'
+      # 기본 브랜치 체크아웃
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: dist
           fetch-depth: 0 # 전체 히스토리 가져오기
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      # 브랜치 강제 리셋 단계 추가
-      - name: Reset branch to prevent conflicts
-        if: steps.check-branch.outputs.exists == 'true'
+      # Git 사용자 설정
+      - name: Configure Git
         run: |
-          git fetch origin dist
-          git reset --hard origin/dist
-          git clean -fd  # 추적되지 않는 파일 제거
-
-      # dist 브랜치가 없으면 기본 브랜치 체크아웃
-      - name: Checkout default branch if dist not exists
-        if: steps.check-branch.outputs.exists == 'false'
-        uses: actions/checkout@v4
-
-      # dist 브랜치 생성 및 푸시
-      - name: Create and push dist branch
-        if: steps.check-branch.outputs.exists == 'false'
-        run: |
-          git checkout -b dist
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git commit --allow-empty -m "Initial dist branch commit"
-          git push origin dist
 
       # 빌드 아티팩트 다운로드
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
           name: sdk-build
-          path: ./
+          path: ./sdk-artifacts
 
-      # dist 브랜치에 커밋 및 푸시
-      - name: Commit to dist branch
+      # dist 브랜치 강제 재생성 (기존 브랜치 삭제 후 새로 생성)
+      - name: Force recreate dist branch
         run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
+          # 로컬 브랜치 목록 확인
+          echo "Current local branches:"
+          git branch -a
 
-          git add .
-          git commit -m "chore: update SDK to version ${{ needs.build.outputs.version }}"
-          git push origin dist
+          # 원격 dist 브랜치 존재 여부 확인
+          if git ls-remote --heads origin dist | grep dist; then
+            echo "Remote dist branch exists - will delete and recreate"
+            
+            # 원격 브랜치 강제 삭제 시도 (실패해도 계속 진행)
+            git push origin --delete dist || echo "Failed to delete remote branch, continuing anyway"
+            sleep 2  # 삭제 작업이 완료될 때까지 잠시 대기
+          else
+            echo "Remote dist branch does not exist - will create new"
+          fi
+
+          # 로컬에 dist 브랜치가 있으면 삭제
+          git branch -D dist 2>/dev/null || echo "No local dist branch to delete"
+
+          # 빈 dist 브랜치 새로 생성
+          git checkout --orphan dist
+          git reset --hard  # 작업 디렉토리 초기화
+
+          # 아티팩트 파일 복사
+          cp -r ./sdk-artifacts/* ./ || echo "No artifacts to copy"
+
+          # 모든 파일 추가 및 커밋
+          git add -A
+          git commit -m "chore: update SDK to version ${{ needs.build.outputs.version }}" || echo "Nothing to commit"
+
+          # 강제 푸시 (--force 플래그 사용)
+          git push --force origin dist
+          echo "Dist branch recreated successfully"
 
       # 태그 푸시 시 dist 브랜치에도 태그 생성
       - name: Create dist tag
         if: startsWith(github.ref, 'refs/tags/')
         run: |
           VERSION="${{ needs.build.outputs.version }}"
-          git tag "dist-v${VERSION}"
-          git push origin "dist-v${VERSION}"
+          # 기존 태그가 있으면 삭제
+          git push origin :refs/tags/dist-v${VERSION} 2>/dev/null || echo "No existing tag to delete"
+          # 새 태그 생성 및 푸시
+          git tag -f "dist-v${VERSION}"
+          git push --force origin "dist-v${VERSION}"
+          echo "Dist tag created successfully"
 
   # 3. dist 브랜치에서 GitHub Packages에 게시
   publish:
