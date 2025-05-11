@@ -1,26 +1,5 @@
 import { z } from 'zod'
 import 'zod-openapi/extend'
-import { createNumberSchema } from '@/schemas/utility'
-
-export const pharmacyRequest = z.object({
-  limit: createNumberSchema().optional().openapi({
-    description: '페이지 당 레코드 개수',
-    example: '10'
-  }),
-  cursor: z.string().optional().openapi({
-    description: '다음 페이지를 조회하는 커서'
-  }),
-  ADDR: z.string().optional().openapi({
-    description: '주소',
-    example: '경기'
-  }),
-  INST_NM: z.string().optional().openapi({
-    description: '약국이름',
-    example: '역곡'
-  })
-})
-
-export type PharmacyRequestType = z.infer<typeof pharmacyRequest>
 
 export const pharmacyPoiSchema = z
   .object({
@@ -152,15 +131,3 @@ export const pharmacyPoiSchema = z
   .openapi({ ref: 'PharmacyPoiSchema' })
 
 export type PharmacyPoiSchemaType = z.infer<typeof pharmacyPoiSchema>
-
-export const pharmacyPoiResSchema = z
-  .object({
-    success: z.boolean(),
-    data: z.object({
-      list: pharmacyPoiSchema.array(),
-      cursor: z.string().nullable()
-    })
-  })
-  .openapi({ ref: 'PharamacyResponse', refType: 'output' })
-
-export type PharmacyPoiResSchemaType = z.infer<typeof pharmacyPoiResSchema>

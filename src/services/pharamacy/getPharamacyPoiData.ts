@@ -1,5 +1,5 @@
-import pharmacyEntity from '@/services/pharmacyEntity'
-import { PharmacyRequestType } from '@/schemas/pharamacy/schema'
+import { PharmacyRequestType } from '@/routes/pharamacy'
+import pharmacyEntity from '@/services/pharamacy/pharmacyEntity'
 import { PharmacyPoiSchema } from 'sdk/api'
 
 const getPharamacyPoiData = async (query: PharmacyRequestType) => {

@@ -1,13 +1,44 @@
+import { hospitalPoiSchema } from '@/services/hospital/schema'
 import {
-  hospitalPoiResSchema,
-  hospitalRequest,
-  HospitalPoiResSchemaType
-} from '@/schemas/hospital/schema'
-import { createFailRoute, createSuccessRoute } from '@/schemas/utility'
-import getHospitalPoiData from '@/services/getHospitalPoiData'
+  createFailRoute,
+  createNumberSchema,
+  createSuccessRoute,
+  createSuccessSchema
+} from '@/services/utility'
+import getHospitalPoiData from '@/services/hospital/getHospitalPoiData'
 import { Hono } from 'hono'
 import { describeRoute } from 'hono-openapi'
 import { validator } from 'hono-openapi/zod'
+import { z } from 'zod'
+
+export const hospitalRequest = z.object({
+  limit: createNumberSchema().optional().openapi({
+    description: '페이지 당 레코드 개수',
+    example: '10'
+  }),
+  cursor: z.string().optional().openapi({
+    description: '다음 페이지를 조회하는 커서'
+  }),
+  ADDR: z.string().optional().openapi({
+    description: '주소',
+    example: '서울'
+  }),
+  FIAI_MDLCR_INST_CD_NM: z.string().optional().openapi({
+    description: '응급의료기관코드명',
+    example: '응급'
+  })
+})
+
+export type HospitalRequestType = z.infer<typeof hospitalRequest>
+
+export const hospitalPoiResSchema = createSuccessSchema(
+  z.object({
+    list: hospitalPoiSchema.array(),
+    cursor: z.string().nullable()
+  })
+).openapi({ ref: 'HospitalResponse' })
+
+export type HospitalPoiResSchemaType = z.infer<typeof hospitalPoiResSchema>
 
 const hospitalRouter = new Hono()
 

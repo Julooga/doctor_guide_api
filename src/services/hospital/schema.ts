@@ -1,26 +1,5 @@
 import { z } from 'zod'
 import 'zod-openapi/extend'
-import { createNumberSchema } from '@/schemas/utility'
-
-export const hospitalRequest = z.object({
-  limit: createNumberSchema().optional().openapi({
-    description: '페이지 당 레코드 개수',
-    example: '10'
-  }),
-  cursor: z.string().optional().openapi({
-    description: '다음 페이지를 조회하는 커서'
-  }),
-  ADDR: z.string().optional().openapi({
-    description: '주소',
-    example: '서울'
-  }),
-  FIAI_MDLCR_INST_CD_NM: z.string().optional().openapi({
-    description: '응급의료기관코드명',
-    example: '응급'
-  })
-})
-
-export type HospitalRequestType = z.infer<typeof hospitalRequest>
 
 export const hospitalPoiSchema = z
   .object({
@@ -170,15 +149,3 @@ export const hospitalPoiSchema = z
   .openapi({ ref: 'HospitalPoiSchema' })
 
 export type HospitalPoiSchemaType = z.infer<typeof hospitalPoiSchema>
-
-export const hospitalPoiResSchema = z
-  .object({
-    success: z.boolean(),
-    data: z.object({
-      list: hospitalPoiSchema.array(),
-      cursor: z.string().nullable()
-    })
-  })
-  .openapi({ ref: 'HospitalResponse', refType: 'output' })
-
-export type HospitalPoiResSchemaType = z.infer<typeof hospitalPoiResSchema>

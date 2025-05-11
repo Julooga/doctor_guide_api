@@ -1,5 +1,5 @@
-import hospitalEntity from '@/services/hospitalEntity'
-import { HospitalRequestType } from '@/schemas/hospital/schema'
+import { HospitalRequestType } from '@/routes/hospital'
+import hospitalEntity from '@/services/hospital/hospitalEntity'
 import { HospitalPoiSchema } from 'sdk/api'
 
 const getHospitalPoiData = async (query: HospitalRequestType) => {
