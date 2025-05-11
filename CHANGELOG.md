@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/Julooga/doctor_guide_api/compare/1.0.2...1.0.3) (2025-05-11)
+
+
+### Bug Fixes
+
+* AWS Lambda 업데이트 명령어에 지역 파라미터 추가 ([9999047](https://github.com/Julooga/doctor_guide_api/commit/999904710de42c4452abe6474dcd094aa0d51b74))
+
 ## [1.0.2](https://github.com/Julooga/doctor_guide_api/compare/1.0.1...1.0.2) (2025-05-11)
 
 
