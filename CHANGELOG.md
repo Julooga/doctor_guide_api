@@ -1,3 +1,11 @@
+## [1.0.8](https://github.com/Julooga/doctor_guide_api/compare/1.0.7...1.0.8) (2025-05-11)
+
+
+### Bug Fixes
+
+* GitHub 저장소 URL 생성 로직 수정 및 잘못된 경로 수정 ([e1783fb](https://github.com/Julooga/doctor_guide_api/commit/e1783fba7d4597d1e445194779cfc11c5a08135b))
+* 각 워크플로우에서 install 작업의 의존성 추가 ([00aa0b9](https://github.com/Julooga/doctor_guide_api/commit/00aa0b90b477d741913498046ebd63ce5b4e53dc))
+
 ## [1.0.7](https://github.com/Julooga/doctor_guide_api/compare/1.0.6...1.0.7) (2025-05-11)
 
 
