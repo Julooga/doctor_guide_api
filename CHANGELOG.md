@@ -1,3 +1,15 @@
+# [1.1.0](https://github.com/Julooga/doctor_guide_api/compare/1.0.15...1.1.0) (2025-05-11)
+
+
+### Bug Fixes
+
+* 워크플로우 수동 실행 옵션 설명 수정 및 .gitignore에서 dist 제거 ([82b850d](https://github.com/Julooga/doctor_guide_api/commit/82b850d5183fb3b64c468ccb36539690405f3fff))
+
+
+### Features
+
+* 워크플로우에서 패키지 이름 및 설명을 동적으로 설정하도록 수정 ([a714167](https://github.com/Julooga/doctor_guide_api/commit/a714167a4890e0d38591da4ec5af6b7fb3339d8b))
+
 ## [1.0.15](https://github.com/Julooga/doctor_guide_api/compare/1.0.14...1.0.15) (2025-05-11)
 
 
