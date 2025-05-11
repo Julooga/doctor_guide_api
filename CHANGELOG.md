@@ -1,3 +1,10 @@
+## [1.0.7](https://github.com/Julooga/doctor_guide_api/compare/1.0.6...1.0.7) (2025-05-11)
+
+
+### Bug Fixes
+
+* README.md에서 semantic-release 배지의 텍스트 수정 ([d2d66c2](https://github.com/Julooga/doctor_guide_api/commit/d2d66c2c6f52514463b460852a541219d9429c9b))
+
 ## [1.0.6](https://github.com/Julooga/doctor_guide_api/compare/1.0.5...1.0.6) (2025-05-11)
 
 
