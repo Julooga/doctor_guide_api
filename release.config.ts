@@ -3,7 +3,7 @@ import { GlobalConfig } from 'semantic-release'
 const config: GlobalConfig = {
   branches: ['main'],
   repositoryUrl: 'https://github.com/Julooga/doctor_guide_api',
-  tagFormat: 'v${version}',
+  tagFormat: '${version}',
   plugins: [
     '@semantic-release/commit-analyzer', // 커밋 메시지를 분석하여 버전 결정
     '@semantic-release/release-notes-generator', // CHANGELOG.md에 들어갈 릴리스 노트를 생성
