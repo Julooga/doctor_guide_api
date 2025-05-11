@@ -1,7 +1,11 @@
 name: Build and Publish SDK
 
 on:
-  workflow_dispatch: # 수동 실행 가능
+  workflow_dispatch: # 수동 실행 옵션
+    inputs:
+      package_name:
+        description: '@julooga/doctor_guide_api_sdk'
+        required: false
   workflow_run:
     workflows: ['semantic-release']
     types:
@@ -64,22 +68,43 @@ jobs:
           # SDK 생성
           pnpm build:api
 
-          # package.json 동적 생성
+          # 동적 변수 설정
           VERSION="${{ steps.extract-version.outputs.version }}"
           REPO_URL=$(node -p "require('./package.json').repository.url")
 
+          # 저장소 이름에서 패키지 이름 추출 (GitHub URL에서 조직/저장소 형식 추출)
+          REPO_FULL_NAME=$(echo $REPO_URL | sed -E 's|.*github.com[:/]([^/]+/[^/.]+).*|\1|')
+          ORG_NAME=$(echo $REPO_FULL_NAME | cut -d '/' -f 1)
+          REPO_NAME=$(echo $REPO_FULL_NAME | cut -d '/' -f 2)
+
+          # 기본 패키지 이름 (원본 package.json에서 가져옴)
+          BASE_PACKAGE_NAME=$(node -p "require('./package.json').name")
+
+          # 워크플로우 디스패치에서 패키지 이름이 제공되었는지 확인
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ github.event.inputs.package_name }}" != "" ]]; then
+            # 워크플로우 디스패치에서 제공된 패키지 이름 사용
+            PACKAGE_NAME="${{ github.event.inputs.package_name }}"
+          else
+            # 기본값: @조직명/저장소명_sdk
+            PACKAGE_NAME="@${ORG_NAME}/${REPO_NAME}_sdk"
+          fi
+
+          # 패키지 설명 동적 생성
+          PACKAGE_DESCRIPTION=$(node -p "require('./package.json').description || '${REPO_NAME} API SDK'")
+
+          # package.json 동적 생성
           cat > ./workspace/package.json << EOF
           {
-            "name": "@julooga/doctor_guide_api_sdk",
+            "name": "${PACKAGE_NAME}",
             "version": "${VERSION}",
-            "description": "의료정보를 제공하는 api 의 스웨거 sdk",
+            "description": "${PACKAGE_DESCRIPTION}",
             "main": "api.ts",
             "types": "api.ts",
             "repository": {
               "type": "git",
               "url": "${REPO_URL}"
             },
-            "author": "Julooga",
+            "author": "${ORG_NAME}",
             "license": "MIT",
             "dependencies": {
               "axios": "^1.9.0"
@@ -87,7 +112,7 @@ jobs:
           }
           EOF
 
-          echo "SDK generated with version ${VERSION}"
+          echo "SDK generated with name ${PACKAGE_NAME} and version ${VERSION}"
 
       # 빌드 결과물을 아티팩트로 저장
       - name: Upload build artifacts
