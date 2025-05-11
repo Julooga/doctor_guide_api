@@ -1,3 +1,10 @@
+## [1.0.12](https://github.com/Julooga/doctor_guide_api/compare/1.0.11...1.0.12) (2025-05-11)
+
+
+### Bug Fixes
+
+* npm을 사용하여 패키지 게시로 변경 ([a60d449](https://github.com/Julooga/doctor_guide_api/commit/a60d44941922bcd8f2d67844832c650137fb96eb))
+
 ## [1.0.11](https://github.com/Julooga/doctor_guide_api/compare/1.0.10...1.0.11) (2025-05-11)
 
 
