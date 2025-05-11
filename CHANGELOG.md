@@ -1,3 +1,10 @@
+## [1.0.6](https://github.com/Julooga/doctor_guide_api/compare/1.0.5...1.0.6) (2025-05-11)
+
+
+### Bug Fixes
+
+* lambda:cleanup 스크립트에서 lambda-update.log 파일 제거 ([205f9f1](https://github.com/Julooga/doctor_guide_api/commit/205f9f112ff175eca22ef5cce4c31d4018b7a906))
+
 ## [1.0.5](https://github.com/Julooga/doctor_guide_api/compare/1.0.4...1.0.5) (2025-05-11)
 
 
