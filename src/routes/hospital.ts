@@ -30,13 +30,16 @@ export const hospitalRequest = z.object({
   })
 })
 
-export type HospitalRequestType = z.infer<typeof hospitalRequest>
+export type HospitalRequest = z.infer<typeof hospitalRequest>
+
+export const hospitalPoiDataSchema = createListDataSchema(hospitalPoiSchema)
+export type HospitalPoiDataType = z.infer<typeof hospitalPoiDataSchema>
 
 export const hospitalPoiResSchema = createSuccessSchema(
-  createListDataSchema(hospitalPoiSchema)
+  hospitalPoiDataSchema
 ).openapi({ ref: 'HospitalResponse' })
 
-export type HospitalPoiResSchemaType = z.infer<typeof hospitalPoiResSchema>
+export type HospitalPoiResponse = z.infer<typeof hospitalPoiResSchema>
 
 const hospitalRouter = new Hono()
 
@@ -56,7 +59,7 @@ hospitalRouter.get(
   async (c) => {
     const query = c.req.valid('query')
     const data = await getHospitalPoiData(query)
-    const res: HospitalPoiResSchemaType = {
+    const res: HospitalPoiResponse = {
       success: true,
       data
     }

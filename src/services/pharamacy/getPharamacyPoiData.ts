@@ -1,8 +1,7 @@
-import { PharmacyRequestType } from '@/routes/pharamacy'
+import { PharmacyPoiDataType, PharmacyRequest } from '@/routes/pharamacy'
 import pharmacyEntity from '@/services/pharamacy/pharmacyEntity'
-import { PharmacyPoiSchema } from 'sdk/api'
 
-const getPharamacyPoiData = async (query: PharmacyRequestType) => {
+const getPharamacyPoiData = async (query: PharmacyRequest) => {
   const data = await pharmacyEntity.scan
     .where(({ ADDR, INST_NM }, { contains }) => {
       const conditions = []
@@ -30,7 +29,7 @@ const getPharamacyPoiData = async (query: PharmacyRequestType) => {
     })
 
   return {
-    list: data.data as unknown as PharmacyPoiSchema[],
+    list: data.data as unknown as PharmacyPoiDataType[],
     cursor: data.cursor
   }
 }

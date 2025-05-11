@@ -30,13 +30,16 @@ export const pharmacyRequest = z.object({
   })
 })
 
-export type PharmacyRequestType = z.infer<typeof pharmacyRequest>
+export type PharmacyRequest = z.infer<typeof pharmacyRequest>
+
+export const pharmacyPoiDataSchema = createListDataSchema(pharmacyPoiSchema)
+export type PharmacyPoiDataType = z.infer<typeof pharmacyPoiDataSchema>
 
 export const pharmacyPoiResSchema = createSuccessSchema(
-  createListDataSchema(pharmacyPoiSchema)
+  pharmacyPoiDataSchema
 ).openapi({ ref: 'PharamacyResponse' })
 
-export type PharmacyPoiResSchemaType = z.infer<typeof pharmacyPoiResSchema>
+export type PharmacyPoiResponse = z.infer<typeof pharmacyPoiResSchema>
 
 const pharamacyRouter = new Hono()
 
@@ -54,7 +57,7 @@ pharamacyRouter.get(
   async (c) => {
     const query = c.req.valid('query')
     const data = await getPharamacyPoiData(query)
-    const res: PharmacyPoiResSchemaType = {
+    const res: PharmacyPoiResponse = {
       success: true,
       data
     }

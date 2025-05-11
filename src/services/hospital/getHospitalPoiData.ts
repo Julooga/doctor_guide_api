@@ -1,8 +1,8 @@
-import { HospitalRequestType } from '@/routes/hospital'
+import { HospitalPoiDataType, HospitalRequest } from '@/routes/hospital'
 import hospitalEntity from '@/services/hospital/hospitalEntity'
-import { HospitalPoiSchema } from 'sdk/api'
+import {} from '@/routes/hospital'
 
-const getHospitalPoiData = async (query: HospitalRequestType) => {
+const getHospitalPoiData = async (query: HospitalRequest) => {
   const data = await hospitalEntity.scan
     .where(({ ADDR, FIAI_MDLCR_INST_CD_NM }, { contains }) => {
       const conditions = []
@@ -32,7 +32,7 @@ const getHospitalPoiData = async (query: HospitalRequestType) => {
     })
 
   return {
-    list: data.data as unknown as HospitalPoiSchema[],
+    list: data.data as unknown as HospitalPoiDataType[],
     cursor: data.cursor
   }
 }
