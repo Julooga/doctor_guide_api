@@ -17,7 +17,7 @@
     "update:local": "aws lambda update-function-code --zip-file fileb://lambda.zip --function-name doctor_guide_api --region ap-northeast-2 --profile 166287530750_jurloogar-jaewon > lambda-update.log 2>&1 & tail -f lambda-update.log",
     "update:ci": "aws lambda update-function-code --zip-file fileb://lambda.zip --function-name doctor_guide_api --region ap-northeast-2 > lambda-update.log 2>&1 & tail -f lambda-update.log",
     "lambda:cleanup": "rimraf lambda.zip dist lambda-update.log",
-    "lambda:deploy:local": "run-s lambda:cleanup lambda:build zip update:local",
+    "lambda:deploy:local": "run-s lambda:cleanup lambda:build zip update:local lambda:cleanup",
     "lambda:deploy:ci": "run-s lambda:cleanup lambda:build zip update:ci",
     "prepare": "husky",
     "type:check": "tsc --skipLibCheck --noEmit --incremental --tsBuildInfoFile ./node_modules/.cache/tsc/tsbuildinfo",
