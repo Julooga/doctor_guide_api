@@ -2,9 +2,12 @@ name: Deploy to aws lambda
 
 on:
   workflow_dispatch:
-  # push:
-  #   tags:
-  #     - '*'
+  # workflow_run:
+  #   workflows: ['semantic-release']
+  #   types:
+  #     - completed
+  #   branches:
+  #     - main
 
 jobs:
   deploy:
