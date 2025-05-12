@@ -1,3 +1,10 @@
+## [1.2.4](https://github.com/Julooga/doctor_guide_api/compare/1.2.3...1.2.4) (2025-05-12)
+
+
+### Bug Fixes
+
+* AWS Lambda 업데이트 스크립트에서 백그라운드 실행 및 로그 출력을 위한 수정 ([ce4d953](https://github.com/Julooga/doctor_guide_api/commit/ce4d9533ccf93ffcd411ca95d6f439a424df4f84))
+
 ## [1.2.3](https://github.com/Julooga/doctor_guide_api/compare/1.2.2...1.2.3) (2025-05-12)
 
 
