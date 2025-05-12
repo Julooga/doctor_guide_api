@@ -1,3 +1,11 @@
+## [1.2.2](https://github.com/Julooga/doctor_guide_api/compare/1.2.1...1.2.2) (2025-05-12)
+
+
+### Bug Fixes
+
+* AWS Lambda 배포 워크플로우 및 SDK 게시 스크립트 수정 ([5c442b7](https://github.com/Julooga/doctor_guide_api/commit/5c442b7d6c02e77033ecd12834a5824387bf28d1))
+* 로컬 배포 스크립트에서 중복 정리 추가 ([0686715](https://github.com/Julooga/doctor_guide_api/commit/0686715b3eb5b3085d6a2fd44de89d201e2d5487))
+
 ## [1.2.1](https://github.com/Julooga/doctor_guide_api/compare/1.2.0...1.2.1) (2025-05-11)
 
 
