@@ -1,3 +1,10 @@
+## [1.2.5](https://github.com/Julooga/doctor_guide_api/compare/1.2.4...1.2.5) (2025-05-12)
+
+
+### Bug Fixes
+
+* update:ci 스크립트에서 백그라운드 실행을 위한 괄호 추가 ([c362d1e](https://github.com/Julooga/doctor_guide_api/commit/c362d1e3e304f97c3cd9f0a0d4472a79804ba0eb))
+
 ## [1.2.4](https://github.com/Julooga/doctor_guide_api/compare/1.2.3...1.2.4) (2025-05-12)
 
 
