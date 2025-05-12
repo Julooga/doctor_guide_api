@@ -1,3 +1,10 @@
+## [1.2.3](https://github.com/Julooga/doctor_guide_api/compare/1.2.2...1.2.3) (2025-05-12)
+
+
+### Bug Fixes
+
+* AWS Lambda 업데이트 스크립트에서 로그 출력 방식 수정 ([1ea13f4](https://github.com/Julooga/doctor_guide_api/commit/1ea13f4a93bbcedf9275a4cd2894b74091043a93))
+
 ## [1.2.2](https://github.com/Julooga/doctor_guide_api/compare/1.2.1...1.2.2) (2025-05-12)
 
 
