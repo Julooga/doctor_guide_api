@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/Julooga/doctor_guide_api/compare/1.2.0...1.2.1) (2025-05-11)
+
+
+### Bug Fixes
+
+* 워크플로우에서 패키지 이름 설명 주석 처리 ([3e3f816](https://github.com/Julooga/doctor_guide_api/commit/3e3f816c74f5f2960973eb8502777b7bb758a612))
+
 # [1.2.0](https://github.com/Julooga/doctor_guide_api/compare/1.1.0...1.2.0) (2025-05-11)
 
 
