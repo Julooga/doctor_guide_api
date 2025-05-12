@@ -15,7 +15,7 @@
     "lambda:build": "esbuild --bundle --outfile=./dist/index.js --platform=node --target=node20 ./src/index.ts",
     "zip": "zip -j lambda.zip dist/index.js",
     "update:local": "(aws lambda update-function-code --zip-file fileb://lambda.zip --function-name doctor_guide_api --region ap-northeast-2 --profile 166287530750_jurloogar-jaewon > /dev/null 2>&1 &) && echo 'Lambda update started in background'",
-    "update:ci": "aws lambda update-function-code --zip-file fileb://lambda.zip --function-name doctor_guide_api --region ap-northeast-2 > /dev/null 2>&1 &) && echo 'Lambda update started in background'",
+    "update:ci": "(aws lambda update-function-code --zip-file fileb://lambda.zip --function-name doctor_guide_api --region ap-northeast-2 > /dev/null 2>&1 &) && echo 'Lambda update started in background'",
     "lambda:cleanup": "rimraf lambda.zip dist lambda-update.log",
     "lambda:deploy:local": "run-s lambda:cleanup lambda:build zip update:local lambda:cleanup",
     "lambda:deploy:ci": "run-s lambda:cleanup lambda:build zip update:ci lambda:cleanup",
