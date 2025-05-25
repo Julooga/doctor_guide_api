@@ -2,12 +2,12 @@ name: Deploy to aws lambda
 
 on:
   workflow_dispatch:
-  # workflow_run:
-  #   workflows: ['semantic-release']
-  #   types:
-  #     - completed
-  #   branches:
-  #     - main
+  workflow_run:
+    workflows: ['semantic-release']
+    types:
+      - completed
+    branches:
+      - main
 
 jobs:
   deploy:
@@ -36,7 +36,6 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: ap-northeast-2
 
       - name: Deploy to Lambda

@@ -8,6 +8,7 @@ provider:
   runtime: nodejs22.x
   region: ap-northeast-2
   stage: ${opt:stage, 'dev'}
+  profile: jurloogar
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -37,7 +38,7 @@ resources:
     HospitalSafetydata:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: Hospital-safetydata
+        TableName: Hospital
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: pk
@@ -91,7 +92,7 @@ resources:
     PharmacySafetydata:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: Pharmacy-safetydata
+        TableName: Pharmacy
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: pk
