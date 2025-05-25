@@ -25,19 +25,13 @@
             ],
             "Resource": [
               {
-                "Fn::GetAtt": [
-                  "HospitalSafetydata",
-                  "Arn"
-                ]
+                "Fn::GetAtt": ["HospitalSafetydata", "Arn"]
               },
               {
                 "Fn::Sub": "${HospitalSafetydata.Arn}/index/*"
               },
               {
-                "Fn::GetAtt": [
-                  "PharmacySafetydata",
-                  "Arn"
-                ]
+                "Fn::GetAtt": ["PharmacySafetydata", "Arn"]
               },
               {
                 "Fn::Sub": "${PharmacySafetydata.Arn}/index/*"
@@ -298,19 +292,13 @@
           ],
           "Resource": [
             {
-              "Fn::GetAtt": [
-                "HospitalSafetydata",
-                "Arn"
-              ]
+              "Fn::GetAtt": ["HospitalSafetydata", "Arn"]
             },
             {
               "Fn::Sub": "${HospitalSafetydata.Arn}/index/*"
             },
             {
-              "Fn::GetAtt": [
-                "PharmacySafetydata",
-                "Arn"
-              ]
+              "Fn::GetAtt": ["PharmacySafetydata", "Arn"]
             },
             {
               "Fn::Sub": "${PharmacySafetydata.Arn}/index/*"
@@ -334,9 +322,7 @@
       "code": "DEPLOYMENT_BUCKET_INSUFFICIENT_PERMISSIONS"
     },
     "serviceRawFile": "# \"org\" ensures this Service is used with the correct Serverless Framework Access Key.\norg: illuwa\n# \"service\" is the name of this project. This will also be added to your AWS resource names.\nservice: doctor-guide-api\n\nprovider:\n  name: aws\n  runtime: nodejs22.x\n  region: ap-northeast-2\n  stage: ${opt:stage, 'dev'}\n  profile: jurloogar\n  iamRoleStatements:\n    - Effect: Allow\n      Action:\n        - dynamodb:Query\n        - dynamodb:Scan\n        - dynamodb:GetItem\n        - dynamodb:PutItem\n        - dynamodb:UpdateItem\n        - dynamodb:DeleteItem\n      Resource:\n        - !GetAtt HospitalSafetydata.Arn\n        - !Sub '${HospitalSafetydata.Arn}/index/*'\n        - !GetAtt PharmacySafetydata.Arn\n        - !Sub '${PharmacySafetydata.Arn}/index/*'\n\npackage:\n  patterns:\n    - '!node_modules/**'\n    - '!*.ts'\n    - '!tsconfig.json'\n    - '!.git/**'\n    - '!.vscode/**'\n    - 'dist/**/*.js'\n\nresources:\n  Resources:\n    HospitalSafetydata:\n      Type: AWS::DynamoDB::Table\n      Properties:\n        TableName: Hospital\n        BillingMode: PAY_PER_REQUEST\n        AttributeDefinitions:\n          - AttributeName: pk\n            AttributeType: S\n          - AttributeName: sk\n            AttributeType: S\n          - AttributeName: HSPTL_CLSF_NM\n            AttributeType: S\n          - AttributeName: INST_NM\n            AttributeType: S\n          - AttributeName: EMRO_OPER_YN_\n            AttributeType: S\n          - AttributeName: ADDR_REGION\n            AttributeType: S\n        KeySchema:\n          - AttributeName: pk\n            KeyType: HASH\n          - AttributeName: sk\n            KeyType: RANGE\n        GlobalSecondaryIndexes:\n          - IndexName: hospital-classification-index\n            KeySchema:\n              - AttributeName: HSPTL_CLSF_NM\n                KeyType: HASH\n              - AttributeName: INST_NM\n                KeyType: RANGE\n            Projection:\n              ProjectionType: ALL\n          - IndexName: hospital-name-index\n            KeySchema:\n              - AttributeName: INST_NM\n                KeyType: HASH\n            Projection:\n              ProjectionType: ALL\n          - IndexName: emergency-room-index\n            KeySchema:\n              - AttributeName: EMRO_OPER_YN_\n                KeyType: HASH\n              - AttributeName: HSPTL_CLSF_NM\n                KeyType: RANGE\n            Projection:\n              ProjectionType: ALL\n          - IndexName: region-index\n            KeySchema:\n              - AttributeName: ADDR_REGION\n                KeyType: HASH\n              - AttributeName: INST_NM\n                KeyType: RANGE\n            Projection:\n              ProjectionType: ALL\n    PharmacySafetydata:\n      Type: AWS::DynamoDB::Table\n      Properties:\n        TableName: Pharmacy\n        BillingMode: PAY_PER_REQUEST\n        AttributeDefinitions:\n          - AttributeName: pk\n            AttributeType: S\n          - AttributeName: sk\n            AttributeType: S\n          - AttributeName: INST_NM\n            AttributeType: S\n          - AttributeName: ADDR_REGION\n            AttributeType: S\n          - AttributeName: WKND_MDEXM_YN\n            AttributeType: S\n        KeySchema:\n          - AttributeName: pk\n            KeyType: HASH\n          - AttributeName: sk\n            KeyType: RANGE\n        GlobalSecondaryIndexes:\n          - IndexName: pharmacy-name-index\n            KeySchema:\n              - AttributeName: INST_NM\n                KeyType: HASH\n            Projection:\n              ProjectionType: ALL\n          - IndexName: pharmacy-region-index\n            KeySchema:\n              - AttributeName: ADDR_REGION\n                KeyType: HASH\n              - AttributeName: INST_NM\n                KeyType: RANGE\n            Projection:\n              ProjectionType: ALL\n          - IndexName: pharmacy-weekend-index\n            KeySchema:\n              - AttributeName: WKND_MDEXM_YN\n                KeyType: HASH\n              - AttributeName: INST_NM\n                KeyType: RANGE\n            Projection:\n              ProjectionType: ALL\n\nfunctions:\n  hospital:\n    handler: dist/index.handler\n    events:\n      - httpApi:\n          path: /hospital\n          method: get\n  pharmacy:\n    handler: dist/index.handler\n    events:\n      - httpApi:\n          path: /pharmacy\n          method: get\n",
-    "command": [
-      "deploy"
-    ],
+    "command": ["deploy"],
     "options": {},
     "orgId": "1c117ed4-6752-4e16-bf13-c9a9b5d7f680",
     "orgName": "illuwa",
