@@ -44,11 +44,132 @@ resources:
             AttributeType: S
           - AttributeName: sk
             AttributeType: S
+          - AttributeName: HSPTL_CLSF_NM
+            AttributeType: S
+          - AttributeName: INST_NM
+            AttributeType: S
+          - AttributeName: EMRO_OPER_YN_
+            AttributeType: S
+          - AttributeName: ADDR_REGION
+            AttributeType: S
+          - AttributeName: HSPTL_LAT
+            AttributeType: N
+          - AttributeName: HSPTL_LOT
+            AttributeType: N
+          - AttributeName: MDEXM_HR_MNDY_S
+            AttributeType: S
+          - AttributeName: MDEXM_HR_TSDY_S
+            AttributeType: S
+          - AttributeName: MDEXM_HR_WDDY_S
+            AttributeType: S
+          - AttributeName: MDEXM_HR_THDY_S
+            AttributeType: S
+          - AttributeName: MDEXM_HR_FRDY_S
+            AttributeType: S
+          - AttributeName: MDEXM_HR_STDY_S
+            AttributeType: S
+          - AttributeName: MDEXM_HR_SNDY_S
+            AttributeType: S
         KeySchema:
           - AttributeName: pk
             KeyType: HASH
           - AttributeName: sk
             KeyType: RANGE
+        GlobalSecondaryIndexes:
+          - IndexName: hospital-classification-index
+            KeySchema:
+              - AttributeName: HSPTL_CLSF_NM
+                KeyType: HASH
+              - AttributeName: INST_NM
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+          - IndexName: hospital-name-index
+            KeySchema:
+              - AttributeName: INST_NM
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+          - IndexName: emergency-room-index
+            KeySchema:
+              - AttributeName: EMRO_OPER_YN_
+                KeyType: HASH
+              - AttributeName: HSPTL_CLSF_NM
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+          - IndexName: region-index
+            KeySchema:
+              - AttributeName: ADDR_REGION
+                KeyType: HASH
+              - AttributeName: INST_NM
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+          - IndexName: location-index
+            KeySchema:
+              - AttributeName: HSPTL_LAT
+                KeyType: HASH
+              - AttributeName: HSPTL_LOT
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+          - IndexName: weekday-hours-index
+            KeySchema:
+              - AttributeName: MDEXM_HR_MNDY_S
+                KeyType: HASH
+              - AttributeName: INST_NM
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+          - IndexName: tuesday-hours-index
+            KeySchema:
+              - AttributeName: MDEXM_HR_TSDY_S
+                KeyType: HASH
+              - AttributeName: INST_NM
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+          - IndexName: wednesday-hours-index
+            KeySchema:
+              - AttributeName: MDEXM_HR_WDDY_S
+                KeyType: HASH
+              - AttributeName: INST_NM
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+          - IndexName: thursday-hours-index
+            KeySchema:
+              - AttributeName: MDEXM_HR_THDY_S
+                KeyType: HASH
+              - AttributeName: INST_NM
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+          - IndexName: friday-hours-index
+            KeySchema:
+              - AttributeName: MDEXM_HR_FRDY_S
+                KeyType: HASH
+              - AttributeName: INST_NM
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+          - IndexName: saturday-hours-index
+            KeySchema:
+              - AttributeName: MDEXM_HR_STDY_S
+                KeyType: HASH
+              - AttributeName: INST_NM
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+          - IndexName: sunday-hours-index
+            KeySchema:
+              - AttributeName: MDEXM_HR_SNDY_S
+                KeyType: HASH
+              - AttributeName: INST_NM
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
     PharmacySafetydata:
       Type: AWS::DynamoDB::Table
       Properties:
@@ -59,11 +180,122 @@ resources:
             AttributeType: S
           - AttributeName: sk
             AttributeType: S
+          - AttributeName: INST_NM
+            AttributeType: S
+          - AttributeName: ADDR_REGION
+            AttributeType: S
+          - AttributeName: WKND_MDEXM_YN
+            AttributeType: S
+          - AttributeName: LAT
+            AttributeType: N
+          - AttributeName: LOT
+            AttributeType: N
+          - AttributeName: MDEXM_BGNG_HR_MNDY
+            AttributeType: S
+          - AttributeName: MDEXM_BGNG_HR_TSDY
+            AttributeType: S
+          - AttributeName: MDEXM_BGNG_HR_WDDY
+            AttributeType: S
+          - AttributeName: MDEXM_BGNG_HR_THDY
+            AttributeType: S
+          - AttributeName: MDEXM_BGNG_HR_FRDY
+            AttributeType: S
+          - AttributeName: MDEXM_BGNG_HR_STDY
+            AttributeType: S
+          - AttributeName: MDEXM_BGNG_HR_SNDY
+            AttributeType: S
         KeySchema:
           - AttributeName: pk
             KeyType: HASH
           - AttributeName: sk
             KeyType: RANGE
+        GlobalSecondaryIndexes:
+          - IndexName: pharmacy-name-index
+            KeySchema:
+              - AttributeName: INST_NM
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+          - IndexName: pharmacy-region-index
+            KeySchema:
+              - AttributeName: ADDR_REGION
+                KeyType: HASH
+              - AttributeName: INST_NM
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+          - IndexName: pharmacy-weekend-index
+            KeySchema:
+              - AttributeName: WKND_MDEXM_YN
+                KeyType: HASH
+              - AttributeName: INST_NM
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+          - IndexName: pharmacy-location-index
+            KeySchema:
+              - AttributeName: LAT
+                KeyType: HASH
+              - AttributeName: LOT
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+          - IndexName: pharmacy-weekday-hours-index
+            KeySchema:
+              - AttributeName: MDEXM_BGNG_HR_MNDY
+                KeyType: HASH
+              - AttributeName: INST_NM
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+          - IndexName: pharmacy-tuesday-hours-index
+            KeySchema:
+              - AttributeName: MDEXM_BGNG_HR_TSDY
+                KeyType: HASH
+              - AttributeName: INST_NM
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+          - IndexName: pharmacy-wednesday-hours-index
+            KeySchema:
+              - AttributeName: MDEXM_BGNG_HR_WDDY
+                KeyType: HASH
+              - AttributeName: INST_NM
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+          - IndexName: pharmacy-thursday-hours-index
+            KeySchema:
+              - AttributeName: MDEXM_BGNG_HR_THDY
+                KeyType: HASH
+              - AttributeName: INST_NM
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+          - IndexName: pharmacy-friday-hours-index
+            KeySchema:
+              - AttributeName: MDEXM_BGNG_HR_FRDY
+                KeyType: HASH
+              - AttributeName: INST_NM
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+          - IndexName: pharmacy-saturday-hours-index
+            KeySchema:
+              - AttributeName: MDEXM_BGNG_HR_STDY
+                KeyType: HASH
+              - AttributeName: INST_NM
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+          - IndexName: pharmacy-sunday-hours-index
+            KeySchema:
+              - AttributeName: MDEXM_BGNG_HR_SNDY
+                KeyType: HASH
+              - AttributeName: INST_NM
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
 
 functions:
   hospital:
