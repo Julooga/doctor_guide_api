@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/Julooga/doctor_guide_api/compare/1.4.2...1.5.0) (2025-05-25)
+
+
+### Features
+
+* serverless 프레임워크 설정 추가 및 .gitignore 업데이트 ([369ef2b](https://github.com/Julooga/doctor_guide_api/commit/369ef2bce91ca98de8cb16d74d2a9ec349f99031))
+
 ## [1.4.2](https://github.com/Julooga/doctor_guide_api/compare/1.4.1...1.4.2) (2025-05-25)
 
 
