@@ -1,13 +1,18 @@
-name: Deploy to aws lambda
+name: Deploy to aws lambda (OIDC)
 
 on:
   workflow_dispatch:
-  workflow_run:
-    workflows: ['semantic-release']
-    types:
-      - completed
-    branches:
-      - main
+#   workflow_run:
+#     workflows: ['semantic-release']
+#     types:
+#       - completed
+#     branches:
+#       - main
+
+# OIDC를 사용하기 위해 필요한 권한
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   deploy:
@@ -31,12 +36,13 @@ jobs:
       - name: Install dependencies
         run: pnpm i --frozen-lockfile
 
+      # OIDC 방식 - AWS에서 OIDC Provider와 Role을 미리 설정해야 함
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
           aws-region: ap-northeast-2
+          audience: sts.amazonaws.com
 
       - name: Deploy to Lambda
         run: pnpm run lambda:deploy:ci
