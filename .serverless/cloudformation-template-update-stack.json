@@ -23,16 +23,27 @@
             {
               "Effect": "Allow",
               "Principal": {
-                "Service": ["lambda.amazonaws.com"]
+                "Service": [
+                  "lambda.amazonaws.com"
+                ]
               },
-              "Action": ["sts:AssumeRole"]
+              "Action": [
+                "sts:AssumeRole"
+              ]
             }
           ]
         },
         "Policies": [
           {
             "PolicyName": {
-              "Fn::Join": ["-", ["doctor-guide-api", "dev", "lambda"]]
+              "Fn::Join": [
+                "-",
+                [
+                  "doctor-guide-api",
+                  "dev",
+                  "lambda"
+                ]
+              ]
             },
             "PolicyDocument": {
               "Version": "2012-10-17",
@@ -52,7 +63,9 @@
                 },
                 {
                   "Effect": "Allow",
-                  "Action": ["logs:PutLogEvents"],
+                  "Action": [
+                    "logs:PutLogEvents"
+                  ],
                   "Resource": [
                     {
                       "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/doctor-guide-api-dev*:*:*"
@@ -71,13 +84,19 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::GetAtt": ["HospitalSafetydata", "Arn"]
+                      "Fn::GetAtt": [
+                        "HospitalSafetydata",
+                        "Arn"
+                      ]
                     },
                     {
                       "Fn::Sub": "${HospitalSafetydata.Arn}/index/*"
                     },
                     {
-                      "Fn::GetAtt": ["PharmacySafetydata", "Arn"]
+                      "Fn::GetAtt": [
+                        "PharmacySafetydata",
+                        "Arn"
+                      ]
                     },
                     {
                       "Fn::Sub": "${PharmacySafetydata.Arn}/index/*"
@@ -109,7 +128,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-northeast-2-d332f796-1daf",
-          "S3Key": "serverless/doctor-guide-api/dev/1748161046107-2025-05-25T08:17:26.107Z/doctor-guide-api.zip"
+          "S3Key": "serverless/doctor-guide-api/dev/1748162150881-2025-05-25T08:35:50.881Z/doctor-guide-api.zip"
         },
         "Handler": "dist/index.handler",
         "Runtime": "nodejs22.x",
@@ -117,17 +136,22 @@
         "MemorySize": 1024,
         "Timeout": 6,
         "Role": {
-          "Fn::GetAtt": ["IamRoleLambdaExecution", "Arn"]
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
         }
       },
-      "DependsOn": ["HospitalLogGroup"]
+      "DependsOn": [
+        "HospitalLogGroup"
+      ]
     },
     "PharmacyLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-northeast-2-d332f796-1daf",
-          "S3Key": "serverless/doctor-guide-api/dev/1748161046107-2025-05-25T08:17:26.107Z/doctor-guide-api.zip"
+          "S3Key": "serverless/doctor-guide-api/dev/1748162150881-2025-05-25T08:35:50.881Z/doctor-guide-api.zip"
         },
         "Handler": "dist/index.handler",
         "Runtime": "nodejs22.x",
@@ -135,29 +159,34 @@
         "MemorySize": 1024,
         "Timeout": 6,
         "Role": {
-          "Fn::GetAtt": ["IamRoleLambdaExecution", "Arn"]
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
         }
       },
-      "DependsOn": ["PharmacyLogGroup"]
+      "DependsOn": [
+        "PharmacyLogGroup"
+      ]
     },
-    "HospitalLambdaVersionzJ0wI0KGa747nMvxuWnWEmyUVdtnotLx96VdS2O8": {
+    "HospitalLambdaVersionk4ce11OYKDOjca4qz69NvpAPDwH0z4Fp67M78AxFbU": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "HospitalLambdaFunction"
         },
-        "CodeSha256": "Rr0xHPvQB/AZ6JvD6VicjE76B+AZjBTvu4NNXcsMKFg="
+        "CodeSha256": "4Laekl9JXvUfgPpVdgNckH6vG8+6bFLI5IJoLTHRavA="
       }
     },
-    "PharmacyLambdaVersiontPUxkrmRUCGVI4mfs7yVhTuXqaKTsCvZU6xTtEuello": {
+    "PharmacyLambdaVersionKCCfut2L3xb1dgP93IEuUWpu3FScmTcjK2zywveEfeg": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "PharmacyLambdaFunction"
         },
-        "CodeSha256": "Rr0xHPvQB/AZ6JvD6VicjE76B+AZjBTvu4NNXcsMKFg="
+        "CodeSha256": "4Laekl9JXvUfgPpVdgNckH6vG8+6bFLI5IJoLTHRavA="
       }
     },
     "HttpApi": {
@@ -184,7 +213,10 @@
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
-          "Fn::GetAtt": ["HospitalLambdaFunction", "Arn"]
+          "Fn::GetAtt": [
+            "HospitalLambdaFunction",
+            "Arn"
+          ]
         },
         "Action": "lambda:InvokeFunction",
         "Principal": "apigateway.amazonaws.com",
@@ -222,7 +254,10 @@
         },
         "IntegrationType": "AWS_PROXY",
         "IntegrationUri": {
-          "Fn::GetAtt": ["HospitalLambdaFunction", "Arn"]
+          "Fn::GetAtt": [
+            "HospitalLambdaFunction",
+            "Arn"
+          ]
         },
         "PayloadFormatVersion": "2.0",
         "TimeoutInMillis": 30000
@@ -253,7 +288,10 @@
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
-          "Fn::GetAtt": ["PharmacyLambdaFunction", "Arn"]
+          "Fn::GetAtt": [
+            "PharmacyLambdaFunction",
+            "Arn"
+          ]
         },
         "Action": "lambda:InvokeFunction",
         "Principal": "apigateway.amazonaws.com",
@@ -291,7 +329,10 @@
         },
         "IntegrationType": "AWS_PROXY",
         "IntegrationUri": {
-          "Fn::GetAtt": ["PharmacyLambdaFunction", "Arn"]
+          "Fn::GetAtt": [
+            "PharmacyLambdaFunction",
+            "Arn"
+          ]
         },
         "PayloadFormatVersion": "2.0",
         "TimeoutInMillis": 30000
@@ -331,6 +372,22 @@
           {
             "AttributeName": "sk",
             "AttributeType": "S"
+          },
+          {
+            "AttributeName": "HSPTL_CLSF_NM",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "INST_NM",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "EMRO_OPER_YN_",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "ADDR_REGION",
+            "AttributeType": "S"
           }
         ],
         "KeySchema": [
@@ -341,6 +398,68 @@
           {
             "AttributeName": "sk",
             "KeyType": "RANGE"
+          }
+        ],
+        "GlobalSecondaryIndexes": [
+          {
+            "IndexName": "hospital-classification-index",
+            "KeySchema": [
+              {
+                "AttributeName": "HSPTL_CLSF_NM",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "INST_NM",
+                "KeyType": "RANGE"
+              }
+            ],
+            "Projection": {
+              "ProjectionType": "ALL"
+            }
+          },
+          {
+            "IndexName": "hospital-name-index",
+            "KeySchema": [
+              {
+                "AttributeName": "INST_NM",
+                "KeyType": "HASH"
+              }
+            ],
+            "Projection": {
+              "ProjectionType": "ALL"
+            }
+          },
+          {
+            "IndexName": "emergency-room-index",
+            "KeySchema": [
+              {
+                "AttributeName": "EMRO_OPER_YN_",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "HSPTL_CLSF_NM",
+                "KeyType": "RANGE"
+              }
+            ],
+            "Projection": {
+              "ProjectionType": "ALL"
+            }
+          },
+          {
+            "IndexName": "region-index",
+            "KeySchema": [
+              {
+                "AttributeName": "ADDR_REGION",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "INST_NM",
+                "KeyType": "RANGE"
+              }
+            ],
+            "Projection": {
+              "ProjectionType": "ALL"
+            }
           }
         ]
       }
@@ -358,6 +477,18 @@
           {
             "AttributeName": "sk",
             "AttributeType": "S"
+          },
+          {
+            "AttributeName": "INST_NM",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "ADDR_REGION",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "WKND_MDEXM_YN",
+            "AttributeType": "S"
           }
         ],
         "KeySchema": [
@@ -368,6 +499,52 @@
           {
             "AttributeName": "sk",
             "KeyType": "RANGE"
+          }
+        ],
+        "GlobalSecondaryIndexes": [
+          {
+            "IndexName": "pharmacy-name-index",
+            "KeySchema": [
+              {
+                "AttributeName": "INST_NM",
+                "KeyType": "HASH"
+              }
+            ],
+            "Projection": {
+              "ProjectionType": "ALL"
+            }
+          },
+          {
+            "IndexName": "pharmacy-region-index",
+            "KeySchema": [
+              {
+                "AttributeName": "ADDR_REGION",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "INST_NM",
+                "KeyType": "RANGE"
+              }
+            ],
+            "Projection": {
+              "ProjectionType": "ALL"
+            }
+          },
+          {
+            "IndexName": "pharmacy-weekend-index",
+            "KeySchema": [
+              {
+                "AttributeName": "WKND_MDEXM_YN",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "INST_NM",
+                "KeyType": "RANGE"
+              }
+            ],
+            "Projection": {
+              "ProjectionType": "ALL"
+            }
           }
         ]
       }
@@ -383,7 +560,7 @@
     "HospitalLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "HospitalLambdaVersionzJ0wI0KGa747nMvxuWnWEmyUVdtnotLx96VdS2O8"
+        "Ref": "HospitalLambdaVersionk4ce11OYKDOjca4qz69NvpAPDwH0z4Fp67M78AxFbU"
       },
       "Export": {
         "Name": "sls-doctor-guide-api-dev-HospitalLambdaFunctionQualifiedArn"
@@ -392,7 +569,7 @@
     "PharmacyLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "PharmacyLambdaVersiontPUxkrmRUCGVI4mfs7yVhTuXqaKTsCvZU6xTtEuello"
+        "Ref": "PharmacyLambdaVersionKCCfut2L3xb1dgP93IEuUWpu3FScmTcjK2zywveEfeg"
       },
       "Export": {
         "Name": "sls-doctor-guide-api-dev-PharmacyLambdaFunctionQualifiedArn"

@@ -126,6 +126,10 @@ const pharmacyPoiSchema = z
     LAT: z.number().nullable().openapi({
       description: '위도',
       example: 35.4160672505
+    }),
+    ADDR_REGION: z.string().nullable().openapi({
+      description: '주소 지역 (검색용)',
+      example: '경상남도'
     })
   })
   .openapi({ ref: 'PharmacyPoiSchema' })

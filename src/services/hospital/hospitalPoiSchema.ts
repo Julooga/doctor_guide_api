@@ -144,6 +144,10 @@ const hospitalPoiSchema = z
     }),
     MDEXM_HR_SNDY_C: z.string().nullable().openapi({
       description: '진료종료시간일요일'
+    }),
+    ADDR_REGION: z.string().nullable().openapi({
+      description: '주소 지역 (검색용)',
+      example: '경기도'
     })
   })
   .openapi({ ref: 'HospitalPoiChema' })
