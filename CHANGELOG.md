@@ -1,3 +1,17 @@
+# [1.3.0](https://github.com/Julooga/doctor_guide_api/compare/1.2.5...1.3.0) (2025-05-25)
+
+
+### Bug Fixes
+
+* dist 디렉토리를 .gitignore에 추가하고 lambda:build 스크립트에 minify 옵션 추가 ([d068224](https://github.com/Julooga/doctor_guide_api/commit/d06822489afdb28a8030b6d12cbc21d1100aa134))
+* JSON 파일에서 불필요한 줄 바꿈 및 공백 제거 ([24eff55](https://github.com/Julooga/doctor_guide_api/commit/24eff554de26b43e0f86c7d23c7d331d522ae65f))
+* 불필요한 줄 바꿈 및 공백 제거 ([bf35900](https://github.com/Julooga/doctor_guide_api/commit/bf359001e48b4fa79a89369e17ff9c05ff68e789))
+
+
+### Features
+
+* DynamoDB 테이블에 새로운 속성과 글로벌 보조 인덱스 추가 ([d520c39](https://github.com/Julooga/doctor_guide_api/commit/d520c397df04a992387be62ab9b24302eb3946fa))
+
 ## [1.2.5](https://github.com/Julooga/doctor_guide_api/compare/1.2.4...1.2.5) (2025-05-12)
 
 
