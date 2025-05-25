@@ -1,1 +1,1 @@
-pnpm run-s lambda:cleanup format
+pnpm format
