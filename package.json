@@ -1,0 +1,16 @@
+{
+  "name": "@julooga/doctor_guide_api_sdk",
+  "version": "1.5.0",
+  "description": "doctor_guide_api API SDK",
+  "main": "api.ts",
+  "types": "api.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Julooga/doctor_guide_api.git"
+  },
+  "author": "julooga",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.9.0"
+  }
+}
