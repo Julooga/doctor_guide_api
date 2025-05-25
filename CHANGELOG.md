@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/Julooga/doctor_guide_api/compare/1.3.0...1.4.0) (2025-05-25)
+
+
+### Features
+
+* OIDC를 사용한 AWS Lambda 배포 워크플로우 추가 및 AWS 자격 증명 구성 업데이트 ([d655e4d](https://github.com/Julooga/doctor_guide_api/commit/d655e4dd03e84a988a061b28f832824a68c5a341))
+
 # [1.3.0](https://github.com/Julooga/doctor_guide_api/compare/1.2.5...1.3.0) (2025-05-25)
 
 
