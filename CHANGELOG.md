@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/Julooga/doctor_guide_api/compare/1.4.0...1.4.1) (2025-05-25)
+
+
+### Bug Fixes
+
+* aws-actions/configure-aws-credentials 버전 업데이트 ([0d1f9e2](https://github.com/Julooga/doctor_guide_api/commit/0d1f9e297d8a0e2b1610b7832883c6d04089e101))
+
 # [1.4.0](https://github.com/Julooga/doctor_guide_api/compare/1.3.0...1.4.0) (2025-05-25)
 
 
