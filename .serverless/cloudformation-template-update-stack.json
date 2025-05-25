@@ -23,27 +23,16 @@
             {
               "Effect": "Allow",
               "Principal": {
-                "Service": [
-                  "lambda.amazonaws.com"
-                ]
+                "Service": ["lambda.amazonaws.com"]
               },
-              "Action": [
-                "sts:AssumeRole"
-              ]
+              "Action": ["sts:AssumeRole"]
             }
           ]
         },
         "Policies": [
           {
             "PolicyName": {
-              "Fn::Join": [
-                "-",
-                [
-                  "doctor-guide-api",
-                  "dev",
-                  "lambda"
-                ]
-              ]
+              "Fn::Join": ["-", ["doctor-guide-api", "dev", "lambda"]]
             },
             "PolicyDocument": {
               "Version": "2012-10-17",
@@ -63,9 +52,7 @@
                 },
                 {
                   "Effect": "Allow",
-                  "Action": [
-                    "logs:PutLogEvents"
-                  ],
+                  "Action": ["logs:PutLogEvents"],
                   "Resource": [
                     {
                       "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/doctor-guide-api-dev*:*:*"
@@ -84,19 +71,13 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::GetAtt": [
-                        "HospitalSafetydata",
-                        "Arn"
-                      ]
+                      "Fn::GetAtt": ["HospitalSafetydata", "Arn"]
                     },
                     {
                       "Fn::Sub": "${HospitalSafetydata.Arn}/index/*"
                     },
                     {
-                      "Fn::GetAtt": [
-                        "PharmacySafetydata",
-                        "Arn"
-                      ]
+                      "Fn::GetAtt": ["PharmacySafetydata", "Arn"]
                     },
                     {
                       "Fn::Sub": "${PharmacySafetydata.Arn}/index/*"
@@ -136,15 +117,10 @@
         "MemorySize": 1024,
         "Timeout": 6,
         "Role": {
-          "Fn::GetAtt": [
-            "IamRoleLambdaExecution",
-            "Arn"
-          ]
+          "Fn::GetAtt": ["IamRoleLambdaExecution", "Arn"]
         }
       },
-      "DependsOn": [
-        "HospitalLogGroup"
-      ]
+      "DependsOn": ["HospitalLogGroup"]
     },
     "PharmacyLambdaFunction": {
       "Type": "AWS::Lambda::Function",
@@ -159,15 +135,10 @@
         "MemorySize": 1024,
         "Timeout": 6,
         "Role": {
-          "Fn::GetAtt": [
-            "IamRoleLambdaExecution",
-            "Arn"
-          ]
+          "Fn::GetAtt": ["IamRoleLambdaExecution", "Arn"]
         }
       },
-      "DependsOn": [
-        "PharmacyLogGroup"
-      ]
+      "DependsOn": ["PharmacyLogGroup"]
     },
     "HospitalLambdaVersionk4ce11OYKDOjca4qz69NvpAPDwH0z4Fp67M78AxFbU": {
       "Type": "AWS::Lambda::Version",
@@ -213,10 +184,7 @@
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
-          "Fn::GetAtt": [
-            "HospitalLambdaFunction",
-            "Arn"
-          ]
+          "Fn::GetAtt": ["HospitalLambdaFunction", "Arn"]
         },
         "Action": "lambda:InvokeFunction",
         "Principal": "apigateway.amazonaws.com",
@@ -254,10 +222,7 @@
         },
         "IntegrationType": "AWS_PROXY",
         "IntegrationUri": {
-          "Fn::GetAtt": [
-            "HospitalLambdaFunction",
-            "Arn"
-          ]
+          "Fn::GetAtt": ["HospitalLambdaFunction", "Arn"]
         },
         "PayloadFormatVersion": "2.0",
         "TimeoutInMillis": 30000
@@ -288,10 +253,7 @@
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
-          "Fn::GetAtt": [
-            "PharmacyLambdaFunction",
-            "Arn"
-          ]
+          "Fn::GetAtt": ["PharmacyLambdaFunction", "Arn"]
         },
         "Action": "lambda:InvokeFunction",
         "Principal": "apigateway.amazonaws.com",
@@ -329,10 +291,7 @@
         },
         "IntegrationType": "AWS_PROXY",
         "IntegrationUri": {
-          "Fn::GetAtt": [
-            "PharmacyLambdaFunction",
-            "Arn"
-          ]
+          "Fn::GetAtt": ["PharmacyLambdaFunction", "Arn"]
         },
         "PayloadFormatVersion": "2.0",
         "TimeoutInMillis": 30000
