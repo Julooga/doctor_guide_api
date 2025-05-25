@@ -1,6 +1,5 @@
 import { HospitalPoiDataType, HospitalRequest } from '@/routes/hospital'
 import hospitalEntity from '@/services/hospital/hospitalEntity'
-import {} from '@/routes/hospital'
 
 const getHospitalPoiData = async (query: HospitalRequest) => {
   const data = await hospitalEntity.scan
