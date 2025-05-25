@@ -1,0 +1,80 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: illuwa
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: doctor-guide-api
+
+provider:
+  name: aws
+  runtime: nodejs22.x
+  region: ap-northeast-2
+  stage: ${opt:stage, 'dev'}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - !GetAtt HospitalSafetydata.Arn
+        - !Sub '${HospitalSafetydata.Arn}/index/*'
+        - !GetAtt PharmacySafetydata.Arn
+        - !Sub '${PharmacySafetydata.Arn}/index/*'
+
+package:
+  patterns:
+    - '!node_modules/**'
+    - '!*.ts'
+    - '!tsconfig.json'
+    - '!.git/**'
+    - '!.vscode/**'
+    - 'dist/**/*.js'
+
+resources:
+  Resources:
+    HospitalSafetydata:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Hospital-safetydata
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S
+          - AttributeName: sk
+            AttributeType: S
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH
+          - AttributeName: sk
+            KeyType: RANGE
+    PharmacySafetydata:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Pharmacy-safetydata
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S
+          - AttributeName: sk
+            AttributeType: S
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH
+          - AttributeName: sk
+            KeyType: RANGE
+
+functions:
+  hospital:
+    handler: dist/index.handler
+    events:
+      - httpApi:
+          path: /hospital
+          method: get
+  pharmacy:
+    handler: dist/index.handler
+    events:
+      - httpApi:
+          path: /pharmacy
+          method: get
