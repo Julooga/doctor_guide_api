@@ -2,6 +2,9 @@
 workspace/
 lambda.zip
 
+# serverless framework
+.serverless/
+
 # dev
 .yarn/
 !.yarn/releases

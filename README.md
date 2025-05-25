@@ -64,12 +64,27 @@ console.log(result.data)
  */
 ```
 
-## 사용한 AWS 리소스 (AWS Resources Used) ☁️
+## 사용한 AWS 리소스 제어 방법
 
-- **DynamoDB** 🗄️
-  - Hospital-safetydata: `arn:aws:dynamodb:ap-northeast-2:166287530750:table/Hospital-safetydata`
-  - Pharamacy-safetydata: `arn:aws:dynamodb:ap-northeast-2:166287530750:table/Pharamacy-safetydata`
-- **Lambda** 🖥️: `arn:aws:lambda:ap-northeast-2:166287530750:function:doctor_guide_api`
-- **API Gateway** 🌐
-  - `/`: `arn:aws:apigateway:ap-northeast-2::/apis/1acgaqfa8f/routes/1gqsibp`
-  - `/docs`: `arn:aws:apigateway:ap-northeast-2::/apis/1acgaqfa8f/routes/u42m1ya`
+- serverless 프레임워크로 프로버저닝합니다.
+  - CloudFormation 권한이 필요합니다.
+- 관리자라면 IAM 에 `AdministratorAccess` 권한을 명시하세요
+- 아니라면 아래의 정책을 사용하세요.
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": ["s3:*", "cloudformation:*", "iam:*", "lambda:*", "logs:*"],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": ["ssm:GetParameter", "ssm:PutParameter", "ssm:DeleteParameter"],
+      "Resource": "*"
+    }
+  ]
+}
+```
