@@ -42,7 +42,7 @@ import * as aws from '@pulumi/aws'
 //     }
 //   ]
 // })
-// 
+//
 // DynamoDB Table for Pharmacy data
 // const pharmacyTable = new aws.dynamodb.Table('PharmacySafetydata', {
 //   name: 'Pharmacy',
@@ -155,47 +155,48 @@ const lambdaFunction = new aws.lambda.Function('doctorGuideApiFunction', {
 })
 
 // HTTP API 생성
-const api = new aws.apigatewayv2.Api("doctorGuideApi", {
-    name: "doctor-guide-http-api",
-    protocolType: "HTTP",
-});
+const api = new aws.apigatewayv2.Api('doctorGuideApi', {
+  name: 'doctor-guide-http-api',
+  protocolType: 'HTTP'
+})
 
 // Lambda 통합 생성
-const integration = new aws.apigatewayv2.Integration("lambdaIntegration", {
-    apiId: api.id,
-    integrationType: "AWS_PROXY",
-    integrationUri: lambdaFunction.invokeArn,
-    payloadFormatVersion: "2.0",
-});
+const integration = new aws.apigatewayv2.Integration('lambdaIntegration', {
+  apiId: api.id,
+  integrationType: 'AWS_PROXY',
+  integrationUri: lambdaFunction.invokeArn,
+  payloadFormatVersion: '2.0'
+})
 
 // 각 경로에 대한 라우트 생성
-[
-    { path: "/", name: "root" },
-    { path: "/docs", name: "docs" },
-    { path: "/hospital", name: "hospital" },
-    { path: "/pharmacy", name: "pharmacy" }
-].forEach(route => 
+;[
+  { path: '/', name: 'root' },
+  { path: '/docs', name: 'docs' },
+  { path: '/hospital', name: 'hospital' },
+  { path: '/pharmacy', name: 'pharmacy' }
+].forEach(
+  (route) =>
     new aws.apigatewayv2.Route(`${route.name}Route`, {
-        apiId: api.id,
-        routeKey: `GET ${route.path}`,
-        target: pulumi.interpolate`integrations/${integration.id}`,
+      apiId: api.id,
+      routeKey: `GET ${route.path}`,
+      target: pulumi.interpolate`integrations/${integration.id}`
     })
-);
+)
 
 // 스테이지 생성
-new aws.apigatewayv2.Stage("defaultStage", {
-    apiId: api.id,
-    name: "$default",
-    autoDeploy: true,
-});
+new aws.apigatewayv2.Stage('defaultStage', {
+  apiId: api.id,
+  name: '$default',
+  autoDeploy: true
+})
 
 // Lambda 권한 부여
-new aws.lambda.Permission("apiGatewayPermission", {
-    action: "lambda:InvokeFunction",
-    function: lambdaFunction.name,
-    principal: "apigateway.amazonaws.com",
-    sourceArn: pulumi.interpolate`${api.executionArn}/*/*`,
-});
+new aws.lambda.Permission('apiGatewayPermission', {
+  action: 'lambda:InvokeFunction',
+  function: lambdaFunction.name,
+  principal: 'apigateway.amazonaws.com',
+  sourceArn: pulumi.interpolate`${api.executionArn}/*/*`
+})
 
 // API URL 출력
-export const apiUrl = api.apiEndpoint;
+export const apiUrl = api.apiEndpoint
