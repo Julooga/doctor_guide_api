@@ -12,7 +12,7 @@
   },
   "scripts": {
     "dev": "tsx watch src/dev.ts",
-    "build": "esbuild --bundle --outfile=./dist/index.js --platform=node --target=node20 --minify ./src/index.ts",
+    "build": "PROFILE=real esbuild --bundle --outfile=./dist/index.js --platform=node --target=node20 --minify ./src/index.ts",
     "build:api": "swagger-typescript-api generate --path https://1acgaqfa8f.execute-api.ap-northeast-2.amazonaws.com/docs -o ./workspace -n api.ts --axios",
     "type:check": "tsc",
     "prettier": "prettier --write \"**/*.{ts,tsx,cjs,mjs,json,html,css,js,jsx}\" --cache --config prettier.config.mjs",

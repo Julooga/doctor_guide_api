@@ -1,28 +1,31 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb'
-import { fromEnv } from '@aws-sdk/credential-providers'
+import { fromIni } from '@aws-sdk/credential-providers'
 
-const remoteClient = new DynamoDBClient({
-  region: 'ap-northeast-2',
-  credentials: fromEnv()
-})
+type ClientParams = { local: boolean }
 
-// docker run -d -p 8000:8000 amazon/dynamodb-local -jar DynamoDBLocal.jar -sharedDb -cors '*' 명령으로 로컬 다이나모 실행가능
-const localClient = new DynamoDBClient({
-  region: 'local', // 또는 'ap-northeast-2'도 무방
-  endpoint: 'http://localhost:8000', // DynamoDB Local 기본 주소
-  credentials: {
-    accessKeyId: 'dummy', // 아무 값이나 가능
-    secretAccessKey: 'dummy' // 아무 값이나 가능
-  }
-})
-
-export const client = ({ local }: { local: boolean }) => {
-  if (local) {
-    return localClient
-  }
-
-  return remoteClient
+const getRemoteClient = () => {
+  // 배포환경에서는 기본 자격증명 체인 사용 (IAM Role 등)
+  return new DynamoDBClient({
+    region: 'ap-northeast-2'
+  })
 }
 
-export const docClient = DynamoDBDocumentClient.from(client({ local: false }))
+const getAwsRemoteClient = () => {
+  // 로컬에서 실제 AWS DynamoDB에 연결하고 싶을 때 사용
+  return new DynamoDBClient({
+    region: 'ap-northeast-2',
+    credentials: fromIni({ profile: process.env.AWS_PROFILE })
+  })
+}
+
+export const client = ({ local }: ClientParams) => {
+  if (local) {
+    return getAwsRemoteClient()
+  }
+  return getRemoteClient()
+}
+
+// PROFILE 환경변수에 따라 로컬/원격 클라이언트 결정
+const isLocalEnvironment = process.env.PROFILE === 'local'
+export const docClient = DynamoDBDocumentClient.from(client({ local: isLocalEnvironment }))

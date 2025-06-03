@@ -1,6 +1,6 @@
+import 'dotenv/config'
 import { handle } from 'hono/aws-lambda'
 import app from '@/app'
-import 'dotenv/config'
 import 'zod-openapi/extend'
 
 import hospitalRouter from '@/routes/hospital'

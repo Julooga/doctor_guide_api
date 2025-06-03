@@ -53,6 +53,16 @@ app.onError((err, c) => {
 
 app.get('/', swaggerUI({ url: '/docs' }))
 
+const getServers = (profile: 'local' | 'real') => {
+  if (profile === 'local') {
+    return [{url :'/'}]
+  }
+
+  return [{
+          url: 'https://rr5yxu11dl.execute-api.ap-northeast-2.amazonaws.com'
+        }]
+}
+
 app.get(
   '/docs',
   openAPISpecs(app, {
@@ -61,11 +71,7 @@ app.get(
         version,
         title: 'Doctor Guide Api'
       },
-      servers: [
-        {
-          url: 'https://rr5yxu11dl.execute-api.ap-northeast-2.amazonaws.com'
-        }
-      ]
+      servers: getServers(process.env.PROFILE as 'local' | 'real')
     }
   })
 )
