@@ -1,0 +1,2 @@
+- @aws-sdk/client-bedrock-runtime 를 사용하는 가장 간단한 서비스 함수를 추가해주세요
+- message: string 을 파라미터로, message: string 를 반환값으로 반환하면 됩니다.

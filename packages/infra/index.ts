@@ -1,5 +1,10 @@
 import * as pulumi from '@pulumi/pulumi'
 import * as aws from '@pulumi/aws'
+import {
+  attachBedrockPoliciesToRole,
+  bedrockEnvironmentVariables,
+  bedrockOutputs
+} from './bedrock'
 
 // 인프라 프로버저닝은 잠시 보류[s]
 // // DynamoDB Table for Hospital data
@@ -139,6 +144,9 @@ const lambdaRole = new aws.iam.Role('lambdaRole', {
   })
 })
 
+// Lambda execution role에 Bedrock 정책 연결 (bedrock.ts의 함수 사용)
+attachBedrockPoliciesToRole(lambdaRole)
+
 // Lambda function
 const lambdaFunction = new aws.lambda.Function('doctorGuideApiFunction', {
   runtime: 'nodejs20.x', // Updated to a valid runtime version
@@ -149,9 +157,13 @@ const lambdaFunction = new aws.lambda.Function('doctorGuideApiFunction', {
   }),
   environment: {
     variables: {
-      NODE_ENV: pulumi.getStack()
+      NODE_ENV: pulumi.getStack(),
+      // Bedrock 관련 환경 변수 (bedrock.ts에서 가져옴)
+      ...bedrockEnvironmentVariables
     }
-  }
+  },
+  timeout: 300, // Bedrock 모델 호출을 위한 타임아웃 증가
+  memorySize: 1024 // 메모리 증가
 })
 
 // HTTP API 생성
@@ -168,17 +180,27 @@ const integration = new aws.apigatewayv2.Integration('lambdaIntegration', {
   payloadFormatVersion: '2.0'
 })
 
-// 각 경로에 대한 라우트 생성
+const getRouteKey = (routeName: string) => {
+  if (routeName === 'medChat' || routeName === 'medDiagnosis') {
+    return 'POST'
+  }
+
+  return 'GET'
+}
+
+// 각 경로에 대한 라우트 생성 (MedGemma 엔드포인트 포함)
 ;[
   { path: '/', name: 'root' },
   { path: '/docs', name: 'docs' },
   { path: '/hospital', name: 'hospital' },
-  { path: '/pharmacy', name: 'pharmacy' }
+  { path: '/pharmacy', name: 'pharmacy' },
+  { path: '/med/chat', name: 'medChat' },
+  { path: '/med/diagnosis', name: 'medDiagnosis' }
 ].forEach(
   (route) =>
     new aws.apigatewayv2.Route(`${route.name}Route`, {
       apiId: api.id,
-      routeKey: `GET ${route.path}`,
+      routeKey: `${getRouteKey(route.name)} ${route.path}`,
       target: pulumi.interpolate`integrations/${integration.id}`
     })
 )
@@ -200,3 +222,7 @@ new aws.lambda.Permission('apiGatewayPermission', {
 
 // API URL 출력
 export const apiUrl = api.apiEndpoint
+export const {
+  modelId: medgemmaModelId,
+  modelAccessPolicyArn: bedrockModelAccessPolicyArn
+} = bedrockOutputs

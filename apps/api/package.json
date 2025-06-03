@@ -12,7 +12,7 @@
   },
   "scripts": {
     "dev": "tsx watch src/dev.ts",
-    "build": "PROFILE=real esbuild --bundle --outfile=./dist/index.js --platform=node --target=node20 --minify ./src/index.ts",
+    "build": "esbuild --bundle --outfile=./dist/index.js --platform=node --target=node20 --minify ./src/index.ts",
     "build:api": "swagger-typescript-api generate --path https://1acgaqfa8f.execute-api.ap-northeast-2.amazonaws.com/docs -o ./workspace -n api.ts --axios",
     "type:check": "tsc",
     "prettier": "prettier --write \"**/*.{ts,tsx,cjs,mjs,json,html,css,js,jsx}\" --cache --config prettier.config.mjs",
@@ -20,9 +20,9 @@
     "format": "run-s type:check prettier eslint"
   },
   "devDependencies": {
-    "@julooga/prettier": "workspace:*",
-    "@julooga/eslint": "workspace:*",
     "@hono/node-server": "^1.14.1",
+    "@julooga/eslint": "workspace:*",
+    "@julooga/prettier": "workspace:*",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "20",
     "commander": "^13.1.0",
@@ -38,6 +38,7 @@
     "zx": "^8.5.3"
   },
   "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "^3.0.0",
     "@aws-sdk/client-dynamodb": "^3.803.0",
     "@aws-sdk/credential-providers": "^3.803.0",
     "@aws-sdk/lib-dynamodb": "^3.803.0",

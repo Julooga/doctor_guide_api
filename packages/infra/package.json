@@ -20,6 +20,7 @@
     "@pulumi/aws-apigateway": "^2.6.2",
     "@pulumi/awsx": "^2.0.2",
     "@pulumi/pulumi": "^3.173.0",
-    "npm-run-all2": "^6.2.0"
+    "npm-run-all2": "^6.2.0",
+    "@aws-sdk/client-bedrock-runtime": "^3.0.0"
   }
 }
