@@ -23,9 +23,12 @@ export const client = ({ local }: ClientParams) => {
   if (local) {
     return getAwsRemoteClient()
   }
+
   return getRemoteClient()
 }
 
 // PROFILE 환경변수에 따라 로컬/원격 클라이언트 결정
 const isLocalEnvironment = process.env.PROFILE === 'local'
-export const docClient = DynamoDBDocumentClient.from(client({ local: isLocalEnvironment }))
+export const docClient = DynamoDBDocumentClient.from(
+  client({ local: isLocalEnvironment })
+)

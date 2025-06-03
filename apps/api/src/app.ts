@@ -55,12 +55,14 @@ app.get('/', swaggerUI({ url: '/docs' }))
 
 const getServers = (profile: 'local' | 'real') => {
   if (profile === 'local') {
-    return [{url :'/'}]
+    return [{ url: '/' }]
   }
 
-  return [{
-          url: 'https://rr5yxu11dl.execute-api.ap-northeast-2.amazonaws.com'
-        }]
+  return [
+    {
+      url: 'https://rr5yxu11dl.execute-api.ap-northeast-2.amazonaws.com'
+    }
+  ]
 }
 
 app.get(
