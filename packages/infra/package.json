@@ -1,0 +1,23 @@
+{
+  "name": "@julooga/infra",
+  "main": "index.ts",
+  "scripts": {
+    "type:check": "tsc",
+    "prettier": "prettier --write \"**/*.{ts,tsx,cjs,mjs,json,html,css,js,jsx}\" --cache --config prettier.config.mjs",
+    "eslint": "eslint --fix --cache --cache-location ./node_modules/.cache/eslint .",
+    "format": "run-s type:check prettier eslint"
+  },
+  "devDependencies": {
+    "@types/node": "^18",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@julooga/prettier": "workspace:*",
+    "@julooga/eslint": "workspace:*",
+    "@pulumi/aws": "^6.81.0",
+    "@pulumi/aws-apigateway": "^2.6.2",
+    "@pulumi/awsx": "^2.0.2",
+    "@pulumi/pulumi": "^3.173.0",
+    "npm-run-all2": "^6.2.0"
+  }
+}

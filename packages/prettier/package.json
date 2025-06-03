@@ -1,0 +1,15 @@
+{
+  "name": "@julooga/prettier",
+  "version": "1.0.0",
+  "description": "shared prettier package",
+  "main": "index.mjs",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "prettier": "^3.5.3",
+    "prettier-plugin-classnames": "^0.7.8",
+    "prettier-plugin-css-order": "^2.1.2",
+    "@ianvs/prettier-plugin-sort-imports": "^4.4.1"
+  }
+}

@@ -4,7 +4,7 @@ import { openAPISpecs } from 'hono-openapi'
 import { HTTPException } from 'hono/http-exception'
 import { logger } from 'hono/logger'
 import { secureHeaders } from 'hono/secure-headers'
-import { version } from '../package.json'
+import { version } from '../../../package.json'
 
 const app = new Hono()
 
