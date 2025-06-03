@@ -10,7 +10,8 @@ const bedrockClient = new BedrockRuntimeClient({
 })
 
 // Claude 모델 설정
-const MODEL_ID = process.env.BEDROCK_MODEL_ID ?? 'anthropic.claude-3-haiku-20240307-v1:0'
+const MODEL_ID =
+  process.env.BEDROCK_MODEL_ID ?? 'anthropic.claude-3-haiku-20240307-v1:0'
 const MAX_TOKENS = Number(process.env.BEDROCK_MAX_TOKENS) || 4096
 const TEMPERATURE = Number(process.env.BEDROCK_TEMPERATURE) || 0.1
 
@@ -23,7 +24,9 @@ type GetMedChatParams = {
  * @param params - 입력 메시지 객체
  * @returns Claude 모델의 응답 메시지
  */
-export const getMedChat = async ({ message }: GetMedChatParams): Promise<string> => {
+export const getMedChat = async ({
+  message
+}: GetMedChatParams): Promise<string> => {
   try {
     // Claude 모델용 요청 페이로드 구성
     const requestBody = {
@@ -55,7 +58,7 @@ export const getMedChat = async ({ message }: GetMedChatParams): Promise<string>
     }
 
     const responseBody = JSON.parse(new TextDecoder().decode(response.body))
-    
+
     // Claude 응답 구조에서 텍스트 추출
     if (responseBody.content && responseBody.content[0]?.text) {
       return responseBody.content[0].text
@@ -68,7 +71,7 @@ export const getMedChat = async ({ message }: GetMedChatParams): Promise<string>
       console.error('getMedChat 오류:', error.message)
       throw new Error(`의료 채팅 서비스 오류: ${error.message}`)
     }
-    
+
     console.error('getMedChat 알 수 없는 오류:', error)
     throw new Error('의료 채팅 서비스에서 알 수 없는 오류가 발생했습니다.')
   }
