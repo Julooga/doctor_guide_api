@@ -6,12 +6,12 @@ on:
       package_name:
         description: '@julooga/doctor_guide_api_sdk'
         required: false
-  workflow_run:
-    workflows: ['semantic-release']
-    types:
-      - completed
-    branches:
-      - main
+  # workflow_run:
+  #   workflows: ['semantic-release']
+  #   types:
+  #     - completed
+  #   branches:
+  #     - main
 
 permissions:
   contents: write
