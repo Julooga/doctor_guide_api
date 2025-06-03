@@ -12,7 +12,8 @@
     "pnpm": ">=9.0.0"
   },
   "scripts": {
-    "prepare": "husky"
+    "prepare": "husky",
+    "dev": "turbo dev --filter=@jurloogar/doctor_guide_api"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",

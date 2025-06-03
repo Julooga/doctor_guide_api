@@ -1,11 +1,6 @@
 {
   "name": "@julooga/prettier",
-  "version": "1.0.0",
-  "description": "shared prettier package",
   "main": "index.mjs",
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "prettier": "^3.5.3",
     "prettier-plugin-classnames": "^0.7.8",
