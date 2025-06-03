@@ -24,12 +24,8 @@ const hospitalEntity = new Entity(
     indexes: {
       primary: {
         pk: {
-          field: 'pk',
+          field: 'INST_ID',
           composite: ['INST_ID']
-        },
-        sk: {
-          field: 'sk',
-          composite: []
         }
       }
     }

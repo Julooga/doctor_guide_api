@@ -15,18 +15,14 @@ const pharmacyEntity = new Entity(
     indexes: {
       primary: {
         pk: {
-          field: 'pk',
+          field: 'INST_ID',
           composite: ['INST_ID']
-        },
-        sk: {
-          field: 'sk',
-          composite: []
         }
       }
     }
   },
   {
-    table: 'Pharmacy-safetydata',
+    table: 'Pharamacy-safetydata',
     client: docClient
   }
 )
