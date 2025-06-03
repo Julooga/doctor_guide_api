@@ -22,7 +22,7 @@ const pharmacyEntity = new Entity(
           field: 'sk',
           composite: []
         }
-      },
+      }
     }
   },
   {
