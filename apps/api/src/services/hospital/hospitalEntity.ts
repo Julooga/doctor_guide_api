@@ -15,7 +15,7 @@ const hospitalEntity = new Entity(
   {
     // 모델 메타데이터 정의
     model: {
-      entity: 'hospital',
+      entity: 'Hospital-safetydata',
       version: '1',
       service: 'doctorGuide'
     },
@@ -30,46 +30,6 @@ const hospitalEntity = new Entity(
         sk: {
           field: 'sk',
           composite: []
-        }
-      },
-      classification: {
-        index: 'hospital-classification-index',
-        pk: {
-          field: 'HSPTL_CLSF_NM',
-          composite: ['HSPTL_CLSF_NM']
-        },
-        sk: {
-          field: 'INST_NM',
-          composite: ['INST_NM']
-        }
-      },
-      name: {
-        index: 'hospital-name-index',
-        pk: {
-          field: 'INST_NM',
-          composite: ['INST_NM']
-        }
-      },
-      emergency: {
-        index: 'emergency-room-index',
-        pk: {
-          field: 'EMRO_OPER_YN_',
-          composite: ['EMRO_OPER_YN_']
-        },
-        sk: {
-          field: 'HSPTL_CLSF_NM',
-          composite: ['HSPTL_CLSF_NM']
-        }
-      },
-      region: {
-        index: 'region-index',
-        pk: {
-          field: 'ADDR_REGION',
-          composite: ['ADDR_REGION']
-        },
-        sk: {
-          field: 'INST_NM',
-          composite: ['INST_NM']
         }
       }
     }

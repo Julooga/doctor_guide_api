@@ -14,6 +14,7 @@ lambda.zip
 .idea/shelf
 .lh/
 dist
+.idea/
 
 # deps
 node_modules/
