@@ -4,11 +4,17 @@
     "enabled": false
   },
   "tasks": {
+    "format": {},
     "dev": {
       "cache": false,
       "persistent": true
     },
     "build": {},
-    "format": {}
+    "deploy": {},
+    "@julooga/infra#deploy": {
+      "dependsOn": ["@jurloogar/doctor_guide_api#build"],
+      "cache": false,
+      "inputs": ["index.ts", "Pulumi.*.yaml", "../../apps/api/dist/**"]
+    }
   }
 }

@@ -60,7 +60,10 @@ app.get(
       info: {
         version,
         title: 'Doctor Guide Api'
-      }
+      },
+      servers: [{
+        url: 'https://rr5yxu11dl.execute-api.ap-northeast-2.amazonaws.com'
+      }]
     }
   })
 )

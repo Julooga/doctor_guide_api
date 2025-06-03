@@ -13,7 +13,8 @@
   },
   "scripts": {
     "prepare": "husky",
-    "dev": "turbo dev --filter=@jurloogar/doctor_guide_api"
+    "dev": "turbo dev --filter=@jurloogar/doctor_guide_api",
+    "deploy": "turbo deploy"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",
