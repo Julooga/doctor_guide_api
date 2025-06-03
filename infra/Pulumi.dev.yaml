@@ -1,0 +1,4 @@
+encryptionsalt: v1:ILacmpQsOg8=:v1:Xb5WUhxf08T0y3Zz:wz3s+Cqxn/vo5byJ7+faLrYiDkwu9w==
+config:
+  aws:region: ap-northeast-2
+  aws:profile: jurloogar
