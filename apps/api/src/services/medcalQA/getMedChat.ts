@@ -18,81 +18,40 @@ export const getMedChat = async ({
   message: string
   conversations: string[]
 }> => {
-  try {
-    const qaChain = await getQAChain()
-    const clarify = await clarifyChain.invoke({ input: message })
+  const qaChain = await getQAChain()
+  const clarify = await clarifyChain.invoke({ input: message })
 
-    if (clarify.startsWith('clarify:')) {
-      return {
-        clarifyNeeded: true,
-        message: clarify.replace('clarify:', '').trim(),
-        conversations
-      }
+  if (clarify.startsWith('clarify:')) {
+    return {
+      clarifyNeeded: true,
+      message: clarify.replace('clarify:', '').trim(),
+      conversations
     }
+  }
 
-    const response = await qaChain.invoke({ input: clarify })
+  const response = await qaChain.invoke({ input: clarify })
 
-    const newconversations = [
-      ...conversations,
-      `User: ${message}`,
-      `Assistant: ${response.answer}`
-    ]
+  const newconversations = [
+    ...conversations,
+    `User: ${message}`,
+    `Assistant: ${response.answer}`
+  ]
 
-    if (newconversations.length >= 10) {
-      const summary = await summarizeChain.invoke({
-        messages: conversations.join('\n')
-      })
-
-      return {
-        clarifyNeeded: false,
-        message: response.answer,
-        conversations: [summary]
-      }
-    }
+  if (newconversations.length >= 10) {
+    const summary = await summarizeChain.invoke({
+      messages: conversations.join('\n')
+    })
 
     return {
       clarifyNeeded: false,
       message: response.answer,
-      conversations: newconversations
+      conversations: [summary]
     }
-  } catch (error) {
-    console.warn('Bedrock API 오류 발생, 모의 응답 사용:', error)
-    
-    // 모의 응답 체인 사용
-    const clarify = await clarifyChain.invoke({ input: message })
+  }
 
-    if (clarify.startsWith('clarify:')) {
-      return {
-        clarifyNeeded: true,
-        message: clarify.replace('clarify:', '').trim(),
-        conversations
-      }
-    }
-
-    const response = await qaChain.invoke({ input: clarify })
-
-    const newconversations = [
-      ...conversations,
-      `User: ${message}`,
-      `Assistant: ${response.answer}`
-    ]
-
-    if (newconversations.length >= 10) {
-      const summary = await summarizeChain.invoke({
-        messages: conversations.join('\n')
-      })
-
-      return {
-        clarifyNeeded: false,
-        message: response.answer,
-        conversations: [summary]
-      }
-    }
-
-    return {
-      clarifyNeeded: false,
-      message: response.answer,
-      conversations: newconversations
-    }
+  return {
+    clarifyNeeded: false,
+    message: response.answer,
+    conversations: newconversations
   }
 }

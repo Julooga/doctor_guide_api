@@ -23,20 +23,24 @@ const bedrockLLM = new BedrockChat({
 export const clarifyChain = ChatPromptTemplate.fromMessages([
   ['system', loadMarkdown('src/services/medcalQA/prompts/clarify/system.md')],
   ['user', loadMarkdown('src/services/medcalQA/prompts/clarify/user.md')]
-]).pipe(bedrockLLM).pipe(parser)
+])
+  .pipe(bedrockLLM)
+  .pipe(parser)
 
 // 사용자와의 대화를 요약해서 토큰을 절약하는 프롬프트 템플릿
 export const summarizeChain = ChatPromptTemplate.fromMessages([
   ['system', loadMarkdown('src/services/medcalQA/prompts/summarize/system.md')],
   ['user', loadMarkdown('src/services/medcalQA/prompts/summarize/user.md')]
-]).pipe(bedrockLLM).pipe(parser)
+])
+  .pipe(bedrockLLM)
+  .pipe(parser)
 
 export const getQAChain = async () => {
   // QA 체인을 위한 프롬프트 템플릿
   const qaPromptTemplate = ChatPromptTemplate.fromMessages([
-  ['system', loadMarkdown('src/services/medcalQA/prompts/qa/system.md')],
-  ['user', loadMarkdown('src/services/medcalQA/prompts/qa/user.md')]
-])
+    ['system', loadMarkdown('src/services/medcalQA/prompts/qa/system.md')],
+    ['user', loadMarkdown('src/services/medcalQA/prompts/qa/user.md')]
+  ])
 
   // Document 결합 체인 생성
   const combineDocsChain = await createStuffDocumentsChain({
