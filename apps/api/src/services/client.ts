@@ -1,6 +1,6 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb'
-import { fromIni } from '@aws-sdk/credential-providers'
+import { credentials } from './credentials'
 
 type ClientParams = { local: boolean }
 
@@ -15,7 +15,7 @@ const getAwsRemoteClient = () => {
   // 로컬에서 실제 AWS DynamoDB에 연결하고 싶을 때 사용
   return new DynamoDBClient({
     region: 'ap-northeast-2',
-    credentials: fromIni({ profile: process.env.AWS_PROFILE })
+    credentials
   })
 }
 

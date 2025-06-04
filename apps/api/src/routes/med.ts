@@ -4,10 +4,11 @@ import { describeRoute } from 'hono-openapi'
 import { HospitalPoiResponse } from './hospital'
 import { validator } from 'hono-openapi/zod'
 import { z } from 'zod'
-import { getMedChat } from '@/services/med/getMedChat'
+import { getMedChat } from '@/services/medcalQA/getMedChat'
 
 export const medRequest = z.object({
   message: z.string()
+  // conversations: z.string().array()
 })
 
 const medRouter = new Hono()
@@ -26,7 +27,7 @@ medRouter.post(
   validator('query', medRequest),
   async (c) => {
     const query = c.req.valid('query')
-    const data = await getMedChat(query)
+    const data = await getMedChat({ message: query.message, conversations: [] })
     const res: HospitalPoiResponse = {
       success: true,
       data
