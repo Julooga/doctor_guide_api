@@ -1,6 +1,6 @@
-import { swaggerUI } from "@hono/swagger-ui"
-import { Hono } from "hono"
-import { openAPISpecs } from "hono-openapi"
+import { swaggerUI } from '@hono/swagger-ui'
+import { Hono } from 'hono'
+import { openAPISpecs } from 'hono-openapi'
 import { version } from '../../package.json'
 import app from '@/app'
 
