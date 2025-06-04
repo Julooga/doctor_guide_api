@@ -1,4 +1,4 @@
-import { clarifyChain, getQAChain, summarizeChain } from './medicalChains'
+import { clarifyChain, getQAChain } from './medicalChains'
 
 type GetMedChatParams = {
   message: string
@@ -11,47 +11,25 @@ type GetMedChatParams = {
  * @returns Claude 모델의 응답 메시지
  */
 export const getMedChat = async ({
-  message,
-  conversations
+  message
 }: GetMedChatParams): Promise<{
   clarifyNeeded: boolean
   message: string
-  conversations: string[]
 }> => {
   const qaChain = await getQAChain()
-  const clarify = await clarifyChain.invoke({ input: message })
+  const clarifyInput = await clarifyChain.invoke({ input: message })
 
-  if (clarify.startsWith('clarify:')) {
+  if (clarifyInput.startsWith('clarify:')) {
     return {
       clarifyNeeded: true,
-      message: clarify.replace('clarify:', '').trim(),
-      conversations
+      message: clarifyInput.replace('clarify:', '').trim()
     }
   }
 
-  const response = await qaChain.invoke({ input: clarify })
-
-  const newconversations = [
-    ...conversations,
-    `User: ${message}`,
-    `Assistant: ${response.answer}`
-  ]
-
-  if (newconversations.length >= 10) {
-    const summary = await summarizeChain.invoke({
-      messages: conversations.join('\n')
-    })
-
-    return {
-      clarifyNeeded: false,
-      message: response.answer,
-      conversations: [summary]
-    }
-  }
+  const response = await qaChain.invoke({ input: clarifyInput })
 
   return {
     clarifyNeeded: false,
-    message: response.answer,
-    conversations: newconversations
+    message: response.answer
   }
 }

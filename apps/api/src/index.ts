@@ -5,11 +5,11 @@ import 'zod-openapi/extend'
 
 import hospitalRouter from '@/routes/hospital'
 import pharamacyRouter from '@/routes/pharamacy'
-import medRouter from '@/routes/med'
+import medRouter from '@/routes/medical'
 
 app.route('/hospital', hospitalRouter)
 app.route('/pharamacy', pharamacyRouter)
-app.route('/med/chat', medRouter)
+app.route('/med', medRouter)
 
 export const handler = handle(app)
 export default app
