@@ -5,8 +5,8 @@ import 'zod-openapi/extend'
 
 import hospitalRouter from '@/routes/hospital'
 import pharamacyRouter from '@/routes/pharamacy'
+import swaggerRouter from '@/routes/swagger'
 import medRouter from '@/routes/medical'
-import swaggerRouter from './routes/swagger'
 
 app.route('/', swaggerRouter)
 app.route('/hospital', hospitalRouter)

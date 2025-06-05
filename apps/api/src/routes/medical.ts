@@ -8,7 +8,6 @@ import { getMedChatSummary } from '@/services/medcalQA/getMedChatSummary'
 
 export const medRequest = z.object({
   message: z.string()
-  // conversations: z.string().array()
 })
 
 export const medSummeriseRequest = z.object({
