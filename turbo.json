@@ -10,6 +10,12 @@
       "persistent": true
     },
     "build": {},
+    "@julooga/infra#build": {
+      "outputs": ["dist/index.js", "dist/openapi.json"]
+    },
+    "@julooga/sdk#build": {
+      "dependsOn": ["@julooga/infra#build"]
+    },
     "deploy": {},
     "@julooga/infra#deploy": {
       "dependsOn": ["@jurloogar/doctor_guide_api#build"],

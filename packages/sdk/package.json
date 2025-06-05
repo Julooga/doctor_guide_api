@@ -1,0 +1,15 @@
+{
+  "name": "@julooga/sdk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.ts",
+  "scripts": {
+    "build": "swagger-typescript-api generate --path ../../apps/api/dist/openapi.json -o ./dist -n index.ts --axios"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "swagger-typescript-api": "^13.1.3"
+  }
+}

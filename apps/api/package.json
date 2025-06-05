@@ -15,7 +15,6 @@
     "build:api": "esbuild --bundle --outfile=./dist/index.js --platform=node --target=node20 --minify ./src/index.ts",
     "build:spec": "tsx src/services/swagger/generateSwagger.ts -o './dist'",
     "build": "run-s build:api build:spec",
-    "build:sdk": "swagger-typescript-api generate --path https://1acgaqfa8f.execute-api.ap-northeast-2.amazonaws.com/docs -o ./workspace -n api.ts --axios",
     "type:check": "tsc",
     "prettier": "prettier --write \"**/*.{ts,tsx,cjs,mjs,json,html,css,js,jsx}\" --cache --config prettier.config.mjs",
     "eslint": "eslint --fix --cache --cache-location ./node_modules/.cache/eslint .",
