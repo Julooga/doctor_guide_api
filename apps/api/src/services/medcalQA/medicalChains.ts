@@ -1,12 +1,10 @@
-import { createRetrievalChain } from 'langchain/chains/retrieval'
-import { createStuffDocumentsChain } from 'langchain/chains/combine_documents'
-import { MemoryVectorStore } from 'langchain/vectorstores/memory'
+import { AgentExecutor, createToolCallingAgent } from 'langchain/agents'
 import { BedrockChat } from '@langchain/community/chat_models/bedrock'
-import { BedrockEmbeddings } from '@langchain/aws'
 import { credentials } from '../credentials'
 import { StringOutputParser } from '@langchain/core/output_parsers'
 import { ChatPromptTemplate } from '@langchain/core/prompts'
 import loadMarkdown from './loadMarkdown'
+import { hospitalSearchTool, pharmacySearchTool } from './tools'
 
 const parser = new StringOutputParser()
 
@@ -36,31 +34,28 @@ export const summarizeChain = ChatPromptTemplate.fromMessages([
   .pipe(parser)
 
 export const getQAChain = async () => {
-  // QA 체인을 위한 프롬프트 템플릿
+  const tools = [hospitalSearchTool, pharmacySearchTool]
+
+  // Tool을 사용할 수 있는 프롬프트 템플릿
   const qaPromptTemplate = ChatPromptTemplate.fromMessages([
     ['system', loadMarkdown('./prompts/qa/system.md')],
-    ['user', loadMarkdown('./prompts/qa/user.md')]
+    ['placeholder', '{chat_history}'],
+    ['human', '{input}'],
+    ['placeholder', '{agent_scratchpad}']
   ])
 
-  // Document 결합 체인 생성
-  const combineDocsChain = await createStuffDocumentsChain({
+  // Tool-calling agent 생성
+  const agent = await createToolCallingAgent({
     llm: bedrockLLM,
+    tools,
     prompt: qaPromptTemplate
   })
 
-  // Bedrock Embeddings 설정
-  const embeddings = new BedrockEmbeddings({
-    region: 'ap-northeast-2',
-    credentials,
-    model: 'amazon.titan-embed-text-v1'
-  })
-
-  // 인메모리 벡터스토어
-  const vectorStore = await MemoryVectorStore.fromTexts([], [], embeddings)
-
-  // 최종 retrieval 체인 생성
-  return createRetrievalChain({
-    retriever: vectorStore.asRetriever(),
-    combineDocsChain
+  // AgentExecutor 반환 (기존 retrieval chain과 동일한 인터페이스)
+  return new AgentExecutor({
+    agent,
+    tools,
+    verbose: true,
+    maxIterations: 3
   })
 }
