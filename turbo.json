@@ -10,11 +10,15 @@
       "persistent": true
     },
     "build": {},
+    "@julooga/web#build": {
+      "outputs": ["build/client/**"]
+    },
     "@julooga/infra#build": {
       "outputs": ["dist/index.js", "dist/openapi.json"]
     },
     "@julooga/sdk#build": {
-      "dependsOn": ["@julooga/infra#build"]
+      "dependsOn": ["@julooga/infra#build"],
+      "outputs": ["dist/index.ts"]
     },
     "deploy": {},
     "@julooga/infra#deploy": {
