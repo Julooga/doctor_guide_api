@@ -12,8 +12,8 @@
   },
   "scripts": {
     "dev": "tsx watch src/dev.ts",
-    "build:api": "esbuild --bundle --outfile=./dist/index.js --platform=node --target=node20 --minify ./src/index.ts",
-    "build:spec": "tsx src/services/swagger/generateSwagger.ts -o './dist'",
+    "build:api": "PROFILE=real esbuild --bundle --outfile=./dist/index.js --platform=node --target=node20 --minify ./src/index.ts",
+    "build:spec": "PROFILE=real tsx src/services/swagger/generateSwagger.ts -o './dist'",
     "build": "run-s build:api build:spec",
     "type:check": "tsc",
     "prettier": "prettier --write \"**/*.{ts,tsx,cjs,mjs,json,html,css,js,jsx}\" --cache --config prettier.config.mjs",
