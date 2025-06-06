@@ -30,7 +30,7 @@ medRouter.post(
   validator('query', medRequest),
   async (c) => {
     const query = c.req.valid('query')
-    const res = await getMedChat({ message: query.message, conversations: [] })
+    const res = await getMedChat(query.message)
 
     return c.text(res.message, undefined, {
       'X-CLARIFY-NEEDED': `${res.clarifyNeeded}`
