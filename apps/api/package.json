@@ -15,16 +15,15 @@
     "build:api": "PROFILE=real esbuild --bundle --outfile=./dist/index.js --platform=node --target=node20 --minify ./src/index.ts",
     "build:spec": "PROFILE=real tsx src/services/swagger/generateSwagger.ts -o './dist'",
     "build": "run-s build:api build:spec",
-    "type:check": "tsc",
+    "typecheck": "tsc",
     "prettier": "prettier --write \"**/*.{ts,tsx,cjs,mjs,json,html,css,js,jsx}\" --cache --config prettier.config.mjs",
     "eslint": "eslint --fix --cache --cache-location ./node_modules/.cache/eslint .",
-    "format": "run-s type:check prettier eslint"
+    "format": "run-s typecheck prettier eslint"
   },
   "devDependencies": {
-    "@hono/node-server": "^1.14.1",
-    "@julooga/sdk": "workspace:*",
     "@julooga/eslint": "workspace:*",
     "@julooga/prettier": "workspace:*",
+    "@hono/node-server": "^1.14.1",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "20",
     "commander": "^13.1.0",
@@ -40,6 +39,7 @@
     "zx": "^8.5.3"
   },
   "dependencies": {
+    "@julooga/sdk": "workspace:*",
     "@aws-sdk/client-bedrock-runtime": "^3.0.0",
     "@aws-sdk/client-dynamodb": "^3.803.0",
     "@aws-sdk/credential-providers": "^3.803.0",

@@ -2,10 +2,10 @@
   "name": "@julooga/infra",
   "main": "index.ts",
   "scripts": {
-    "type:check": "tsc",
+    "typecheck": "tsc",
     "prettier": "prettier --write \"**/*.{ts,tsx,cjs,mjs,json,html,css,js,jsx}\" --cache --config prettier.config.mjs",
     "eslint": "eslint --fix --cache --cache-location ./node_modules/.cache/eslint .",
-    "format": "run-s type:check prettier eslint",
+    "format": "run-s typecheck prettier eslint",
     "deploy": "PULUMI_CONFIG_PASSPHRASE='' AWS_PROFILE=jurloogar pulumi up --yes --stack dev",
     "destroy": "PULUMI_CONFIG_PASSPHRASE='' AWS_PROFILE=jurloogar pulumi destroy"
   },
