@@ -6,10 +6,22 @@ import { z } from 'zod'
 import { getMedChat } from '@/services/medcalQA/getMedChat'
 import { getMedChatSummary } from '@/services/medcalQA/getMedChatSummary'
 
-// Zod 스키마 정의
+// Zod 스키마 정의 - AI SDK 호환성을 위해 더 유연하게 구성
 const messagePartSchema = z.object({
-  type: z.literal('text'),
-  text: z.string()
+  type: z.union([
+    z.literal('text'),
+    z.literal('step-start'),
+    z.literal('step-finish'),
+    z.literal('tool-call'),
+    z.literal('tool-result'),
+    z.string() // 기타 미래의 타입들을 위한 fallback
+  ]),
+  text: z.string().optional(),
+  // AI SDK에서 사용할 수 있는 추가 필드들
+  toolCallId: z.string().optional(),
+  toolName: z.string().optional(),
+  result: z.any().optional(),
+  delta: z.string().optional()
 })
 
 const messageRoleSchema = z.enum(['system', 'user', 'assistant'])
@@ -17,7 +29,7 @@ const messageRoleSchema = z.enum(['system', 'user', 'assistant'])
 const messageSchema = z.object({
   role: messageRoleSchema,
   content: z.string(),
-  parts: z.array(messagePartSchema)
+  parts: z.array(messagePartSchema).optional() // parts를 optional로 변경
 })
 
 // 요청/응답 스키마
@@ -43,25 +55,58 @@ medRouter.post(
       400: createFailRoute()
     }
   }),
-  validator('json', medRequest), // query에서 json으로 수정
+  validator('json', medRequest),
   async (c) => {
-    const { messages = [] } = c.req.valid('json')
+    try {
+      const requestBody = c.req.valid('json')
+      console.log(
+        'Received request body:',
+        JSON.stringify(requestBody, null, 2)
+      )
 
-    // 마지막 사용자 메시지 추출
-    const userMessages = messages.filter((msg) => msg.role === 'user')
-    const lastUserMessage = userMessages[userMessages.length - 1]
+      const { messages = [] } = requestBody
 
-    if (!lastUserMessage) {
-      return c.json({ error: '사용자 메시지가 없습니다.' }, 400)
-    }
+      // 마지막 사용자 메시지 추출
+      const userMessages = messages.filter((msg) => msg.role === 'user')
+      const lastUserMessage = userMessages[userMessages.length - 1]
 
-    const stream = await getMedChat(lastUserMessage.content)
+      if (!lastUserMessage) {
+        console.log('No user message found in:', messages)
 
-    return stream.toDataStreamResponse({
-      headers: {
-        'Content-Type': 'text/event-stream'
+        return c.json({ error: '사용자 메시지가 없습니다.' }, 400)
       }
-    })
+
+      console.log('Processing user message:', lastUserMessage.content)
+      const stream = await getMedChat(lastUserMessage.content)
+
+      return stream.toDataStreamResponse({
+        headers: {
+          'Content-Type': 'text/event-stream'
+        }
+      })
+    } catch (error) {
+      console.error('Error in medical chat route:', error)
+
+      // Rate limit 에러 체크
+      if (
+        error instanceof Error &&
+        error.message.includes('Too many requests')
+      ) {
+        return c.json(
+          {
+            error: '요청이 너무 빠릅니다. 잠시 후 다시 시도해주세요.'
+          },
+          429
+        )
+      }
+
+      return c.json(
+        {
+          error: '서버 내부 오류가 발생했습니다.'
+        },
+        500
+      )
+    }
   }
 )
 
