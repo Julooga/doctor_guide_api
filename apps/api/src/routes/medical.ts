@@ -6,12 +6,28 @@ import { z } from 'zod'
 import { getMedChat } from '@/services/medcalQA/getMedChat'
 import { getMedChatSummary } from '@/services/medcalQA/getMedChatSummary'
 
+// Zod 스키마 정의
+const messagePartSchema = z.object({
+  type: z.literal('text'),
+  text: z.string()
+})
+
+const messageRoleSchema = z.enum(['system', 'user', 'assistant'])
+
+const messageSchema = z.object({
+  role: messageRoleSchema,
+  content: z.string(),
+  parts: z.array(messagePartSchema)
+})
+
+// 요청/응답 스키마
 export const medRequest = z.object({
-  message: z.string()
+  id: z.string(),
+  messages: z.array(messageSchema)
 })
 
 export const medSummeriseRequest = z.object({
-  conversations: z.string().array()
+  conversations: z.array(z.string())
 })
 
 const medRouter = new Hono()
@@ -19,7 +35,7 @@ const medRouter = new Hono()
 medRouter.post(
   '/chat',
   describeRoute({
-    description: '의학적 질문에 답하는 post 메소드',
+    description: '의학적 질문을 sse 스트림으로 답하는 post 메소드',
     responses: {
       200: createSuccessRoute({
         resSchema: medRequest
@@ -27,13 +43,24 @@ medRouter.post(
       400: createFailRoute()
     }
   }),
-  validator('query', medRequest),
+  validator('json', medRequest), // query에서 json으로 수정
   async (c) => {
-    const query = c.req.valid('query')
-    const res = await getMedChat(query.message)
+    const { messages = [] } = c.req.valid('json')
 
-    return c.text(res.message, undefined, {
-      'X-CLARIFY-NEEDED': `${res.clarifyNeeded}`
+    // 마지막 사용자 메시지 추출
+    const userMessages = messages.filter((msg) => msg.role === 'user')
+    const lastUserMessage = userMessages[userMessages.length - 1]
+
+    if (!lastUserMessage) {
+      return c.json({ error: '사용자 메시지가 없습니다.' }, 400)
+    }
+
+    const stream = await getMedChat(lastUserMessage.content)
+
+    return stream.toDataStreamResponse({
+      headers: {
+        'Content-Type': 'text/event-stream'
+      }
     })
   }
 )
