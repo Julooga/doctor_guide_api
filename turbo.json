@@ -13,7 +13,7 @@
     "@julooga/web#build": {
       "outputs": ["build/client/**"]
     },
-    "@julooga/infra#build": {
+    "@jurloogar/doctor_guide_api#build": {
       "outputs": ["dist/index.js", "dist/openapi.json"]
     },
     "@julooga/sdk#build": {
@@ -22,9 +22,15 @@
     },
     "deploy": {},
     "@julooga/infra#deploy": {
-      "dependsOn": ["@jurloogar/doctor_guide_api#build"],
+      "dependsOn": ["@julooga/web#build", "@jurloogar/doctor_guide_api#build"],
       "cache": false,
-      "inputs": ["index.ts", "Pulumi.*.yaml", "../../apps/api/dist/**"]
+      "inputs": [
+        "index.ts",
+        "bedrock.ts",
+        "Pulumi.*.yaml",
+        "../../apps/api/dist/**",
+        "../../apps/web/build/client/**"
+      ]
     }
   }
 }
