@@ -66,10 +66,22 @@ const messageSchema = z.object({
 })
 
 // 스트리밍 요청/응답 스키마
-export const medStreamRequest = z.object({
-  id: z.string(),
-  messages: z.array(messageSchema)
-})
+export const medStreamRequest = z
+  .object({
+    id: z.string(),
+    messages: z.array(messageSchema)
+  })
+  .openapi({
+    example: {
+      id: 'chat_123456789',
+      messages: [
+        {
+          role: 'user',
+          content: '혈압이 높은데 어떻게 관리해야 하나요?'
+        }
+      ]
+    }
+  })
 
 medRouter.post(
   '/chat/stream',
