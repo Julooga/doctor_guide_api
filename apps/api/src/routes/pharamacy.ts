@@ -1,7 +1,6 @@
 import pharmacyPoiSchema from '@/services/pharamacy/pharmacyPoiSchema'
 import {
   createFailRoute,
-  createListDataSchema,
   createNumberSchema,
   createSuccessRoute,
   createSuccessSchema
@@ -32,7 +31,13 @@ export const pharmacyRequest = z.object({
 
 export type PharmacyRequest = z.infer<typeof pharmacyRequest>
 
-export const pharmacyPoiDataSchema = createListDataSchema(pharmacyPoiSchema)
+export const pharmacyPoiDataSchema = z.object({
+  list: pharmacyPoiSchema.array(),
+  cursor: z.string().nullable()
+})
+
+export type PharmacyPoiType = z.infer<typeof pharmacyPoiSchema>
+
 export type PharmacyPoiDataType = z.infer<typeof pharmacyPoiDataSchema>
 
 export const pharmacyPoiResSchema = createSuccessSchema(

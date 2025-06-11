@@ -1,4 +1,4 @@
-import { PharmacyPoiDataType, PharmacyRequest } from '@/routes/pharamacy'
+import { PharmacyPoiType, PharmacyRequest } from '@/routes/pharamacy'
 import pharmacyEntity from '@/services/pharamacy/pharmacyEntity'
 
 const getPharamacyPoiData = async (query: PharmacyRequest) => {
@@ -29,7 +29,7 @@ const getPharamacyPoiData = async (query: PharmacyRequest) => {
     })
 
   return {
-    list: data.data as unknown as PharmacyPoiDataType[],
+    list: data.data as unknown as PharmacyPoiType[],
     cursor: data.cursor
   }
 }

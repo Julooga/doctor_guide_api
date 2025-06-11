@@ -33,14 +33,14 @@ export const createFailRoute = (description = '에러응답') => {
   }
 }
 
-export const createSuccessSchema = (dataSchema: ZodType) => {
+export const createSuccessSchema = <T>(dataSchema: ZodType<T>) => {
   return z.object({
     success: z.boolean(),
     data: dataSchema
   })
 }
 
-export const createListDataSchema = (recordSchema: ZodType) => {
+export const createListDataSchema = <T>(recordSchema: ZodType<T>) => {
   return z.object({
     list: recordSchema.array(),
     cursor: z.string().nullable()
