@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@hono/node-server": "^1.14.1",
-    "@julooga/eslint": "workspace:^",
+    "@julooga/eslint": "workspace:*",
     "@julooga/prettier": "workspace:*",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "20",
@@ -40,6 +40,7 @@
   },
   "dependencies": {
     "@ai-sdk/amazon-bedrock": "^2.2.10",
+    "@ai-sdk/anthropic": "^1.2.12",
     "@aws-sdk/client-bedrock-runtime": "^3.0.0",
     "@aws-sdk/client-dynamodb": "^3.803.0",
     "@aws-sdk/credential-providers": "^3.803.0",

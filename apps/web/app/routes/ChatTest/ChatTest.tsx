@@ -1,11 +1,5 @@
 import { useChat } from '@ai-sdk/react'
 
-type Message = {
-  id: string
-  role: 'user' | 'assistant' | 'system'
-  content: string
-}
-
 const getButtonLabel = (isLoading: boolean) => {
   if (isLoading) {
     return '전송 중...'
@@ -31,15 +25,7 @@ const getMessageStyles = (role: string) => {
 const ChatTest = () => {
   const { messages, input, handleInputChange, handleSubmit, isLoading } =
     useChat({
-      api: 'http://localhost:8080/med/chat',
-      initialMessages: [
-        {
-          id: 'welcome',
-          role: 'system',
-          content:
-            '안녕하세요! 의료 상담 AI입니다. 증상이나 건강 관련 질문을 자유롭게 해주세요.'
-        }
-      ] as Message[]
+      api: '/med/chat/stream'
     })
 
   return (

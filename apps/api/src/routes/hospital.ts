@@ -32,6 +32,8 @@ export const hospitalRequest = z.object({
 
 export type HospitalRequest = z.infer<typeof hospitalRequest>
 
+export type HospitalPoiType = z.infer<typeof hospitalPoiSchema>
+
 export const hospitalPoiDataSchema = createListDataSchema(hospitalPoiSchema)
 export type HospitalPoiDataType = z.infer<typeof hospitalPoiDataSchema>
 

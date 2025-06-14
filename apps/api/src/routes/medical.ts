@@ -5,6 +5,39 @@ import { validator } from 'hono-openapi/zod'
 import { z } from 'zod'
 import { getMedChat } from '@/services/medcalQA/getMedChat'
 import { getMedChatSummary } from '@/services/medcalQA/getMedChatSummary'
+import { getMedChatStream } from '@/services/medcalQA/getMedChatStream'
+
+export const medRequest = z.object({
+  message: z.string()
+})
+
+export const medSummeriseRequest = z.object({
+  conversations: z.string().array()
+})
+
+const medRouter = new Hono()
+
+medRouter.post(
+    '/chat',
+    describeRoute({
+      description: '의학적 질문에 답하는 post 메소드',
+      responses: {
+        200: createSuccessRoute({
+          resSchema: medRequest
+        }),
+        400: createFailRoute()
+      }
+    }),
+    validator('query', medRequest),
+    async (c) => {
+      const query = c.req.valid('query')
+      const res = await getMedChat(query.message)
+
+      return c.text(res.message, undefined, {
+        'X-CLARIFY-NEEDED': `${res.clarifyNeeded}`
+      })
+    }
+)
 
 // Zod 스키마 정의 - AI SDK 호환성을 위해 더 유연하게 구성
 const messagePartSchema = z.object({
@@ -32,102 +65,108 @@ const messageSchema = z.object({
   parts: z.array(messagePartSchema).optional() // parts를 optional로 변경
 })
 
-// 요청/응답 스키마
-export const medRequest = z.object({
-  id: z.string(),
-  messages: z.array(messageSchema)
-})
-
-export const medSummeriseRequest = z.object({
-  conversations: z.array(z.string())
-})
-
-const medRouter = new Hono()
+// 스트리밍 요청/응답 스키마
+export const medStreamRequest = z
+    .object({
+      id: z.string(),
+      messages: z.array(messageSchema)
+    })
+    .openapi({
+      example: {
+        id: 'chat_123456789',
+        messages: [
+          {
+            role: 'user',
+            content: '혈압이 높은데 어떻게 관리해야 하나요?'
+          }
+        ]
+      }
+    })
 
 medRouter.post(
-  '/chat',
-  describeRoute({
-    description: '의학적 질문을 sse 스트림으로 답하는 post 메소드',
-    responses: {
-      200: createSuccessRoute({
-        resSchema: medRequest
-      }),
-      400: createFailRoute()
-    }
-  }),
-  validator('json', medRequest),
-  async (c) => {
-    try {
-      const requestBody = c.req.valid('json')
-      console.log(
-        'Received request body:',
-        JSON.stringify(requestBody, null, 2)
-      )
-
-      const { messages = [] } = requestBody
-
-      // 마지막 사용자 메시지 추출
-      const userMessages = messages.filter((msg) => msg.role === 'user')
-      const lastUserMessage = userMessages[userMessages.length - 1]
-
-      if (!lastUserMessage) {
-        console.log('No user message found in:', messages)
-
-        return c.json({ error: '사용자 메시지가 없습니다.' }, 400)
+    '/chat/stream',
+    describeRoute({
+      description: '의학적 질문에 스트리밍으로 답하는 post 메소드',
+      responses: {
+        200: createSuccessRoute({
+          resSchema: medStreamRequest
+        }),
+        400: createFailRoute()
       }
+    }),
+    validator('json', medStreamRequest),
+    async (c) => {
+      try {
+        const requestBody = c.req.valid('json')
+        console.log(
+            'Received request body:',
+            JSON.stringify(requestBody, null, 2)
+        )
 
-      console.log('Processing user message:', lastUserMessage.content)
-      const stream = await getMedChat(lastUserMessage.content)
+        const { messages = [] } = requestBody
 
-      return stream.toDataStreamResponse({
-        headers: {
-          'Content-Type': 'text/event-stream'
+        // 마지막 사용자 메시지 추출
+        const userMessages = messages.filter((msg) => msg.role === 'user')
+        const lastUserMessage = userMessages[userMessages.length - 1]
+
+        if (!lastUserMessage) {
+          console.log('No user message found in:', messages)
+
+          return c.json({ error: '사용자 메시지가 없습니다.' }, 400)
         }
-      })
-    } catch (error) {
-      console.error('Error in medical chat route:', error)
 
-      // Rate limit 에러 체크
-      if (
-        error instanceof Error &&
-        error.message.includes('Too many requests')
-      ) {
+        console.log('Processing user message:', lastUserMessage.content)
+        const stream = await getMedChatStream(lastUserMessage.content)
+
+        return stream.toDataStreamResponse({
+          headers: {
+            'Content-Type': 'text/event-stream'
+          }
+        })
+      } catch (error) {
+        console.error('Error in medical chat route:', error)
+
+        // Rate limit 에러 체크
+        if (
+            error instanceof Error &&
+            error.message.includes('Too many requests')
+        ) {
+          return c.json(
+              {
+                error: '요청이 너무 빠릅니다. 잠시 후 다시 시도해주세요.'
+              },
+              429
+          )
+        }
+
         return c.json(
-          {
-            error: '요청이 너무 빠릅니다. 잠시 후 다시 시도해주세요.'
-          },
-          429
+            {
+              error: '서버 내부 오류가 발생했습니다.'
+            },
+            500
         )
       }
-
-      return c.json(
-        {
-          error: '서버 내부 오류가 발생했습니다.'
-        },
-        500
-      )
     }
-  }
 )
 
 medRouter.post(
-  '/summarize',
-  describeRoute({
-    description: '의학적 대화를 요약하는 post 메소드',
-    responses: {
-      200: createSuccessRoute({
-        resSchema: medSummeriseRequest
-      }),
-      400: createFailRoute()
-    }
-  }),
-  validator('query', medSummeriseRequest),
-  async (c) => {
-    const { conversations } = c.req.valid('query')
-    const res = await getMedChatSummary(conversations)
+    '/summarize',
+    describeRoute({
+      description: '의학적 대화를 요약하는 post 메소드',
+      responses: {
+        200: createSuccessRoute({
+          resSchema: medSummeriseRequest
+        }),
+        400: createFailRoute()
+      }
+    }),
+    validator('query', medSummeriseRequest),
+    async (c) => {
+      const { conversations } = c.req.valid('query')
+      const res = await getMedChatSummary(conversations)
 
-    return c.text(res)
-  }
+      return c.text(res)
+    }
 )
 
 export default medRouter

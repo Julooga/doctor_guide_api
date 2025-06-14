@@ -1,4 +1,4 @@
-import { HospitalPoiDataType, HospitalRequest } from '@/routes/hospital'
+import { HospitalPoiType, HospitalRequest } from '@/routes/hospital'
 import hospitalEntity from '@/services/hospital/hospitalEntity'
 
 const getHospitalPoiData = async (query: HospitalRequest) => {
@@ -31,7 +31,7 @@ const getHospitalPoiData = async (query: HospitalRequest) => {
     })
 
   return {
-    list: data.data as unknown as HospitalPoiDataType[],
+    list: data.data as unknown as HospitalPoiType[],
     cursor: data.cursor
   }
 }
