@@ -3,7 +3,7 @@ import loadMarkdown from './loadMarkdown'
 // RAG를 위한 서비스 import
 import getHospitalPoiData from '../hospital/getHospitalPoiData'
 import getPharamacyPoiData from '../pharamacy/getPharamacyPoiData'
-import anthropicModel from './anthropicModel'
+import bedrockModel from './bedrockModel'
 
 type EnhancedMessageParams = {
   contextData: string | null
@@ -100,8 +100,8 @@ export const getMedChatStream = async (messages: Message[]) => {
     const conversationMessages = [systemMessage, ...processedMessages]
 
     const result = await streamText({
-      // model: bedrockModel,
-      model: anthropicModel('claude-3-5-haiku-20241022'),
+      model: bedrockModel,
+      // model: anthropicModel('claude-3-5-haiku-20241022'),
       messages: conversationMessages,
       maxTokens: 1000,
       temperature: 0.7,
