@@ -104,19 +104,7 @@ medRouter.post(
       )
 
       const { messages = [] } = requestBody
-
-      // 마지막 사용자 메시지 추출
-      const userMessages = messages.filter((msg) => msg.role === 'user')
-      const lastUserMessage = userMessages[userMessages.length - 1]
-
-      if (!lastUserMessage) {
-        console.log('No user message found in:', messages)
-
-        return c.json({ error: '사용자 메시지가 없습니다.' }, 400)
-      }
-
-      console.log('Processing user message:', lastUserMessage.content)
-      const stream = await getMedChatStream(lastUserMessage.content)
+      const stream = await getMedChatStream(messages)
 
       return stream.toDataStreamResponse({
         headers: {

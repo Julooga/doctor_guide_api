@@ -1,9 +1,9 @@
 import { streamText } from 'ai'
-import bedrockModel from './bedrockModel'
 import loadMarkdown from './loadMarkdown'
 // RAG를 위한 서비스 import
 import getHospitalPoiData from '../hospital/getHospitalPoiData'
 import getPharamacyPoiData from '../pharamacy/getPharamacyPoiData'
+import anthropicModel from './anthropicModel'
 
 type EnhancedMessageParams = {
   contextData: string | null
@@ -50,40 +50,59 @@ const formatPharmacyInfo = (pharmacies: PharmacyInfo[]): string => {
   return `관련 약국 정보:\n${pharmacyList}`
 }
 
+type Message = {
+  role: 'system' | 'user' | 'assistant'
+  content: string
+}
+
 /**
  * AWS Bedrock Claude 모델을 사용하여 의료 관련 채팅 응답을 생성합니다.
  * RAG를 통해 병원/약국 데이터를 포함한 컨텍스트를 제공합니다.
  */
-export const getMedChatStream = async (message: string) => {
+export const getMedChatStream = async (messages: Message[]) => {
   try {
     const systemPrompt = loadMarkdown('./prompts/qa/system.md')
 
+    // 마지막 사용자 메시지에서 컨텍스트 추출
+    const userMeassages = messages.filter((msg) => msg.role === 'user')
+    const lastUserMessage = userMeassages[userMeassages.length - 1]
+
     // RAG: 관련 데이터 검색
     const contextData = await buildContextData({
-      message,
+      message: lastUserMessage?.content || '',
       includeHospitalData: true,
       includePharamacyData: true,
       searchLocation: ''
     })
 
-    // 컨텍스트가 있는 경우 메시지에 추가
-    const enhancedMessage = getEnhancedMessage({
-      message,
-      contextData
+    // 시스템 메시지 구성
+    const systemMessage: Message = {
+      role: 'system',
+      content: systemPrompt
+    }
+
+    // 컨텍스트가 있는 경우 마지막 사용자 메시지에 추가
+    const processedMessages = messages.map((msg, index) => {
+      if (msg.role === 'user' && index === messages.length - 1 && contextData) {
+        return {
+          ...msg,
+          content: getEnhancedMessage({
+            message: msg.content,
+            contextData
+          })
+        }
+      }
+
+      return msg
     })
 
+    // 전체 대화 히스토리 구성
+    const conversationMessages = [systemMessage, ...processedMessages]
+
     const result = await streamText({
-      model: bedrockModel,
-      messages: [
-        {
-          role: 'system',
-          content: systemPrompt
-        },
-        {
-          role: 'user',
-          content: enhancedMessage
-        }
-      ],
+      // model: bedrockModel,
+      model: anthropicModel('claude-3-5-haiku-20241022'),
+      messages: conversationMessages,
       maxTokens: 1000,
       temperature: 0.7,
       maxRetries: 1,
