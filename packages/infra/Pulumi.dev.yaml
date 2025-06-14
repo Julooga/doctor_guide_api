@@ -2,3 +2,5 @@ encryptionsalt: v1:ILacmpQsOg8=:v1:Xb5WUhxf08T0y3Zz:wz3s+Cqxn/vo5byJ7+faLrYiDkwu
 config:
   aws:region: ap-northeast-2
   aws:profile: jurloogar
+  web:anthropic:
+    secure: v1:rbvtFCgJT2jPISZa:3q0DUhFWfGgXc5Giuczd4x0sdpuerfX5xgwKydcvCRpuFNOgYwKmB/GdZGZJwY2h3APtLUKQbgoRgpxXrmmAyS0K656Y4XIl2nllC6sUocvGyGnl8xs+bOPqp762y/99CRU/YqKHSqIr6HypCn2oLN/gAHqgHl660dk4Mg==
