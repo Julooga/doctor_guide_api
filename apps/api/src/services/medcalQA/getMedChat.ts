@@ -6,7 +6,7 @@ import { clarifyChain, getQAChain } from './medicalChains'
  * @returns Claude 모델의 응답 메시지
  */
 export const getMedChat = async (
-    message: string
+  message: string
 ): Promise<{
   clarifyNeeded: boolean
   message: string
