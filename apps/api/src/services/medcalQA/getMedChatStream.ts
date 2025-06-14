@@ -1,9 +1,9 @@
 import { streamText } from 'ai'
-import bedrockModel from './bedrockModel'
 import loadMarkdown from './loadMarkdown'
 // RAG를 위한 서비스 import
 import getHospitalPoiData from '../hospital/getHospitalPoiData'
 import getPharamacyPoiData from '../pharamacy/getPharamacyPoiData'
+import bedrockModel from './bedrockModel'
 
 type EnhancedMessageParams = {
   contextData: string | null
@@ -73,6 +73,7 @@ export const getMedChatStream = async (message: string) => {
     })
 
     const result = await streamText({
+      // model: anthropicModel('claude-3-7-sonnet-20250219'),
       model: bedrockModel,
       messages: [
         {
