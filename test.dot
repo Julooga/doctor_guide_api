@@ -1,0 +1,36 @@
+digraph {
+	graph [bb="0,0,1341.4,180",
+		compound=true,
+		newrank=true
+	];
+	node [label="\N"];
+	subgraph root {
+		"[root] @julooga/eslint#build"	[height=0.5,
+			pos="116.86,90",
+			width=3.2462];
+		"[root] ___ROOT___"	[height=0.5,
+			pos="621.86,18",
+			width=2.4216];
+		"[root] @julooga/eslint#build" -> "[root] ___ROOT___"	[pos="e,551.03,28.819 201.67,77.244 295.8,64.197 446.65,43.286 539.7,30.389"];
+		"[root] @julooga/infra#build"	[height=0.5,
+			pos="365.86,90",
+			width=3.1751];
+		"[root] @julooga/infra#build" -> "[root] ___ROOT___"	[pos="e,570.77,32.97 421.41,73.811 462.18,62.664 517.57,47.519 559.79,35.973"];
+		"[root] @julooga/prettier#build"	[height=0.5,
+			pos="621.86,90",
+			width=3.431];
+		"[root] @julooga/prettier#build" -> "[root] ___ROOT___"	[pos="e,621.86,36.104 621.86,71.697 621.86,64.407 621.86,55.726 621.86,47.536"];
+		"[root] @julooga/sdk#build"	[height=0.5,
+			pos="365.86,162",
+			width=3.0472];
+		"[root] @julooga/sdk#build" -> "[root] @julooga/infra#build"	[pos="e,365.86,108.1 365.86,143.7 365.86,136.41 365.86,127.73 365.86,119.54"];
+		"[root] @julooga/web#build"	[height=0.5,
+			pos="875.86,90",
+			width=3.1182];
+		"[root] @julooga/web#build" -> "[root] ___ROOT___"	[pos="e,672.68,33.004 821.06,73.897 780.63,62.755 725.58,47.584 683.6,36.014"];
+		"[root] @jurloogar/doctor_guide_api#build"	[height=0.5,
+			pos="1173.9,90",
+			width=4.6537];
+		"[root] @jurloogar/doctor_guide_api#build" -> "[root] ___ROOT___"	[pos="e,694.79,28.248 1068.4,75.627 963.06,62.267 803.18,41.993 706.03,29.673"];
+	}
+}
