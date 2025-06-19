@@ -25,7 +25,7 @@ const getMessageStyles = (role: string) => {
 const ChatTest = () => {
   const { messages, input, handleInputChange, handleSubmit, isLoading } =
     useChat({
-      api: '/med/chat/stream'
+      api: 'https://s92t9ee2c1.execute-api.ap-northeast-2.amazonaws.com/med/chat/stream'
     })
 
   return (
