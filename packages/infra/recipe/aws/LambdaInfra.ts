@@ -7,10 +7,21 @@ type EndPoint = {
   path: string
 }
 
-type Params = {
+type LambdaInfraParams = {
   endpoints: EndPoint[]
   pathname: string
   env?: Record<string, string>
+}
+
+type BedrockPolicyStatement = {
+  Effect: string
+  Action: string[]
+  Resource: string[]
+}
+
+type BedrockPolicy = {
+  Version: string
+  Statement: BedrockPolicyStatement[]
 }
 
 export class LambdaInfra extends pulumi.ComponentResource {
@@ -18,7 +29,7 @@ export class LambdaInfra extends pulumi.ComponentResource {
 
   constructor(
     _name: string,
-    params: Params,
+    { endpoints, pathname, env }: LambdaInfraParams,
     opts?: pulumi.ComponentResourceOptions
   ) {
     super('organizaton:utils:LambdaInfra', _name, {}, opts)
@@ -59,22 +70,52 @@ export class LambdaInfra extends pulumi.ComponentResource {
       }
     )
 
+    // Bedrock 권한 추가
+    const bedrockPolicy: BedrockPolicy = {
+      Version: '2012-10-17',
+      Statement: [
+        {
+          Effect: 'Allow',
+          Action: [
+            'bedrock:InvokeModel',
+            'bedrock:InvokeModelWithResponseStream',
+            'bedrock:ListFoundationModels'
+          ],
+          Resource: [
+            'arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-3-sonnet-20240229-v1:0',
+            'arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-*'
+          ]
+        }
+      ]
+    }
+
+    new aws.iam.RolePolicy(
+      `${_name}-bedrock-policy-${pulumi.getStack()}`,
+      {
+        role: lambdaRole.name,
+        policy: JSON.stringify(bedrockPolicy)
+      },
+      {
+        parent: this
+      }
+    )
+
     // Lambda function
     const lambdaFunction = new aws.lambda.Function(
       '람다 함수',
       {
         name: `${_name}-lambda-${pulumi.getStack()}`,
-        runtime: 'nodejs20.x', // Updated to a valid runtime version
+        runtime: 'nodejs20.x',
         role: lambdaRole.arn,
         handler: 'index.handler',
         code: new pulumi.asset.AssetArchive({
-          '.': new pulumi.asset.FileArchive(params.pathname)
+          '.': new pulumi.asset.FileArchive(pathname)
         }),
         environment: {
           variables: {
             STACK: pulumi.getStack(),
             PROJECT: pulumi.getProject(),
-            ...(params.env || {})
+            ...(env || {})
           }
         },
         timeout: 300,
@@ -85,12 +126,20 @@ export class LambdaInfra extends pulumi.ComponentResource {
       }
     )
 
-    // HTTP API 생성
+    // HTTP API 생성 (CORS 설정 포함)
     this.api = new aws.apigatewayv2.Api(
       'http api',
       {
         name: `${_name}-http-api-${pulumi.getStack()}`,
-        protocolType: 'HTTP'
+        protocolType: 'HTTP',
+        corsConfiguration: {
+          allowCredentials: false,
+          allowHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+          allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+          allowOrigins: ['*'],
+          exposeHeaders: ['X-CLARIFY-NEEDED'],
+          maxAge: 86400
+        }
       },
       {
         parent: this
@@ -111,20 +160,27 @@ export class LambdaInfra extends pulumi.ComponentResource {
       }
     )
 
+    // OPTIONS 라우트 자동 추가
+    const allEndpoints = endpoints.reduce((acc, endpoint) => {
+      if (endpoint.method !== 'OPTIONS') {
+        return [...acc, { method: 'OPTIONS' as const, path: endpoint.path }]
+      }
+
+      return [...acc, endpoint]
+    }, [] as EndPoint[])
+
     // 엔드포인트 매핑
-    const routes: aws.apigatewayv2.Route[] = params.endpoints.map(
+    const routes: aws.apigatewayv2.Route[] = allEndpoints.map(
       (route, index) => {
-        // 안전한 리소스 이름 생성
         const safeName = `${route.method.toLowerCase()}-${route.path
           .replace(/[^a-zA-Z0-9]/g, '-')
           .replace(/^-+|-+$/g, '')
           .replace(/-+/g, '-')
           .toLowerCase()}`
 
-        // 인덱스 추가로 중복 방지
         const resourceName = `route-${index}-${safeName}-${pulumi.getStack()}`
 
-        const route_resource = new aws.apigatewayv2.Route(
+        return new aws.apigatewayv2.Route(
           resourceName,
           {
             apiId: this.api.id,
@@ -133,11 +189,9 @@ export class LambdaInfra extends pulumi.ComponentResource {
           },
           {
             parent: this,
-            dependsOn: [integration] // 통합에 의존성 추가
+            dependsOn: [integration]
           }
         )
-
-        return route_resource
       }
     )
 
@@ -147,7 +201,6 @@ export class LambdaInfra extends pulumi.ComponentResource {
       {
         apiId: this.api.id,
         description: `${_name}의 ${pulumi.getStack()} 배포 스테이지`,
-        // 강제 재배포를 위한 트리거 추가
         triggers: {
           redeployment: pulumi
             .all([integration.id, ...routes.map((r) => r.id)])
@@ -156,11 +209,11 @@ export class LambdaInfra extends pulumi.ComponentResource {
       },
       {
         parent: this,
-        dependsOn: [integration, ...routes] // 모든 라우트와 통합이 생성된 후 배포
+        dependsOn: [integration, ...routes]
       }
     )
 
-    // 스테이지 생성 - 리소스 이름 변경
+    // 스테이지 생성
     new aws.apigatewayv2.Stage(
       `${_name}-${pulumi.getStack()}-stage`,
       {
