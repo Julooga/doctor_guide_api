@@ -17,6 +17,20 @@ export const medSummeriseRequest = z.object({
 
 const medRouter = new Hono()
 
+// OPTIONS 요청 처리
+medRouter.options('/chat/stream', async () => {
+  return new Response(null, {
+    status: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers':
+        'Content-Type, Authorization, X-Requested-With',
+      'Access-Control-Max-Age': '86400'
+    }
+  })
+})
+
 medRouter.post(
   '/chat',
   describeRoute({
@@ -106,11 +120,15 @@ medRouter.post(
       const { messages = [] } = requestBody
       const stream = await getMedChatStream(messages)
 
-      return stream.toDataStreamResponse({
-        headers: {
-          'Content-Type': 'text/event-stream'
-        }
-      })
+      // CORS 헤더 추가
+      c.header('Access-Control-Allow-Origin', '*')
+      c.header('Access-Control-Allow-Methods', 'POST, OPTIONS')
+      c.header(
+        'Access-Control-Allow-Headers',
+        'Content-Type, Authorization, X-Requested-With'
+      )
+
+      return stream.toDataStreamResponse()
     } catch (error) {
       console.error('Error in medical chat route:', error)
 

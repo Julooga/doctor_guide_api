@@ -2,11 +2,23 @@ import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import { logger } from 'hono/logger'
 import { secureHeaders } from 'hono/secure-headers'
+import { cors } from 'hono/cors'
 
 const app = new Hono()
 
 app.use('*', logger())
+app.use(
+  '*',
+  cors({
+    origin: '*',
+    allowHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    exposeHeaders: ['X-CLARIFY-NEEDED'],
+    credentials: false
+  })
+)
 app.use(secureHeaders())
+
 app.onError((err, c) => {
   if (err instanceof HTTPException) {
     // HTTP 예외를 Zod 스타일로 변환
@@ -34,7 +46,7 @@ app.onError((err, c) => {
     {
       success: false,
       error: {
-        name: 'InternalServerError', // 에러 종류 식별자
+        name: 'InternalServerError',
         issues: [
           {
             code: 'INTERNAL_SERVER_ERROR',
