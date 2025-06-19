@@ -8,7 +8,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/med': {
-        target: 'https://s92t9ee2c1.execute-api.ap-northeast-2.amazonaws.com',
+        target: 'http://localhost:8080',
         changeOrigin: true,
         secure: false
       }
