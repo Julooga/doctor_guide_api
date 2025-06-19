@@ -46,6 +46,19 @@ export class LambdaInfra extends pulumi.ComponentResource {
       }
     )
 
+    // CloudWatch Logs 작성
+    new aws.iam.RolePolicyAttachment(
+      `${_name}-lambda-execution-policy-${pulumi.getStack()}`,
+      {
+        role: lambdaRole.name,
+        policyArn:
+          'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+      },
+      {
+        parent: this
+      }
+    )
+
     // Lambda function
     const lambdaFunction = new aws.lambda.Function(
       '람다 함수',
@@ -99,40 +112,66 @@ export class LambdaInfra extends pulumi.ComponentResource {
     )
 
     // 엔드포인트 매핑
-    params.endpoints.forEach((route, index) => {
-      // 안전한 리소스 이름 생성
-      const safeName = `${route.method.toLowerCase()}-${route.path
-        .replace(/[^a-zA-Z0-9]/g, '-')
-        .replace(/^-+|-+$/g, '')
-        .replace(/-+/g, '-')
-        .toLowerCase()}`
+    const routes: aws.apigatewayv2.Route[] = params.endpoints.map(
+      (route, index) => {
+        // 안전한 리소스 이름 생성
+        const safeName = `${route.method.toLowerCase()}-${route.path
+          .replace(/[^a-zA-Z0-9]/g, '-')
+          .replace(/^-+|-+$/g, '')
+          .replace(/-+/g, '-')
+          .toLowerCase()}`
 
-      // 인덱스 추가로 중복 방지
-      const resourceName = `route-${index}-${safeName}-${pulumi.getStack()}`
+        // 인덱스 추가로 중복 방지
+        const resourceName = `route-${index}-${safeName}-${pulumi.getStack()}`
 
-      new aws.apigatewayv2.Route(
-        resourceName,
-        {
-          apiId: this.api.id,
-          routeKey: `${route.method} ${route.path}`,
-          target: pulumi.interpolate`integrations/${integration.id}`
-        },
-        {
-          parent: this
-        }
-      )
-    })
+        const route_resource = new aws.apigatewayv2.Route(
+          resourceName,
+          {
+            apiId: this.api.id,
+            routeKey: `${route.method} ${route.path}`,
+            target: pulumi.interpolate`integrations/${integration.id}`
+          },
+          {
+            parent: this,
+            dependsOn: [integration] // 통합에 의존성 추가
+          }
+        )
 
-    // 스테이지 생성
-    new aws.apigatewayv2.Stage(
-      `${pulumi.getStack()}-stage`,
+        return route_resource
+      }
+    )
+
+    // API Gateway 배포 생성
+    const deployment = new aws.apigatewayv2.Deployment(
+      `${_name}-deployment-${pulumi.getStack()}`,
       {
         apiId: this.api.id,
-        name: pulumi.getStack(),
-        autoDeploy: true
+        description: `${_name}의 ${pulumi.getStack()} 배포 스테이지`,
+        // 강제 재배포를 위한 트리거 추가
+        triggers: {
+          redeployment: pulumi
+            .all([integration.id, ...routes.map((r) => r.id)])
+            .apply((ids) => ids.join('-'))
+        }
       },
       {
-        parent: this
+        parent: this,
+        dependsOn: [integration, ...routes] // 모든 라우트와 통합이 생성된 후 배포
+      }
+    )
+
+    // 스테이지 생성 - 리소스 이름 변경
+    new aws.apigatewayv2.Stage(
+      `${_name}-${pulumi.getStack()}-stage`,
+      {
+        apiId: this.api.id,
+        deploymentId: deployment.id,
+        name: '$default',
+        autoDeploy: false
+      },
+      {
+        parent: this,
+        dependsOn: [deployment]
       }
     )
 

@@ -15,7 +15,7 @@ const getServers = (profile: 'local' | 'real') => {
 
   return [
     {
-      url: 'https://rr5yxu11dl.execute-api.ap-northeast-2.amazonaws.com'
+      url: 'https://s92t9ee2c1.execute-api.ap-northeast-2.amazonaws.com'
     }
   ]
 }
