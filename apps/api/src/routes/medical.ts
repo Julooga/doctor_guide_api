@@ -127,8 +127,22 @@ medRouter.post(
         'Access-Control-Allow-Headers',
         'Content-Type, Authorization, X-Requested-With'
       )
+      c.header('Content-Type', 'text/plain; charset=utf-8')
+      c.header('Cache-Control', 'no-cache')
+      c.header('Connection', 'keep-alive')
 
-      return stream.toDataStreamResponse()
+      // AI SDK 스트림을 변환
+      return stream.toTextStreamResponse({
+        headers: {
+          'Content-Type': 'text/plain; charset=utf-8',
+          'Cache-Control': 'no-cache',
+          Connection: 'keep-alive',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'POST, OPTIONS',
+          'Access-Control-Allow-Headers':
+            'Content-Type, Authorization, X-Requested-With'
+        }
+      })
     } catch (error) {
       console.error('Error in medical chat route:', error)
 
