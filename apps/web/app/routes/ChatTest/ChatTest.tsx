@@ -1,5 +1,14 @@
 import { useChat } from '@ai-sdk/react'
 
+type MedicalResponse = {
+  answer: string
+  recommendations: string[]
+  severity: string
+  suggestedActions: string[]
+  disclaimer: string
+  contextUsed: boolean
+}
+
 const getButtonLabel = (isLoading: boolean) => {
   if (isLoading) {
     return '전송 중...'
@@ -22,10 +31,99 @@ const getMessageStyles = (role: string) => {
   return `${baseStyles} bg-green-50 text-green-800 mx-auto text-center border border-green-200`
 }
 
+const getSeverityBadgeStyle = (severity: string) => {
+  const baseStyle = 'inline-block px-2 py-1 rounded-full text-xs font-medium'
+
+  if (severity === '긴급') {
+    return `${baseStyle} bg-red-100 text-red-800`
+  }
+
+  if (severity === '주의') {
+    return `${baseStyle} bg-yellow-100 text-yellow-800`
+  }
+
+  if (severity === '보통') {
+    return `${baseStyle} bg-green-100 text-green-800`
+  }
+
+  return `${baseStyle} bg-gray-100 text-gray-800`
+}
+
+const parseMedicalResponse = (content: string): MedicalResponse | null => {
+  try {
+    return JSON.parse(content) as MedicalResponse
+  } catch {
+    return null
+  }
+}
+
+const MedicalResponseDisplay = ({
+  response
+}: {
+  response: MedicalResponse
+}) => (
+  <div className="space-y-4">
+    {/* 답변 */}
+    <div>
+      <h4 className="font-medium text-gray-900 mb-2">의료 상담 결과</h4>
+      <p className="text-gray-700 leading-relaxed">{response.answer}</p>
+    </div>
+
+    {/* 심각도 */}
+    <div className="flex items-center gap-2">
+      <span className="text-sm font-medium text-gray-600">심각도:</span>
+      <span className={getSeverityBadgeStyle(response.severity)}>
+        {response.severity}
+      </span>
+    </div>
+
+    {/* 권장사항 */}
+    {response.recommendations.length > 0 && (
+      <div>
+        <h5 className="font-medium text-gray-900 mb-2">생활 관리 권장사항</h5>
+        <ul className="space-y-1">
+          {response.recommendations.map((rec, index) => (
+            <li
+              key={index}
+              className="flex items-start gap-2 text-sm text-gray-700"
+            >
+              <span className="text-blue-500 mt-1">•</span>
+              <span>{rec}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    {/* 제안된 조치사항 */}
+    {response.suggestedActions.length > 0 && (
+      <div>
+        <h5 className="font-medium text-gray-900 mb-2">권장 조치사항</h5>
+        <ul className="space-y-1">
+          {response.suggestedActions.map((action, index) => (
+            <li
+              key={index}
+              className="flex items-start gap-2 text-sm text-gray-700"
+            >
+              <span className="text-green-500 mt-1">✓</span>
+              <span>{action}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    {/* 면책 조항 */}
+    <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+      <p className="text-xs text-amber-800">{response.disclaimer}</p>
+    </div>
+  </div>
+)
+
 const ChatTest = () => {
   const { messages, input, handleInputChange, handleSubmit, isLoading } =
     useChat({
-      api: 'https://s92t9ee2c1.execute-api.ap-northeast-2.amazonaws.com/med/chat/stream'
+      api: '/med/chat/stream'
     })
 
   return (
@@ -40,18 +138,41 @@ const ChatTest = () => {
 
       {/* 메시지 영역 */}
       <div className="flex-1 overflow-y-auto p-4 space-y-2 bg-gray-50">
-        {messages.map((message) => (
-          <div key={message.id} className="flex">
-            <div className={getMessageStyles(message.role)}>
+        {messages.map((message) => {
+          const isAssistantMessage = message.role === 'assistant'
+          const medicalResponse = (() => {
+            if (isAssistantMessage) {
+              return parseMedicalResponse(message.content)
+            }
+
+            return null
+          })()
+
+          const renderMessageContent = () => {
+            if (isAssistantMessage && medicalResponse) {
+              return <MedicalResponseDisplay response={medicalResponse} />
+            }
+
+            return (
               <div className="whitespace-pre-wrap break-words">
                 {message.content}
               </div>
-              {message.role === 'assistant' && (
-                <div className="text-xs text-gray-500 mt-2">AI 의료 상담사</div>
-              )}
+            )
+          }
+
+          return (
+            <div key={message.id} className="flex">
+              <div className={getMessageStyles(message.role)}>
+                {renderMessageContent()}
+                {isAssistantMessage && (
+                  <div className="text-xs text-gray-500 mt-2">
+                    AI 의료 상담사
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
 
         {isLoading && (
           <div className="flex justify-start">
