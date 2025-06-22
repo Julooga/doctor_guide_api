@@ -100,6 +100,43 @@ export class LambdaInfra extends pulumi.ComponentResource {
       }
     )
 
+    // DynamoDB 권한 추가
+    const dynamoDbPolicy = {
+      Version: '2012-10-17',
+      Statement: [
+        {
+          Effect: 'Allow',
+          Action: [
+            'dynamodb:Scan',
+            'dynamodb:Query',
+            'dynamodb:GetItem',
+            'dynamodb:PutItem',
+            'dynamodb:UpdateItem',
+            'dynamodb:DeleteItem',
+            'dynamodb:BatchGetItem',
+            'dynamodb:BatchWriteItem',
+            'dynamodb:DescribeTable'
+          ],
+          Resource: [
+            'arn:aws:dynamodb:ap-northeast-2:*:table/Hospital-*',
+            'arn:aws:dynamodb:ap-northeast-2:*:table/Pharmacy-*',
+            'arn:aws:dynamodb:ap-northeast-2:*:table/*'
+          ]
+        }
+      ]
+    }
+
+    new aws.iam.RolePolicy(
+      `${_name}-dynamodb-policy-${pulumi.getStack()}`,
+      {
+        role: lambdaRole.name,
+        policy: JSON.stringify(dynamoDbPolicy)
+      },
+      {
+        parent: this
+      }
+    )
+
     // Lambda function
     const lambdaFunction = new aws.lambda.Function(
       '람다 함수',
