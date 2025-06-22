@@ -118,33 +118,17 @@ medRouter.post(
       )
 
       const { messages = [] } = requestBody
-      const stream = await getMedChatStream(messages)
+      const streamResult = await getMedChatStream(messages)
 
-      // CORS 헤더 추가
-      c.header('Access-Control-Allow-Origin', '*')
-      c.header('Access-Control-Allow-Methods', 'POST, OPTIONS')
-      c.header(
-        'Access-Control-Allow-Headers',
-        'Content-Type, Authorization, X-Requested-With'
-      )
-      c.header('Content-Type', 'text/plain; charset=utf-8')
-      c.header('Cache-Control', 'no-cache')
-      c.header('Connection', 'keep-alive')
-
-      // streamObject의 결과를 직접 반환
-      const response = new Response(stream.textStream, {
+      // Vercel AI SDK의 toTextStreamResponse 사용
+      return streamResult.toTextStreamResponse({
         headers: {
-          'Content-Type': 'text/plain; charset=utf-8',
-          'Cache-Control': 'no-cache',
-          Connection: 'keep-alive',
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Methods': 'POST, OPTIONS',
           'Access-Control-Allow-Headers':
             'Content-Type, Authorization, X-Requested-With'
         }
       })
-
-      return response
     } catch (error) {
       console.error('Error in medical chat route:', error)
 

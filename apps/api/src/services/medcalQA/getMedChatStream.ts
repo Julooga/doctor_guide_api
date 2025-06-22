@@ -1,28 +1,9 @@
-import { streamObject } from 'ai'
-import { z } from 'zod'
+import { streamText } from 'ai'
 import loadMarkdown from './loadMarkdown'
 // RAG를 위한 서비스 import
 import getHospitalPoiData from '../hospital/getHospitalPoiData'
 import getPharamacyPoiData from '../pharamacy/getPharamacyPoiData'
 import bedrockModel from './bedrockModel'
-
-// ✅ 의료 응답 스키마 정의
-const medicalResponseSchema = z.object({
-  answer: z
-    .string()
-    .describe('환자의 질문에 대한 상세하고 이해하기 쉬운 의료 정보 답변'),
-  recommendations: z
-    .array(z.string())
-    .describe('증상 완화나 건강 관리를 위한 구체적인 추천 사항들'),
-  severity: z
-    .enum(['낮음', '보통', '높음', '응급'])
-    .describe('증상의 심각도 수준'),
-  suggestedActions: z
-    .array(z.string())
-    .describe('환자가 취해야 할 구체적인 행동 지침들'),
-  disclaimer: z.string().describe('의료 면책 고지사항'),
-  contextUsed: z.boolean().describe('병원/약국 정보가 답변에 포함되었는지 여부')
-})
 
 type EnhancedMessageParams = {
   contextData: string | null
@@ -75,7 +56,7 @@ type Message = {
 }
 
 /**
- * AWS Bedrock Claude 모델을 사용하여 의료 관련 채팅 응답을 JSON 스트리밍으로 생성합니다.
+ * AWS Bedrock Claude 모델을 사용하여 의료 관련 채팅 응답을 텍스트 스트리밍으로 생성합니다.
  * RAG를 통해 병원/약국 데이터를 포함한 컨텍스트를 제공합니다.
  */
 export const getMedChatStream = async (messages: Message[]) => {
@@ -94,26 +75,33 @@ export const getMedChatStream = async (messages: Message[]) => {
       searchLocation: ''
     })
 
-    // 시스템 메시지 구성 - JSON 응답 요구사항 추가
+    // 시스템 메시지 구성 - 텍스트 응답 요구사항
     const enhancedSystemPrompt = `${systemPrompt}
 
-당신은 반드시 다음과 같은 JSON 형식으로만 응답해야 합니다:
-- answer: 환자의 질문에 대한 상세하고 이해하기 쉬운 의료 정보 답변
-- recommendations: 증상 완화나 건강 관리를 위한 구체적인 추천 사항들 (배열)
-- severity: 증상의 심각도 ('낮음', '보통', '높음', '응급' 중 하나)
-- suggestedActions: 환자가 취해야 할 구체적인 행동 지침들 (배열)
-- disclaimer: "이 정보는 의학적 조언을 대체할 수 없습니다. 심각한 증상이나 응급상황에는 즉시 의료진에게 연락하세요."
-- contextUsed: 병원/약국 정보가 답변에 포함되었는지 여부 (boolean)
+당신은 의료 전문가로서 환자의 질문에 친절하고 정확하게 답변해야 합니다.
+답변은 다음 구조로 작성해주세요:
 
-예시:
-{
-  "answer": "두통의 원인은 다양할 수 있습니다...",
-  "recommendations": ["충분한 수분 섭취", "규칙적인 수면"],
-  "severity": "보통",
-  "suggestedActions": ["증상이 지속되면 병원 방문", "진통제 복용 고려"],
-  "disclaimer": "이 정보는 의학적 조언을 대체할 수 없습니다. 심각한 증상이나 응급상황에는 즉시 의료진에게 연락하세요.",
-  "contextUsed": ${!!contextData}
-}`
+## 답변
+[환자의 질문에 대한 상세하고 이해하기 쉬운 의료 정보 답변]
+
+## 추천사항
+- [증상 완화나 건강 관리를 위한 구체적인 추천 사항]
+- [추가 추천사항들...]
+
+## 심각도
+[낮음/보통/높음/응급 중 하나]
+
+## 권장 행동
+- [환자가 취해야 할 구체적인 행동 지침]
+- [추가 행동 지침들...]
+
+## 주의사항
+이 정보는 의학적 조언을 대체할 수 없습니다. 심각한 증상이나 응급상황에는 즉시 의료진에게 연락하세요.`
+
+    // if (contextData) {
+    //   enhancedSystemPrompt +=
+    //     '\n\n## 관련 병원/약국 정보\n병원 및 약국 정보가 답변에 포함되었습니다.'
+    // }
 
     const systemMessage: Message = {
       role: 'system',
@@ -138,27 +126,30 @@ export const getMedChatStream = async (messages: Message[]) => {
     // 전체 대화 히스토리 구성
     const conversationMessages = [systemMessage, ...processedMessages]
 
-    const result = await streamObject({
+    const result = await streamText({
       model: bedrockModel,
-      schema: medicalResponseSchema,
       messages: conversationMessages,
       maxTokens: 2000,
-      temperature: 0.3, // JSON 응답의 일관성을 위해 낮은 temperature 사용
+      temperature: 0.3,
       maxRetries: 2,
-      onFinish: (finishResult) => {
+      onFinish: (finishResult: {
+        finishReason?: string
+        usage?: unknown
+        text?: string
+      }) => {
         console.log('Stream finished successfully:', {
-          finishReason: finishResult,
+          finishReason: finishResult.finishReason,
           usage: finishResult.usage,
           hasContext: !!contextData,
-          object: finishResult.object
+          text: finishResult.text
         })
       },
-      onError: (streamError) => {
-        console.error('Stream error occurred:', streamError)
+      onError: (errorEvent: { error: unknown }) => {
+        console.error('Stream error occurred:', errorEvent.error)
       }
     })
 
-    console.log('streamObject result created successfully with RAG context')
+    console.log('streamText result created successfully with RAG context')
 
     return result
   } catch (error) {
