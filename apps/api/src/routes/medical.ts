@@ -131,8 +131,8 @@ medRouter.post(
       c.header('Cache-Control', 'no-cache')
       c.header('Connection', 'keep-alive')
 
-      // AI SDK 스트림을 변환
-      return stream.toTextStreamResponse({
+      // streamObject의 결과를 직접 반환
+      const response = new Response(stream.textStream, {
         headers: {
           'Content-Type': 'text/plain; charset=utf-8',
           'Cache-Control': 'no-cache',
@@ -143,6 +143,8 @@ medRouter.post(
             'Content-Type, Authorization, X-Requested-With'
         }
       })
+
+      return response
     } catch (error) {
       console.error('Error in medical chat route:', error)
 
