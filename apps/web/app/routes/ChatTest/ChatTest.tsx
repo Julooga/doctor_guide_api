@@ -14,7 +14,7 @@ const getButtonLabel = (isLoading: boolean) => {
     return '전송 중...'
   }
 
-  return '전송'
+  return '전송!'
 }
 
 const getMessageStyles = (role: string) => {
