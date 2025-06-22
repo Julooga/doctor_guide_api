@@ -17,20 +17,6 @@ export const medSummeriseRequest = z.object({
 
 const medRouter = new Hono()
 
-// OPTIONS 요청 처리
-medRouter.options('/chat/stream', async () => {
-  return new Response(null, {
-    status: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers':
-        'Content-Type, Authorization, X-Requested-With',
-      'Access-Control-Max-Age': '86400'
-    }
-  })
-})
-
 medRouter.post(
   '/chat',
   describeRoute({
@@ -118,15 +104,11 @@ medRouter.post(
       )
 
       const { messages = [] } = requestBody
-      const streamResult = await getMedChatStream(messages)
+      const stream = await getMedChatStream(messages)
 
-      // Vercel AI SDK의 toTextStreamResponse 사용
-      return streamResult.toTextStreamResponse({
+      return stream.toDataStreamResponse({
         headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'POST, OPTIONS',
-          'Access-Control-Allow-Headers':
-            'Content-Type, Authorization, X-Requested-With'
+          'Content-Type': 'text/event-stream'
         }
       })
     } catch (error) {

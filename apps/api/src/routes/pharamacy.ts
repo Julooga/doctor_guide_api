@@ -16,6 +16,9 @@ export const pharmacyRequest = z.object({
     description: '페이지 당 레코드 개수',
     example: '10'
   }),
+  // latitude: z.number(),
+  // longitude: z.number(),
+  // radius: z.number().optional(),
   cursor: z.string().optional().openapi({
     description: '다음 페이지를 조회하는 커서'
   }),

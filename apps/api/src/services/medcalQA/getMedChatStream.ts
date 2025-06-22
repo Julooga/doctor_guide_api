@@ -56,7 +56,7 @@ type Message = {
 }
 
 /**
- * AWS Bedrock Claude 모델을 사용하여 의료 관련 채팅 응답을 텍스트 스트리밍으로 생성합니다.
+ * AWS Bedrock Claude 모델을 사용하여 의료 관련 채팅 응답을 생성합니다.
  * RAG를 통해 병원/약국 데이터를 포함한 컨텍스트를 제공합니다.
  */
 export const getMedChatStream = async (messages: Message[]) => {
@@ -64,8 +64,8 @@ export const getMedChatStream = async (messages: Message[]) => {
     const systemPrompt = loadMarkdown('./prompts/qa/system.md')
 
     // 마지막 사용자 메시지에서 컨텍스트 추출
-    const userMessages = messages.filter((msg) => msg.role === 'user')
-    const lastUserMessage = userMessages[userMessages.length - 1]
+    const userMeassages = messages.filter((msg) => msg.role === 'user')
+    const lastUserMessage = userMeassages[userMeassages.length - 1]
 
     // RAG: 관련 데이터 검색
     const contextData = await buildContextData({
@@ -75,37 +75,10 @@ export const getMedChatStream = async (messages: Message[]) => {
       searchLocation: ''
     })
 
-    // 시스템 메시지 구성 - 텍스트 응답 요구사항
-    const enhancedSystemPrompt = `${systemPrompt}
-
-당신은 의료 전문가로서 환자의 질문에 친절하고 정확하게 답변해야 합니다.
-답변은 다음 구조로 작성해주세요:
-
-## 답변
-[환자의 질문에 대한 상세하고 이해하기 쉬운 의료 정보 답변]
-
-## 추천사항
-- [증상 완화나 건강 관리를 위한 구체적인 추천 사항]
-- [추가 추천사항들...]
-
-## 심각도
-[낮음/보통/높음/응급 중 하나]
-
-## 권장 행동
-- [환자가 취해야 할 구체적인 행동 지침]
-- [추가 행동 지침들...]
-
-## 주의사항
-이 정보는 의학적 조언을 대체할 수 없습니다. 심각한 증상이나 응급상황에는 즉시 의료진에게 연락하세요.`
-
-    // if (contextData) {
-    //   enhancedSystemPrompt +=
-    //     '\n\n## 관련 병원/약국 정보\n병원 및 약국 정보가 답변에 포함되었습니다.'
-    // }
-
+    // 시스템 메시지 구성
     const systemMessage: Message = {
       role: 'system',
-      content: enhancedSystemPrompt
+      content: systemPrompt
     }
 
     // 컨텍스트가 있는 경우 마지막 사용자 메시지에 추가
@@ -128,24 +101,20 @@ export const getMedChatStream = async (messages: Message[]) => {
 
     const result = await streamText({
       model: bedrockModel,
+      // model: anthropicModel('claude-3-5-haiku-20241022'),
       messages: conversationMessages,
-      maxTokens: 2000,
-      temperature: 0.3,
-      maxRetries: 2,
-      onFinish: (finishResult: {
-        finishReason?: string
-        usage?: unknown
-        text?: string
-      }) => {
+      maxTokens: 1000,
+      temperature: 0.7,
+      maxRetries: 1,
+      onFinish: (finishResult) => {
         console.log('Stream finished successfully:', {
           finishReason: finishResult.finishReason,
           usage: finishResult.usage,
-          hasContext: !!contextData,
-          text: finishResult.text
+          hasContext: !!contextData
         })
       },
-      onError: (errorEvent: { error: unknown }) => {
-        console.error('Stream error occurred:', errorEvent.error)
+      onError: (streamError) => {
+        console.error('Stream error occurred:', streamError)
       }
     })
 

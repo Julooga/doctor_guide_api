@@ -123,7 +123,7 @@ const MedicalResponseDisplay = ({
 const ChatTest = () => {
   const { messages, input, handleInputChange, handleSubmit, isLoading } =
     useChat({
-      api: '/med/chat/stream'
+      api: 'http://localhost:8080/med/chat/stream'
     })
 
   return (
