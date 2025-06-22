@@ -77,7 +77,7 @@ export const medStreamRequest = z
       messages: [
         {
           role: 'user',
-          content: '혈압이 높은데 어떻게 관리해야 하나요?'
+          content: 'How should I manage my blood pressure?'
         }
       ]
     }
