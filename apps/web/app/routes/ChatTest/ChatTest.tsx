@@ -123,7 +123,15 @@ const MedicalResponseDisplay = ({
 const ChatTest = () => {
   const { messages, input, handleInputChange, handleSubmit, isLoading } =
     useChat({
-      api: 'http://localhost:8080/med/chat/stream'
+      api: 'http://localhost:8080/med/chat/stream',
+      initialMessages: [
+        {
+          role: 'system',
+          content: `안녕하세요!\nAI 예진 도우미 닥터 가이드입니다.\n증상을 듣고 적절한 진료과 안내와 증상 요약을 도와드릴게요.주의: 제 정보는 진단/처방이 아니며 의사 진료를 대신할 수 없습니다
+          위급 시엔 즉시 119나 응급실로 가세요.\n이제, 어떻게 불편하신지 말씀해주시겠어요?`,
+          id: '1'
+        }
+      ]
     })
 
   return (
